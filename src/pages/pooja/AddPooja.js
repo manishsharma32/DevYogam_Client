@@ -107,14 +107,12 @@ const initialValues = {
   fileHi: null,
   logoImages: [],
   logoImagesHi: [],
-  price: {
+  price: [{
     single: "",
-    singleDesc: "",
     couple: "",
-    coupleDesc: "",
     family: "",
-    familyDesc: "",
-  },
+    
+  }],
   benefit: [{ title: "", titleHi: "", description: "", descriptionHi: "" }],
   faq: [{ question: "", questionHi: "", answer: "", answerHi: "" }],
 };
@@ -373,7 +371,7 @@ export default function AddPooja({ open, handleClose }) {
                               touched.price?.single && errors.price?.single
                             }
                           />
-                          <CustomTextField
+                       <CustomTextField
                             id="price.singleDesc"
                             name="price.singleDesc"
                             value={values.price.singleDesc}
