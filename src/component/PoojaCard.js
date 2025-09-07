@@ -12,15 +12,15 @@ function getDateParts(dateString) {
 }
 
 export default function PujaCard({
-  bannerImg,         // Banner image URL
-  badge,             // JSX or string for top-left badge
-  date,              // "YYYY-MM-DD"
+  bannerImg, // Banner image URL
+  badge, // JSX or string for top-left badge
+  date, // "YYYY-MM-DD"
   dateBg = "#FFD700",
-  headingHi,         // Hindi/main heading (string, can include <br/> tag or \n)
-  headingEn,         // English heading
-  highlight,         // JSX or string-highlighted desc
+  headingHi, // Hindi/main heading (string, can include <br/> tag or \n)
+  headingEn, // English heading
+  highlight, // JSX or string-highlighted desc
   highlightColor = "#ED6A12",
-  location,          // string
+  location, // string
   locationIconColor = "#ED6A12",
   ctaText = "Limited Slots",
   ctaColor = "#ED6A12",
@@ -29,7 +29,16 @@ export default function PujaCard({
   const { day, month } = getDateParts(date);
 
   return (
-    <Card sx={{ borderRadius: 3, boxShadow: 3, width: 360, p: 0, overflow: "visible", position: "relative" }}>
+    <Card
+      sx={{
+        borderRadius: 3,
+        boxShadow: 3,
+        width: 360,
+        p: 0,
+        overflow: "visible",
+        position: "relative",
+      }}
+    >
       {/* Top Banner with overlay badges */}
       <Box sx={{ position: "relative" }}>
         <img
@@ -85,10 +94,16 @@ export default function PujaCard({
             letterSpacing: 1,
           }}
         >
-          <Typography variant="body1" sx={{ fontWeight: 600, fontSize: 17, m: 0, p: 0, lineHeight: 1 }}>
+          <Typography
+            variant="body1"
+            sx={{ fontWeight: 600, fontSize: 17, m: 0, p: 0, lineHeight: 1 }}
+          >
             {day}
           </Typography>
-          <Typography variant="body2" sx={{ fontSize: 13, m: 0, p: 0, mt: "-2px" }}>
+          <Typography
+            variant="body2"
+            sx={{ fontSize: 13, m: 0, p: 0, mt: "-2px" }}
+          >
             {month}
           </Typography>
         </Box>
@@ -105,7 +120,14 @@ export default function PujaCard({
               zIndex: 2,
             }}
           >
-            <Typography variant="h6" sx={{ color: "#fff", fontWeight: 900, textShadow: "0 0 7px #490101" }}>
+            <Typography
+              variant="h6"
+              sx={{
+                color: "#fff",
+                fontWeight: 900,
+                textShadow: "0 0 7px #490101",
+              }}
+            >
               {headingHi}
             </Typography>
           </Box>
@@ -113,15 +135,31 @@ export default function PujaCard({
       </Box>
       {/* Card Content */}
       <CardContent sx={{ pt: 2, pb: 2, px: 2 }}>
-        <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.2, fontSize: 19 }}>
+        <Typography
+          variant="subtitle1"
+          sx={{ fontWeight: 700, mb: 0.2, fontSize: 19 }}
+        >
           {headingEn}
         </Typography>
-        <Typography variant="body2" sx={{ color: highlightColor, mb: 0.5, fontWeight: 500, fontSize: 15, display: "flex", alignItems: "center", gap: 0.8 }}>
+        <Typography
+          variant="body2"
+          sx={{
+            color: highlightColor,
+            mb: 0.5,
+            fontWeight: 500,
+            fontSize: 15,
+            display: "flex",
+            alignItems: "center",
+            gap: 0.8,
+          }}
+        >
           {/* Example highlight: <span role="img" aria-label="star">&#x2728;</span> Bring peace to ancestral souls */}
           {highlight}
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", mb: 1, mt: 1 }}>
-          <LocationOnIcon sx={{ color: locationIconColor, fontSize: 20, mr: 0.7 }} />
+          <LocationOnIcon
+            sx={{ color: locationIconColor, fontSize: 20, mr: 0.7 }}
+          />
           <Typography variant="body2" sx={{ color: "#555", fontSize: 15 }}>
             {location}
           </Typography>
@@ -130,7 +168,8 @@ export default function PujaCard({
           fullWidth
           onClick={onCtaClick}
           sx={{
-            background: ctaColor,
+            // background: ctaColor,
+            backgroundColor: "#9a67e6",
             color: "#fff",
             borderRadius: 2,
             textTransform: "none",

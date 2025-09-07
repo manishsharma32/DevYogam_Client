@@ -18,7 +18,7 @@ import Slide from "@mui/material/Slide";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-
+import logo from "../assests/logo.png"
 // Nav data
 const navItemsLeft = [
   { label: "Home", link: "/" },
@@ -106,16 +106,14 @@ export default function Header(props) {
     <HideOnScroll {...props}>
       <AppBar
         position="absolute"
-  
         elevation={trigger ? 4 : 0}
-        
         sx={{
-          // background: "linear-gradient(180deg, #ffe5ed 0%, #fff 100%)",
-          background:
-            "linear-gradient(360deg, #FFF7E6 0%, #FFE9CC 20%, #FFD6A5 100%)",
+          backgroundColor:'white',
+          // backgroundImage:
+          //   "linear-gradient(360deg, #E8DAF9 0%, #C1A4F0 20%, #9a67e6 100%)",
           boxShadow: trigger ? 3 : 0,
-          transition: "background-color 0.3s, box-shadow 0.3s",
-          paddingY: 1,
+          // transition: "background-image 0.3s, box-shadow 0.3s",
+          py: 1, 
         }}
       >
         <Toolbar
@@ -173,7 +171,7 @@ export default function Header(props) {
               pointerEvents: "none",
             }}
           >
-            <Typography
+            {/* <Typography
               variant="h3"
               sx={{
                 fontFamily: "'Playfair Display', serif",
@@ -187,7 +185,8 @@ export default function Header(props) {
               }}
             >
               DevYogam
-            </Typography>
+            </Typography> */}
+            <img src={logo} loading="lazy" style={{width:'320px'}} />
           </Box>
 
           {/* Right Navs + More or empty (on Mobile) */}

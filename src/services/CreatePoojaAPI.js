@@ -17,53 +17,45 @@ export const CreatePoojaAPI = async (data) => {
     formData.append("locationHi", data.originatorHi?.value || "");
 
     // Date
-    formData.append("capDate", data.capDate);
+     if (data.capDate) {
+    formData.append("capDate", new Date(data.capDate).toISOString());
+  }
 
-    // Multiple Images (files)
+
     if (Array.isArray(data.logoImages)) {
       data.logoImages.forEach((file) => {
-        formData.append("logo_image", file);
+        formData.append("images", file);
       });
     }
     if (Array.isArray(data.logoImagesHi)) {
       data.logoImagesHi.forEach((file) => {
-        formData.append("ht_logo_image", file);
+        formData.append("images_hi", file);
       });
     }
-    if (data.price) {
-      formData.append("price[0][single][amaount]", data.price.single || "");
-      formData.append(
-        "price[0][single][description]",
-        data.price.singleDesc || ""
-      );
-      formData.append("price[0][couple][amaount]", data.price.couple || "");
-      formData.append(
-        "price[0][couple][description]",
-        data.price.coupleDesc || ""
-      );
-      formData.append("price[0][family][amaount]", data.price.family || "");
-      formData.append(
-        "price[0][family][description]",
-        data.price.familyDesc || ""
-      );
-    }
+    if (Array.isArray(data.price) && data.price.length > 0) {
+    const price = data.price[0];
+    formData.append("price[0][single]", price.single ?? "");
+    formData.append("price[0][couple]", price.couple ?? "");
+    formData.append("price[0][family]", price.family ?? "");
+  }
 
-    // Benefit array
-    if (data.benefit) {
-      data.benefit.forEach((b, i) => {
-        formData.append(`benefit[${i}][title]`, b.title);
-        formData.append(`benefit[${i}][titleHi]`, b.titleHi);
-        formData.append(`benefit[${i}][description]`, b.description);
-        formData.append(`benefit[${i}][descriptionHi]`, b.descriptionHi);
-      });
-    }
-    // FAQ array
-    if (data.faq) {
+  // Benefit array
+  if (Array.isArray(data.benefit)) {
+    data.benefit.forEach((b, i) => {
+      formData.append(`benefit[${i}][title]`, b.title || "");
+      formData.append(`benefit[${i}][titleHi]`, b.titleHi || "");
+      formData.append(`benefit[${i}][description]`, b.description || "");
+      formData.append(`benefit[${i}][descriptionHi]`, b.descriptionHi || "");
+    });
+  }
+
+  // FAQ array
+  if (Array.isArray(data.faq)) {
     data.faq.forEach((f, i) => {
-      formData.append(`faq[${i}][question]`, f.question);
-      formData.append(`faq[${i}][questionHi]`, f.questionHi);
-      formData.append(`faq[${i}][answer]`, f.answer);
-      formData.append(`faq[${i}][answerHi]`, f.answerHi);
+      formData.append(`faq[${i}][question]`, f.question || "");
+      formData.append(`faq[${i}][questionHi]`, f.questionHi || "");
+      formData.append(`faq[${i}][answer]`, f.answer || "");
+      formData.append(`faq[${i}][answerHi]`, f.answerHi || "");
     });
   }
     return formData;

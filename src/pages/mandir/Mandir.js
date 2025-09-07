@@ -21,10 +21,12 @@ export default function Mandir() {
       <Box sx={{ minHeight: "100vh" }}>
         <SplitHeader />
       </Box>
-      <Box sx={{ width: "90%", margin: "auto", padding:'2%' }}>
+      <Box sx={{ width: "90%", margin: "auto", padding: "2%" }}>
         <Box className="heading-container">
-          <Typography className="heading-text">Explore Temples With Dev Yogam </Typography>
-          <Button
+          <Typography className="heading-text">
+            Explore Temples With Dev Yogam{" "}
+          </Typography>
+          {/* <Button
             className="create-btn"
             onClick={() => {
               window.open(`${window?.location?.origin}/mandir/create`);
@@ -32,15 +34,16 @@ export default function Mandir() {
             }}
           >
             Add Temple
-          </Button>
+          </Button> */}
         </Box>
 
         <Grid container spacing={2}>
-          {templeData?.map((item) => (
-            <Grid item size={{ lg: 3, md: 4, sm: 6, xs: 12 }}>
-              <Card item={item} />
-            </Grid>
-          ))}
+          {Array.isArray(templeData) &&
+            templeData.map((item) => (
+              <Grid key={item._id} item lg={3} md={4} sm={6} xs={12}>
+                <Card item={item} />
+              </Grid>
+            ))}
         </Grid>
       </Box>
     </GlobalCssStyles>

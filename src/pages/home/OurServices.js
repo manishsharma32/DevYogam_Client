@@ -29,27 +29,27 @@ const services = [
       "Offer Chadava at India’s renowned temples for blessings & solving life’s problems.",
     btnLabel: "Offer Now",
   },
-  {
-    icon: <SpaIcon fontSize="inherit" />,
-    title: "Bhakti Dhara",
-    description:
-      "India’s First Bhakti Subscription. Offer Chadava to different deities monthly, live talks & more.",
-    btnLabel: "Join Now",
-  },
-  {
-    icon: <WhatshotIcon fontSize="inherit" />,
-    title: "Pujas",
-    description:
-      "Book online pujas anytime, anywhere and get prasad delivered to your home.",
-    btnLabel: "Book Now",
-  },
-  {
-    icon: <EmojiObjectsIcon fontSize="inherit" />,
-    title: "Chadhava",
-    description:
-      "Offer Chadava at India’s renowned temples for blessings & solving life’s problems.",
-    btnLabel: "Offer Now",
-  },
+  // {
+  //   icon: <SpaIcon fontSize="inherit" />,
+  //   title: "Bhakti Dhara",
+  //   description:
+  //     "India’s First Bhakti Subscription. Offer Chadava to different deities monthly, live talks & more.",
+  //   btnLabel: "Join Now",
+  // },
+  // {
+  //   icon: <WhatshotIcon fontSize="inherit" />,
+  //   title: "Pujas",
+  //   description:
+  //     "Book online pujas anytime, anywhere and get prasad delivered to your home.",
+  //   btnLabel: "Book Now",
+  // },
+  // {
+  //   icon: <EmojiObjectsIcon fontSize="inherit" />,
+  //   title: "Chadhava",
+  //   description:
+  //     "Offer Chadava at India’s renowned temples for blessings & solving life’s problems.",
+  //   btnLabel: "Offer Now",
+  // },
 ];
 
 export default function OurServices() {
