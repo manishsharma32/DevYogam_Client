@@ -12,6 +12,10 @@ import * as Yup from "yup";
 import { CreatePoojaAPI } from "../../services/CreatePoojaAPI";
 import UploadIcon from "../../assests/upload-icon.svg";
 import CloseIcon from "@mui/icons-material/Close";
+import { CreateTempleAPI } from "../../services/CreateTempleAPI";
+const MAX_LOGOS = 5;
+const MAX_SIZE = 5 * 1024 * 1024;
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png", "image/gif"];
 
 // Validation Schema
 const validationSchema = Yup.object().shape({
@@ -80,7 +84,14 @@ const initialValues = {
   },
   benefit: [{ title: "", titleHi: "", description: "", descriptionHi: "" }],
   faq: [{ question: "", questionHi: "", answer: "", answerHi: "" }],
+  logoImages: [],          // Add this
+  logoImagesHi: [],        // Add this
+  newLogoImages: [],       // Also referenced in upload function
+  newLogoImagesHi: [],     // Also referenced in upload function
+  removedLogoImageIds: [], // Also referenced in remove function
+  removedLogoImageIdsHi: []// Also referenced in remove function
 };
+
 
 export default function AddTemple({ open, handleClose }) {
   const [poojaData, setPoojaData] = useState(initialValues);
@@ -119,10 +130,83 @@ export default function AddTemple({ open, handleClose }) {
     callback(filtered);
   };
 
-  const handleSubmit = async (val) => {
-    const res = await CreatePoojaAPI(val);
+  const handleLogoImagesUpload = (event, values, setFieldValue) => {
+    const files = Array.from(event.target.files);
+    const combined = [...(values.logoImages || []), ...files].slice(
+      0,
+      MAX_LOGOS
+    );
+    setFieldValue("logoImages", combined);
+    setFieldValue(
+      "newLogoImages",
+      [...(values.newLogoImages || []), ...files].slice(0, MAX_LOGOS)
+    );
   };
+  const removeLogoImage = (index, values, setFieldValue) => {
+    const updated = [...values.logoImages];
+    const removedFile = updated[index];
+    if (removedFile && removedFile._id) {
+      setFieldValue("removedLogoImageIds", [
+        ...(values.removedLogoImageIds || []),
+        removedFile._id,
+      ]);
+    } else {
+      setFieldValue(
+        "newLogoImages",
+        (values.newLogoImages || []).filter((file) => file !== removedFile)
+      );
+    }
 
+    updated.splice(index, 1);
+    setFieldValue("logoImages", updated);
+  };
+  const handleLogoImagesUploadHi = (event, values, setFieldValue) => {
+    const files = Array.from(event.target.files);
+    const combined = [...(values.logoImagesHi || []), ...files].slice(
+      0,
+      MAX_LOGOS
+    );
+    setFieldValue("logoImagesHi", combined);
+    setFieldValue(
+      "newLogoImagesHi",
+      [...(values.newLogoImagesHi || []), ...files].slice(0, MAX_LOGOS)
+    );
+  };
+  const removeLogoImageHi = (index, values, setFieldValue) => {
+    const updated = [...values.logoImagesHi];
+    const removedFile = updated[index];
+    if (removedFile && removedFile._id) {
+      setFieldValue("removedLogoImageIdsHi", [
+        ...(values.removedLogoImageIdsHi || []),
+        removedFile._id,
+      ]);
+    } else {
+      setFieldValue(
+        "newLogoImagesHi",
+        (values.newLogoImagesHi || []).filter((file) => file !== removedFile)
+      );
+    }
+
+    updated.splice(index, 1);
+    setFieldValue("logoImagesHi", updated);
+  };
+  const handleSubmit = async (val) => {
+    const formData = new FormData();
+    Object.keys(val).forEach((key) => {
+      if (key === "logoImages") {
+        val.logoImages.forEach((file) => {
+          formData.append("logoImages", file);
+        });
+      } else if (key === "logoImagesHi") {
+        val.logoImages.forEach((file) => {
+          formData.append("logoImagesHi", file);
+        });
+      } else if (val[key] !== null && val[key] !== undefined) {
+        formData.append(key, val[key]);
+      }
+    });
+    await CreateTempleAPI(val);
+  };
   return (
     <GlobalCssStyles>
       <Box style={{ width: "90%", margin: "auto", marginTop: "2%   " }}>
@@ -249,7 +333,39 @@ export default function AddTemple({ open, handleClose }) {
                         </Typography>
                       )}
                     </Grid>
-
+                    <Grid item xs={12} sm={12} sx={{ mb: 1 }}>
+                      <Typography className="policy-form-label policy-text-field-label">
+                        Bhagwan <span className="required-icon">*</span>
+                      </Typography>
+                      <Stack spacing={1}>
+                        <CustomTextField
+                          id="bhagwan"
+                          name="bhagwan"
+                          value={values.bhagwan}
+                          autoComplete="off"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          placeholder="Enter Deity (English)"
+                          fullWidth
+                          size="small"
+                          error={touched.bhagwan && Boolean(errors.bhagwan)}
+                          helperText={touched.bhagwan && errors.bhagwan}
+                        />
+                        <CustomTextField
+                          id="bhagwanHi"
+                          name="bhagwanHi"
+                          value={values.bhagwanHi}
+                          autoComplete="off"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          placeholder="भगवान का नाम (हिंदी)"
+                          fullWidth
+                          size="small"
+                          error={touched.bhagwanHi && Boolean(errors.bhagwanHi)}
+                          helperText={touched.bhagwanHi && errors.bhagwanHi}
+                        />
+                      </Stack>
+                    </Grid>
                     {/* File upload (English) */}
                     <Grid item xs={12} sm={12} sx={{ mb: 2 }}>
                       <Typography className="policy-form-label policy-text-field-label">
@@ -258,70 +374,81 @@ export default function AddTemple({ open, handleClose }) {
                       </Typography>
                       <input
                         type="file"
-                        id="file-upload-english"
+                         id="logo-images-upload"
                         style={{ display: "none" }}
                         accept="image/*"
                         onChange={(e) => {
-                          if (e.target.files && e.target.files[0]) {
-                            setFieldValue("file", e.target.files[0]);
-                          }
+                         handleLogoImagesUpload(e,values,setFieldValue)
                         }}
                       />
-                      {values.file ? (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "1rem",
-                          }}
-                        >
-                          <Typography className="evidence-details-text">
-                            {values.file.name}
-                          </Typography>
-                          <CloseIcon
-                            style={{ cursor: "pointer" }}
-                            fontSize="small"
-                            onClick={() => {
-                              setFieldValue("file", null);
+                     <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          flexWrap: "wrap",
+                          gap: "0.7rem",
+                        }}
+                      >
+                        {values?.logoImages &&
+                          values?.logoImages?.map((file, idx) => (
+                            <Box
+                              key={idx}
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                background: "#f3f2f1",
+                                padding: "4px 10px",
+                                borderRadius: 12,
+                                mb: 0.5,
+                              }}
+                            >
+                              <Typography sx={{ fontFamily: "Poppins" }}>
+                                {file.name}
+                              </Typography>
+                              <IconButton
+                                size="small"
+                                onClick={() =>
+                                  removeLogoImage(idx, values, setFieldValue)
+                                }
+                              >
+                                <CloseIcon fontSize="small" />
+                              </IconButton>
+                            </Box>
+                          ))}
+                        {(values.logoImages?.length ?? 0) < MAX_LOGOS && (
+                          <Button
+                            type="button"
+                            variant="outlined"
+                            size="small"
+                            style={{
+                              minHeight: "2.5rem",
+                              marginLeft: "10px",
+                              borderRadius: 20,
+                              background: "#fff",
                             }}
-                          />
-                        </Box>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() =>
-                            document
-                              .getElementById("file-upload-english")
-                              .click()
-                          }
-                          style={{
-                            background: "white",
-                            marginTop: "10px",
-                            borderRadius: "20px",
-                            width: "14rem",
-                            height: "2.5rem",
-                            color: "black",
-                            fontWeight: 500,
-                            border: "1px solid #DADCE0",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            gap: "1rem",
-                          }}
-                        >
-                          <img src={UploadIcon} alt="Upload" />
-                          <Typography style={{ fontFamily: "Poppins" }}>
-                            Upload File (English)
-                          </Typography>
-                        </button>
-                      )}
-                      {touched.file && errors.file && (
+                            onClick={() =>
+                              document
+                                .getElementById("logo-images-upload")
+                                .click()
+                            }
+                          >
+                            <img
+                              src={UploadIcon}
+                              alt="Upload"
+                              style={{ width: 20, marginRight: 8 }}
+                            />
+                            Upload Images
+                          </Button>
+                        )}
+                      </Box>
+                      {touched.logoImages && errors.logoImages && (
                         <Typography
                           color="error"
                           variant="caption"
                           className="error-msg"
                         >
-                          {errors.file}
+                          {errors.logoImages}
                         </Typography>
                       )}
                     </Grid>
@@ -334,72 +461,85 @@ export default function AddTemple({ open, handleClose }) {
                       </Typography>
                       <input
                         type="file"
-                        id="file-upload-hindi"
+                        id="logo-images-upload-hi"
                         style={{ display: "none" }}
                         accept="image/*"
                         onChange={(e) => {
-                          if (e.target.files && e.target.files[0]) {
-                            setFieldValue("fileHi", e.target.files[0]);
-                          }
+                           handleLogoImagesUploadHi(e, values, setFieldValue)
                         }}
                       />
-                      {values.fileHi ? (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "1rem",
-                          }}
-                        >
-                          <Typography className="evidence-details-text">
-                            {values.fileHi.name}
-                          </Typography>
-                          <CloseIcon
-                            style={{ cursor: "pointer" }}
-                            fontSize="small"
-                            onClick={() => {
-                              setFieldValue("fileHi", null);
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          flexWrap: "wrap",
+                          gap: "0.7rem",
+                        }}
+                      >
+                        {values.logoImagesHi &&
+                          values.logoImagesHi.map((file, idx) => (
+                            <Box
+                              key={idx}
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                background: "#f3f2f1",
+                                padding: "4px 10px",
+                                borderRadius: 12,
+                                mb: 0.5,
+                              }}
+                            >
+                              <Typography sx={{ fontFamily: "Poppins" }}>
+                                {file.name}
+                              </Typography>
+                              <IconButton
+                                size="small"
+                                onClick={() =>
+                                  removeLogoImageHi(idx, values, setFieldValue)
+                                }
+                              >
+                                <CloseIcon fontSize="small" />
+                              </IconButton>
+                            </Box>
+                          ))}
+                        {values.logoImagesHi.length < MAX_LOGOS && (
+                          <Button
+                            type="button"
+                            variant="outlined"
+                            size="small"
+                            style={{
+                              minHeight: "2.5rem",
+                              marginLeft: "10px",
+                              borderRadius: 20,
+                              background: "#fff",
                             }}
-                          />
-                        </Box>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() =>
-                            document.getElementById("file-upload-hindi").click()
-                          }
-                          style={{
-                            background: "white",
-                            marginTop: "10px",
-                            borderRadius: "20px",
-                            width: "14rem",
-                            height: "2.5rem",
-                            color: "black",
-                            fontWeight: 500,
-                            border: "1px solid #DADCE0",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            gap: "1rem",
-                          }}
-                        >
-                          <img src={UploadIcon} alt="Upload" />
-                          <Typography style={{ fontFamily: "Poppins" }}>
-                            फाइल अपलोड करें (हिंदी)
-                          </Typography>
-                        </button>
-                      )}
-                      {touched.fileHi && errors.fileHi && (
+                            onClick={() =>
+                              document
+                                .getElementById("logo-images-upload-hi")
+                                .click()
+                            }
+                          >
+                            <img
+                              src={UploadIcon}
+                              alt="Upload"
+                              style={{ width: 20, marginRight: 8 }}
+                            />
+                            चित्र अपलोड करें
+                          </Button>
+                        )}
+                      </Box>
+                      {touched.logoImages && errors.logoImages && (
                         <Typography
                           color="error"
                           variant="caption"
                           className="error-msg"
                         >
-                          {errors.fileHi}
+                          {errors.logoImages}
                         </Typography>
-                      )}
+                      )}{" "}
                     </Grid>
-                      
+
                     {/* Benefits Field Array - max 3 */}
                     <Grid item xs={12} sm={12} sx={{ mb: 2 }}>
                       <Typography
@@ -413,7 +553,7 @@ export default function AddTemple({ open, handleClose }) {
                         as="textarea"
                         name="description"
                         sx={{ minWidth: "100%", minHeight: "10vh" }}
-                        placeholder="डिस्क्रिप्शन जोड़े (हिंदी)"
+                        placeholder="Description"
                         value={values.description}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -430,6 +570,27 @@ export default function AddTemple({ open, handleClose }) {
                           errors.description
                         }
                       />
+                       <CustomTextField
+                        as="textarea"
+                        name="descriptionHi"
+                        sx={{ minWidth: "100%", minHeight: "10vh" }}
+                        placeholder="डिस्क्रिप्शन जोड़े (हिंदी)"
+                        value={values.descriptionHi}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        fullWidth
+                        size="small"
+                        error={
+                          touched.descriptionHi &&
+                          touched.descriptionHi &&
+                          Boolean(errors.descriptionHi)
+                        }
+                        helperText={
+                          touched.descriptionHi &&
+                          touched.descriptionHi &&
+                          errors.descriptionHi
+                        }
+                      />
                     </Grid>
                     {/* Long Description  */}
                     <Grid item xs={12} sm={12} sx={{ mb: 2 }}>
@@ -444,7 +605,7 @@ export default function AddTemple({ open, handleClose }) {
                         as="textarea"
                         name="longDescription"
                         sx={{ minWidth: "100%", minHeight: "15vh" }}
-                        placeholder="बड़ा डिस्क्रिप्शन जोड़े (हिंदी)"
+                        placeholder="Long Description"
                         value={values?.longDescription}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -459,6 +620,27 @@ export default function AddTemple({ open, handleClose }) {
                           touched.longDescription &&
                           touched.longDescription &&
                           errors.longDescription
+                        }
+                      />
+                       <CustomTextField
+                        as="textarea"
+                        name="longDescriptionHi"
+                        sx={{ minWidth: "100%", minHeight: "15vh" }}
+                        placeholder="बड़ा डिस्क्रिप्शन जोड़े (हिंदी)"
+                        value={values?.longDescriptionHi}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        fullWidth
+                        size="small"
+                        error={
+                          touched.longDescriptionHi &&
+                          touched.longDescriptionHi &&
+                          Boolean(errors.longDescriptionHi)
+                        }
+                        helperText={
+                          touched.longDescriptionHi &&
+                          touched.longDescriptionHi &&
+                          errors.longDescriptionHi
                         }
                       />
                     </Grid>
@@ -478,7 +660,7 @@ export default function AddTemple({ open, handleClose }) {
                         type="submit"
                         disabled={!isValid || !dirty}
                       >
-                        Create Pooja
+                        Create Temple
                       </Button>
                     </Box>
                   </Grid>
