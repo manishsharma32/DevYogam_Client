@@ -17,10 +17,9 @@ export const CreatePoojaAPI = async (data) => {
     formData.append("locationHi", data.originatorHi?.value || "");
 
     // Date
-     if (data.capDate) {
-    formData.append("capDate", new Date(data.capDate).toISOString());
-  }
-
+    if (data.capDate) {
+      formData.append("capDate", new Date(data.capDate).toISOString());
+    }
 
     if (Array.isArray(data.logoImages)) {
       data.logoImages.forEach((file) => {
@@ -32,32 +31,39 @@ export const CreatePoojaAPI = async (data) => {
         formData.append("images_hi", file);
       });
     }
-    if (Array.isArray(data.price) && data.price.length > 0) {
-    const price = data.price[0];
-    formData.append("price[0][single]", price.single ?? "");
-    formData.append("price[0][couple]", price.couple ?? "");
-    formData.append("price[0][family]", price.family ?? "");
-  }
+if (data.price?.type[0]) {
+  const p = data.price.type[0];
+  formData.append("price[type][single][amaount]", p.single.amaount ?? "");
+  formData.append("price[type][single][description]", p.single.description ?? "");
+  formData.append("price[type][single][descriptionHi]", p.single.descriptionHi ?? "");
+  formData.append("price[type][couple][amaount]", p.couple.amaount ?? "");
+  formData.append("price[type][couple][description]", p.couple.description ?? "");
+  formData.append("price[type][couple][descriptionHi]", p.couple.descriptionHi ?? "");
+  formData.append("price[type][family][amaount]", p.family.amaount ?? "");
+  formData.append("price[type][family][description]", p.family.description ?? "");
+  formData.append("price[type][family][descriptionHi]", p.family.descriptionHi ?? "");
+}
 
-  // Benefit array
-  if (Array.isArray(data.benefit)) {
-    data.benefit.forEach((b, i) => {
-      formData.append(`benefit[${i}][title]`, b.title || "");
-      formData.append(`benefit[${i}][titleHi]`, b.titleHi || "");
-      formData.append(`benefit[${i}][description]`, b.description || "");
-      formData.append(`benefit[${i}][descriptionHi]`, b.descriptionHi || "");
-    });
-  }
 
-  // FAQ array
-  if (Array.isArray(data.faq)) {
-    data.faq.forEach((f, i) => {
-      formData.append(`faq[${i}][question]`, f.question || "");
-      formData.append(`faq[${i}][questionHi]`, f.questionHi || "");
-      formData.append(`faq[${i}][answer]`, f.answer || "");
-      formData.append(`faq[${i}][answerHi]`, f.answerHi || "");
-    });
-  }
+    // Benefit array
+    if (Array.isArray(data.benefit)) {
+      data.benefit.forEach((b, i) => {
+        formData.append(`benefit[${i}][title]`, b.title || "");
+        formData.append(`benefit[${i}][titleHi]`, b.titleHi || "");
+        formData.append(`benefit[${i}][description]`, b.description || "");
+        formData.append(`benefit[${i}][descriptionHi]`, b.descriptionHi || "");
+      });
+    }
+
+    // FAQ array
+    if (Array.isArray(data.faq)) {
+      data.faq.forEach((f, i) => {
+        formData.append(`faq[${i}][question]`, f.question || "");
+        formData.append(`faq[${i}][questionHi]`, f.questionHi || "");
+        formData.append(`faq[${i}][answer]`, f.answer || "");
+        formData.append(`faq[${i}][answerHi]`, f.answerHi || "");
+      });
+    }
     return formData;
   };
 

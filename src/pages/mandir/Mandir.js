@@ -26,7 +26,7 @@ export default function Mandir() {
           <Typography className="heading-text">
             Explore Temples With Dev Yogam{" "}
           </Typography>
-          {/* <Button
+          <Button
             className="create-btn"
             onClick={() => {
               window.open(`${window?.location?.origin}/mandir/create`);
@@ -34,7 +34,7 @@ export default function Mandir() {
             }}
           >
             Add Temple
-          </Button> */}
+          </Button>
         </Box>
 
         <Grid container spacing={2}>

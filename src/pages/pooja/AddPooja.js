@@ -55,20 +55,23 @@ const validationSchema = Yup.object().shape({
           file ? file.size <= MAX_SIZE : true
         )
     ),
-  price: Yup.object().shape({
-    single: Yup.number()
-      .typeError("Single Price must be a number")
-      .required("Single Price is required"),
-    singleDesc: Yup.string().required("Single Price Description required"),
-    couple: Yup.number()
-      .typeError("Couple Price must be a number")
-      .required("Couple Price is required"),
-    coupleDesc: Yup.string().required("Couple Price Description required"),
-    family: Yup.number()
-      .typeError("Family Price must be a number")
-      .required("Family Price is required"),
-    familyDesc: Yup.string().required("Family Price Description required"),
-  }),
+  // price: Yup.object().shape({
+  //   single: Yup.number()
+  //     .typeError("Single Price must be a number")
+  //     .required("Single Price is required"),
+  //   singleDesc: Yup.string().required("Single Price Description required"),
+  //   singleDescHi: Yup.string().required("Single Price Description required"),
+  //   couple: Yup.number()
+  //     .typeError("Couple Price must be a number")
+  //     .required("Couple Price is required"),
+  //   coupleDesc: Yup.string().required("Couple Price Description required"),
+  //   coupleDescHi: Yup.string().required("Couple Price Description required"),
+  //   family: Yup.number()
+  //     .typeError("Family Price must be a number")
+  //     .required("Family Price is required"),
+  //   familyDesc: Yup.string().required("Family Price Description required"),
+  //   familyDescHi: Yup.string().required("Family Price Description required"),
+  // }),
   benefit: Yup.array()
     .of(
       Yup.object().shape({
@@ -108,13 +111,27 @@ const initialValues = {
   logoImages: [],
   logoImagesHi: [],
   price: {
-    single: "",
-    singleDesc: "",
-    couple: "",
-    coupleDesc: "",
-    family: "",
-    familyDesc: "",
+    type: [
+      {
+        single: {
+          amaount: null,
+          description: "",
+          descriptionHi: "",
+        },
+        couple: {
+          amaount: null,
+          description: "",
+          descriptionHi: "",
+        },
+        family: {
+          amaount: null,
+          description: "",
+          descriptionHi: "",
+        },
+      },
+    ],
   },
+
   benefit: [{ title: "", titleHi: "", description: "", descriptionHi: "" }],
   faq: [{ question: "", questionHi: "", answer: "", answerHi: "" }],
 };
@@ -226,13 +243,11 @@ export default function AddPooja({ open, handleClose }) {
         val.logoImages.forEach((file) => {
           formData.append("logoImages", file);
         });
-      } 
-      else if (key === "logoImagesHi") {
+      } else if (key === "logoImagesHi") {
         val.logoImages.forEach((file) => {
           formData.append("logoImagesHi", file);
         });
-      } 
-      else if (key === "price") {
+      } else if (key === "price") {
         formData.append("price", JSON.stringify(val.price));
       } else if (key === "originator" || key === "originatorHi") {
         formData.append(key, val[key]?.value || "");
@@ -356,27 +371,28 @@ export default function AddPooja({ open, handleClose }) {
                       <Stack direction="row" spacing={2}>
                         <Box>
                           <CustomTextField
-                            id="price.single"
-                            name="price.single"
+                            id="price.type[0].single.amaount"
+                            name="price.type[0].single.amaount"
                             type="number"
-                            value={values.price.single}
+                            value={values?.price?.type[0]?.single?.amaount}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             placeholder="Single Plan"
                             fullWidth
                             size="small"
-                            error={
-                              touched.price?.single &&
-                              Boolean(errors.price?.single)
-                            }
-                            helperText={
-                              touched.price?.single && errors.price?.single
-                            }
+                            // error={
+                            //   touched?.price?.type[0]?.single?.amaount &&
+                            //   Boolean(errors?.price.type[0]?.single?.amaount)
+                            // }
+                            // helperText={
+                            //   touched?.price?.type[0]?.single?.amaount &&
+                            //   errors?.price?.type[0]?.single?.amaount
+                            // }
                           />
                           <CustomTextField
-                            id="price.singleDesc"
-                            name="price.singleDesc"
-                            value={values.price.singleDesc}
+                            id="price.type[0].single.description"
+                            name="price.type[0].single.description"
+                            value={values?.price?.type[0].single?.description}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             placeholder="Single Price Description"
@@ -384,40 +400,64 @@ export default function AddPooja({ open, handleClose }) {
                             size="small"
                             multiline
                             rows={2}
+                            // error={
+                            //   touched.price?.type[0]?.single?.description &&
+                            //   Boolean(errors.price?.type[0].single?.description)
+                            // }
+                            // helperText={
+                            //   touched.price?.type[0].single?.description &&
+                            //   errors.price?.type[0].single?.description
+                            // }
+                            sx={{ mt: 1 }}
+                          />
+                          <CustomTextField
+                            id="price.type[0].single.descriptionHi"
+                            name="price.type[0].single.descriptionHi"
+                            value={values.price?.type[0].single?.descriptionHi}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            placeholder="सिंगल डिस्क्रिप्शन"
+                            fullWidth
+                            size="small"
+                            multiline
+                            rows={2}
                             error={
-                              touched.price?.singleDesc &&
-                              Boolean(errors.price?.singleDesc)
+                              touched.price?.type[0].single?.descriptionHi &&
+                              Boolean(
+                                errors.price?.type[0].single?.descriptionHi
+                              )
                             }
                             helperText={
-                              touched.price?.singleDesc &&
-                              errors.price?.singleDesc
+                              touched.price?.type[0].single?.descriptionHi &&
+                              errors.price?.type[0].single?.descriptionHi
                             }
                             sx={{ mt: 1 }}
                           />
                         </Box>
                         <Box>
                           <CustomTextField
-                            id="price.couple"
-                            name="price.couple"
+                            id="price.type[0].couple.amaount"
+                            name="price.type[0].couple.amaount"
                             type="number"
-                            value={values.price.couple}
+                            value={values.price?.type[0]?.couple?.amaount}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             placeholder="Couple Plan"
                             fullWidth
                             size="small"
                             error={
-                              touched.price?.couple &&
-                              Boolean(errors.price?.couple)
+                              touched.price?.type[0]?.couple?.amaount &&
+                              Boolean(errors.price?.type[0]?.couple?.amaount)
                             }
                             helperText={
-                              touched.price?.couple && errors.price?.couple
+                              touched.price?.type[0]?.couple?.amaount &&
+                              errors.price?.type[0]?.couple?.amaount
                             }
                           />
                           <CustomTextField
-                            id="price.coupleDesc"
-                            name="price.coupleDesc"
-                            value={values.price.coupleDesc}
+                            id="price.type[0].couple.description"
+                            name="price.type[0].couple.description"
+                            value={values.price?.type[0]?.couple?.description}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             placeholder="Couple Price Description"
@@ -426,39 +466,65 @@ export default function AddPooja({ open, handleClose }) {
                             multiline
                             rows={2}
                             error={
-                              touched.price?.coupleDesc &&
-                              Boolean(errors.price?.coupleDesc)
+                              touched.price?.type[0]?.couple?.description &&
+                              Boolean(
+                                errors.price?.type[0]?.couple?.description
+                              )
                             }
                             helperText={
-                              touched.price?.coupleDesc &&
-                              errors.price?.coupleDesc
+                              touched.price?.type[0]?.couple?.description &&
+                              errors.price?.type[0]?.couple?.description
+                            }
+                            sx={{ mt: 1 }}
+                          />
+                          <CustomTextField
+                            id="price.type[0].couple.descriptionHi"
+                            name="price.type[0].couple.descriptionHi"
+                            value={values.price?.type[0]?.couple?.descriptionHi}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            placeholder="जोड़े का डिस्क्रिप्शन"
+                            fullWidth
+                            size="small"
+                            multiline
+                            rows={2}
+                            error={
+                              touched.price?.type[0]?.couple?.descriptionHi &&
+                              Boolean(
+                                errors.price?.type[0]?.couple?.descriptionHi
+                              )
+                            }
+                            helperText={
+                              touched.price?.type[0]?.couple?.descriptionHi &&
+                              errors.price?.type[0]?.couple?.descriptionHi
                             }
                             sx={{ mt: 1 }}
                           />
                         </Box>
                         <Box>
                           <CustomTextField
-                            id="price.family"
-                            name="price.family"
+                            id="values.price.type[0].family.amaount"
+                            name="values.price.type[0].family.amaount"
                             type="number"
-                            value={values.price.family}
+                            value={values.price?.type[0]?.family?.amaount}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             placeholder="Family Plan"
                             fullWidth
                             size="small"
                             error={
-                              touched.price?.family &&
-                              Boolean(errors.price?.family)
+                              touched.price?.type[0]?.family?.amaount &&
+                              Boolean(errors.price?.type[0]?.family?.amaount)
                             }
                             helperText={
-                              touched.price?.family && errors.price?.family
+                              touched.price?.type[0]?.family?.amaount &&
+                              errors.price?.type[0]?.family?.amaount
                             }
                           />
                           <CustomTextField
-                            id="price.familyDesc"
-                            name="price.familyDesc"
-                            value={values.price.familyDesc}
+                            id="price.type[0].family.description"
+                            name="price.type[0].family.description"
+                            value={values.price?.type[0]?.family?.description}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             placeholder="Family Price Description"
@@ -467,12 +533,37 @@ export default function AddPooja({ open, handleClose }) {
                             multiline
                             rows={2}
                             error={
-                              touched.price?.familyDesc &&
-                              Boolean(errors.price?.familyDesc)
+                              touched.price?.type[0]?.family?.description &&
+                              Boolean(
+                                errors.price?.type[0]?.family?.description
+                              )
                             }
                             helperText={
-                              touched.price?.familyDesc &&
-                              errors.price?.familyDesc
+                              touched.price?.type[0]?.family?.description &&
+                              errors.price?.type[0]?.family?.description
+                            }
+                            sx={{ mt: 1 }}
+                          />
+                          <CustomTextField
+                            id="price.type[0].family.descriptionHi"
+                            name="price.type[0].family.descriptionHi"
+                            value={values.price?.type[0]?.family?.descriptionHi}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            placeholder="फॅमिली डिस्क्रिप्शन"
+                            fullWidth
+                            size="small"
+                            multiline
+                            rows={2}
+                            error={
+                              touched.price?.type[0]?.family?.descriptionHi &&
+                              Boolean(
+                                errors.price?.type[0]?.family?.descriptionHi
+                              )
+                            }
+                            helperText={
+                              touched.price?.type[0]?.family?.descriptionHi &&
+                              errors.price?.type[0]?.family?.descriptionHi
                             }
                             sx={{ mt: 1 }}
                           />
