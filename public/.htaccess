@@ -1,11 +1,9 @@
+# React Router fallback for SPA
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
-  
-  # Ignore existing files or directories
+  RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  
-  # Redirect all other requests to index.html
   RewriteRule . /index.html [L]
 </IfModule>
