@@ -27,7 +27,7 @@ function App() {
         {/* <Box sx={{minHeight:"190vh", overflowY:'auto'}}>
 
       </Box> */}
-        {/* <Footer /> */}
+        <Footer />
       {/* </ThemeProvider> */}
     </div>
   );

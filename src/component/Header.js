@@ -26,7 +26,7 @@ const navItemsLeft = [
 ];
 const navItemsRight = [
   { label: "Chadava", link: "/chadhava" },
-  { label: "Mandir", link: "/mandir" },
+  { label: "Temples", link: "/temple" },
 ];
 const moreOptions = [
   { label: "Login", link: "/login" },

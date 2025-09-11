@@ -6,6 +6,9 @@ import Mandir from "../pages/mandir/Mandir";
 import Home from "../pages/home/Home";
 import AddPooja from "../pages/pooja/AddPooja";
 import AddTemple from "../pages/mandir/AddTemple";
+import PrivacyPolicy from "../pages/policies/PrivacyPolicy";
+import Disclamer from "../pages/policies/Disclaimer";
+import TermsAndConditions from "../pages/policies/TermsAndConditions";
 
 export default function PublicRoutes() {
   return (
@@ -16,8 +19,11 @@ export default function PublicRoutes() {
       <Route path="/pooja" element={<Pooja />} />
       <Route path="/pooja/create" element={<AddPooja />} />
       <Route path="/chadava" element={<Chadhava />} />
-      <Route path="/mandir" element={<Mandir />} />
-      <Route path="/mandir/create" element={<AddTemple />} />
+      <Route path="/temple" element={<Mandir />} />
+      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+      <Route path="/disclaimer" element={<Disclamer />} />
+      <Route path="/terms-conditions" element={<TermsAndConditions />} />
+      <Route path="/temple/create" element={<AddTemple />} />
       {/* You can add more routes here */}
     </Routes>
   );

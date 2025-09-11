@@ -29,7 +29,7 @@ export default function Mandir() {
           <Button
             className="create-btn"
             onClick={() => {
-              window.open(`${window?.location?.origin}/mandir/create`);
+              window.open(`${window?.location?.origin}/temple/create`);
               // setOpenCreatePoOja(true);
             }}
           >
