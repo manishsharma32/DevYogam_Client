@@ -11,7 +11,6 @@ export default function Mandir() {
     const res = await GetAllTempleAPI();
     setTempleData(res);
   };
-
   useEffect(() => {
     getTemple();
   }, []);
