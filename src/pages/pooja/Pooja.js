@@ -9,9 +9,11 @@ export default function Pooja() {
   const { navigate } = useNavigate();
 
   const [openCreatePoOja, setOpenCreatePoOja] = useState(false);
+  const [poojaData, setPoojaData] = useState([]);
 
   const getPooja = async () => {
     const res = await GetAllPoojasAPI();
+    setPoojaData(res);
     console.log(res);
   };
 
@@ -37,59 +39,25 @@ export default function Pooja() {
 
         {/* Pooja List  */}
 
-        <Grid container size={4}>
-          {/* <PujaCard
-            bannerText="ऋणमुक्तेश्वर महादेव पूजा"
-            bannerSubText="ऋणमुक्तेश्वर महादेव मंदिर, उज्जैन"
-            bannerBg="#FFEB3B"
-            image="https://images.unsplash.com/photo-1676731790152-fe6f3b9eb025?q=80&w=580&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            title="Rinmukteshwar Mahadev Puja"
-            subtitle="To get rid of debt…"
-            location="Rin Mukteshwar Mahadev Temple, Ujjain"
-            date="2025-08-26"
-            onBook={() => alert("Book Puja Clicked!")}
-          /> */}
-          <PujaCard
-            bannerImg="https://images.unsplash.com/photo-1676731790152-fe6f3b9eb025?q=80&w=580&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            // Your puja's banner image URL
-            badge={
-              <Box
-                component="span"
-                sx={{ display: "flex", alignItems: "center", gap: 0.6 }}
-              >
-                2{" "}
-                <Box component="span" sx={{ fontSize: 12, ml: 0.3 }}>
-                  लाख+
-                </Box>
-              </Box>
-            }
-            date="2025-09-07"
-            dateBg="#FFD700"
-            headingHi={
-              <>
-                पितृदोष
-                <br />
-                शांति पूजा
-              </>
-            }
-            headingEn="Pitradosh Shanti Puja, Ujjain"
-            highlight={
-              <>
-                <span role="img" aria-label="peace">
-                  🕉️
-                </span>{" "}
-                <span style={{ fontWeight: 600 }}>
-                  Bring peace to ancestral souls and remove lineage obstacles
-                  with Pitradosh Shanti Puja.
-                </span>
-              </>
-            }
-            highlightColor="#ED6A12"
-            location="Siddhvat Mandir, Ram Ghat, Ujjain, Madhya Pradesh, India"
-            ctaText="Limited Slots"
-            ctaColor="#ED6A12"
-            onCtaClick={() => alert("Slot Booked!")}
-          />
+        <Grid container spacing={2}>
+          {poojaData?.map((item, index) => (
+            <Grid item key={index} xs={12} sm={6} md={4}>
+              <PujaCard
+                bannerImg={item?.images[0]}
+                badge={item?.badge}
+                date={item?.capDate}
+                dateBg={item?.dateBg || "#FFD700"}
+                headingHi={item?.titleHi}
+                headingEn={item?.title}
+                highlight={item?.highlight}
+                highlightColor={item?.highlightColor || "#ED6A12"}
+                location={item?.location}
+                ctaText={item?.ctaText || "Limited Slots"}
+                ctaColor={item?.ctaColor || "#ED6A12"}
+                onCtaClick={() => alert(`Slot booked for ${item.headingEn}`)}
+              />
+            </Grid>
+          ))}
         </Grid>
       </Box>
     </GlobalCssStyles>
