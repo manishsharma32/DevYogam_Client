@@ -17,7 +17,7 @@ export default function ReviewCard() {
   };
 
   return (
-    <div style={{ margin: "40px auto", maxWidth: 1100 }}>
+    <div style={{ margin: "40px auto", maxWidth: 1200 }}>
       <Carousel
         centerMode={true}
         showStatus={false}

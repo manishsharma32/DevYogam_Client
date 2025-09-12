@@ -4,6 +4,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import XIcon from "@mui/icons-material/X";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import logo from "../assests/logo.png";
+import { Box } from "@mui/material";
 const footerLinks = [
   {
     heading: "Useful Links",
@@ -49,19 +50,19 @@ export default function Footer() {
         marginTop:'5rem'
       }}
     >
-      <div
-        style={{
+      <Box
+        sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "flex-start",
           maxWidth: "1200px",
           margin: "auto",
           flexWrap: "wrap",
-          gap: "16px",
+          width: {xs: "80%", md: "100%", sm:"80%" },
         }}
       >
         {/* Logo */}
-        <div style={{ minWidth: "180px", marginBottom: "24px" }}>
+        <div style={{marginBottom: "24px" }}>
           <img src={logo} alt="DevYogam Logo" style={{ maxWidth: "200px" }} />
         </div>
 
@@ -127,7 +128,7 @@ export default function Footer() {
             ))}
           </div>
         </div>
-      </div>
+      </Box>
       <div
         style={{
           borderTop: "1px solid #e3e3e3",
