@@ -10,6 +10,7 @@ import PrivacyPolicy from "../pages/policies/PrivacyPolicy";
 import Disclamer from "../pages/policies/Disclaimer";
 import TermsAndConditions from "../pages/policies/TermsAndConditions";
 import AddChadhava from "../pages/chadhava/AddChadhava";
+import PoojaDetails from "../pages/pooja/PoojaDetails";
 
 export default function PublicRoutes() {
   return (
@@ -19,6 +20,7 @@ export default function PublicRoutes() {
       {/* <Route path="/contact" element={<Contact />} /> */}
       <Route path="/pooja" element={<Pooja />} />
       <Route path="/pooja/create" element={<AddPooja />} />
+      <Route path="/pooja-details/:name/:id" element={<PoojaDetails />} />
       <Route path="/chadhava" element={<Chadhava />} />
       <Route path="/temple" element={<Mandir />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />

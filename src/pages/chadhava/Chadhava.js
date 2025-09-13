@@ -18,19 +18,15 @@ export default function Chadhava() {
 
   return (
     <GlobalCssStyles>
-      <Box sx={{ minHeight: "100vh" }}>
-        <SplitHeader />
-      </Box>
       <Box sx={{ width: "90%", margin: "auto", padding: "2%" }}>
-        <Box className="heading-container">
-          <Typography className="heading-text">
+        <Box sx={{display:'flex', justifyContent:'flex-end'}}>
+          {/* <Typography className="heading-text">
             Explore Chadhavas With Dev Yogam{" "}
-          </Typography>
+          </Typography> */}
           <Button
             className="create-btn"
             onClick={() => {
               window.open(`${window?.location?.origin}/chadhava/create`);
-              // setOpenCreatePoOja(true);
             }}
           >
             Add Chadhava

@@ -173,12 +173,13 @@ export default function PujaCard({
             color: "#fff",
             borderRadius: 2,
             textTransform: "none",
+            fontFamily:'Poppins',
             fontWeight: 600,
-            py: 1.3,
+            py: 0.5,
             fontSize: 16,
             boxShadow: "0 2px 8px 2px rgba(237,106,18,0.09)",
             mt: 1,
-            letterSpacing: 0.5,
+            letterSpacing: 0.1,
             "&:hover": { background: "#cd5200" },
           }}
           endIcon={<span style={{ fontSize: "22px" }}>→</span>}

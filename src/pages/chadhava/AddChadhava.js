@@ -40,48 +40,37 @@ export default function AddChadhava({ open, handleClose }) {
   const [poojaData, setPoojaData] = useState(initialValues);
   const [templeData, setTempleData] = useState([]);
   const [mandirOptions, setMandirOptions] = useState([]);
-
+  const [templeList, setTempleList] = useState([]);
+  const [templeListHi, setTempleListHi] = useState([]);
   const getTemple = async () => {
     const res = await GetAllTempleAPI();
-    setTempleData(res);
-    const options = res.map((temple) => ({
-      value: temple._id,
-      label: temple.title,
+    const english = (res || []).map((item) => ({
+      value: item?.title || "",
+      label: item?.title || "",
     }));
-    setMandirOptions(options);
+    const hindi = (res || []).map((item) => ({
+      value: item?.titleHi || item?.title || "",
+      label: item?.titleHi || "",
+    }));
+    setTempleList(english);
+    setTempleListHi(hindi);
   };
 
   useEffect(() => {
     getTemple();
-  }, []);   
+  }, []);
 
-  const locationOptions = [
-    { value: "new_york", label: "New York" },
-    { value: "london", label: "London" },
-    { value: "paris", label: "Paris" },
-    { value: "tokyo", label: "Tokyo" },
-    { value: "sydney", label: "Sydney" },
-    { value: "berlin", label: "Berlin" },
-    { value: "dubai", label: "Dubai" },
-    { value: "singapore", label: "Singapore" },
-    { value: "toronto", label: "Toronto" },
-    { value: "san_francisco", label: "San Francisco" },
-  ];
+  const locationOptionsHi = [...templeListHi];
 
-  const locationOptionsHi = [
-    { value: "delhi", label: "दिल्ली" },
-    { value: "mumbai", label: "मुंबई" },
-    { value: "varanasi", label: "वाराणसी" },
-    { value: "ayodhya", label: "अयोध्या" },
-    { value: "haridwar", label: "हरिद्वार" },
-    { value: "rishikesh", label: "ऋषिकेश" },
-  ];
+  const locationOptions = [...templeList];
+
   const loadLocationOptions = (inputValue, callback) => {
     const filtered = locationOptions.filter((opt) =>
       opt.label.toLowerCase().includes(inputValue.toLowerCase())
     );
     callback(filtered);
   };
+
   const loadLocationOptionsHi = (inputValue, callback) => {
     const filtered = locationOptionsHi.filter((opt) =>
       opt.label.includes(inputValue)
@@ -210,7 +199,7 @@ export default function AddChadhava({ open, handleClose }) {
                           autoComplete="off"
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          placeholder="Enter Title (English)"
+                          placeholder="Enter Chadhava (English)"
                           fullWidth
                           size="small"
                           error={touched.title && Boolean(errors.title)}
@@ -223,7 +212,7 @@ export default function AddChadhava({ open, handleClose }) {
                           autoComplete="off"
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          placeholder="मंदिर का नाम (हिंदी)"
+                          placeholder="चढावा का नाम (हिंदी)"
                           fullWidth
                           size="small"
                           error={touched.titleHi && Boolean(errors.titleHi)}

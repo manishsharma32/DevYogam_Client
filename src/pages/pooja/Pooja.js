@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import PujaCard from "../../component/PoojaCard";
 import { GetAllPoojasAPI } from "../../services/GetAllPoojasAPI";
 export default function Pooja() {
-  const { navigate } = useNavigate();
+  const navigate = useNavigate();
 
   const [openCreatePoOja, setOpenCreatePoOja] = useState(false);
   const [poojaData, setPoojaData] = useState([]);
@@ -14,12 +14,16 @@ export default function Pooja() {
   const getPooja = async () => {
     const res = await GetAllPoojasAPI();
     setPoojaData(res);
-    console.log(res);
   };
 
   useEffect(() => {
     getPooja();
   }, []);
+
+  const handeNavigate = (id, name) => {
+    let s = name.split(" ").join("-")
+    navigate(`/pooja-details/${s}/${id}`);
+  };
 
   return (
     <GlobalCssStyles>
@@ -52,9 +56,9 @@ export default function Pooja() {
                 highlight={item?.highlight}
                 highlightColor={item?.highlightColor || "#ED6A12"}
                 location={item?.location}
-                ctaText={item?.ctaText || "Limited Slots"}
+                ctaText={item?.ctaText || "Participate Now"}
                 ctaColor={item?.ctaColor || "#ED6A12"}
-                onCtaClick={() => alert(`Slot booked for ${item.headingEn}`)}
+                onCtaClick={() => handeNavigate(item?._id, item?.title)}
               />
             </Grid>
           ))}

@@ -49,7 +49,7 @@ export default function ServiceCard({
         mountOnEnter
         unmountOnExit={false}
       >
-        <Box sx={{ textAlign: "start" }}>
+        <Box sx={{ textAlign: "start", cursor:'pointer' }} onClick={onClick} >
           <Box sx={{ fontSize: 40, color: "#89255b", mb: 1 }}>{icon}</Box>
           <Typography
             variant="h6"
