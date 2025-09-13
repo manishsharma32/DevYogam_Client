@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-
 import { GlobalCssStyles } from "../../style/GlobalCSS";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import Card from "../../component/Card";
-import { GetAllTempleAPI } from "../../services/GetAllTempleAPI";
 import SplitHeader from "../mandir/SplitHeader";
+import { GetAllChadhavaAPI } from "../../services/GetAllChadhavaAPI";
+import ChadhavaCard from "../../component/ChadhavaCard";
 
 export default function Chadhava() {
   const [chadhavaData, setChadhavaData] = useState([]);
   const getChadhava = async () => {
-    const res = await GetAllTempleAPI();
+    const res = await GetAllChadhavaAPI();
     setChadhavaData(res);
   };
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function Chadhava() {
           {Array.isArray(chadhavaData) &&
             chadhavaData.map((item) => (
               <Grid key={item._id} item lg={3} md={4} sm={6} xs={12}>
-                <Card item={item} />
+                <ChadhavaCard item={item} />
               </Grid>
             ))}
         </Grid>

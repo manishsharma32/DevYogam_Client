@@ -14,20 +14,21 @@ export default function ChadhavaCard({ item }) {
         component="img"
         alt="green iguana"
         height="140"
-        image={item?.images?.[0]}
+        image={item?.mandir?.images?.[0]}
       />
       <CardContent>
         <Typography gutterBottom variant="h6" component="div">
           {item?.title}
         </Typography>
         <Typography gutterBottom variant="h6" component="div">
-          {item?.bhagwan}
+          {item?.subtitle}
         </Typography>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          {item?.templeDescription} Lizards are a widespread group of squamate
+          {item?.desc} Lizards are a widespread group of squamate
           reptiles, with over 6,000 species, ranging across all continents
           except Antarctica
         </Typography>
+        <Typography>Rs. {item.chadhava}</Typography>
       </CardContent>
       <CardActions>
         <Button

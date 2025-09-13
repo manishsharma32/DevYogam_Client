@@ -31,19 +31,38 @@ export const CreatePoojaAPI = async (data) => {
         formData.append("images_hi", file);
       });
     }
-if (data.price?.type[0]) {
-  const p = data.price.type[0];
-  formData.append("price[type][single][amaount]", p.single.amaount ?? "");
-  formData.append("price[type][single][description]", p.single.description ?? "");
-  formData.append("price[type][single][descriptionHi]", p.single.descriptionHi ?? "");
-  formData.append("price[type][couple][amaount]", p.couple.amaount ?? "");
-  formData.append("price[type][couple][description]", p.couple.description ?? "");
-  formData.append("price[type][couple][descriptionHi]", p.couple.descriptionHi ?? "");
-  formData.append("price[type][family][amaount]", p.family.amaount ?? "");
-  formData.append("price[type][family][description]", p.family.description ?? "");
-  formData.append("price[type][family][descriptionHi]", p.family.descriptionHi ?? "");
-}
+    if (data.price?.type?.[0]) {
+      const p = data.price.type[0];
+      formData.append("price[0][single][amaount]", p.single?.amaount ?? "");
+      formData.append(
+        "price[0][single][description]",
+        p.single?.description ?? ""
+      );
+      formData.append(
+        "price[0][single][descriptionHi]",
+        p.single?.descriptionHi ?? ""
+      );
 
+      formData.append("price[0][couple][amaount]", p.couple?.amaount ?? "");
+      formData.append(
+        "price[0][couple][description]",
+        p.couple?.description ?? ""
+      );
+      formData.append(
+        "price[0][couple][descriptionHi]",
+        p.couple?.descriptionHi ?? ""
+      );
+
+      formData.append("price[0][family][amaount]", p.family?.amaount ?? "");
+      formData.append(
+        "price[0][family][description]",
+        p.family?.description ?? ""
+      );
+      formData.append(
+        "price[0][family][descriptionHi]",
+        p.family?.descriptionHi ?? ""
+      );
+    }
 
     // Benefit array
     if (Array.isArray(data.benefit)) {
