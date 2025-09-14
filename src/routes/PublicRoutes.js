@@ -12,6 +12,7 @@ import TermsAndConditions from "../pages/policies/TermsAndConditions";
 import AddChadhava from "../pages/chadhava/AddChadhava";
 import PoojaDetails from "../pages/pooja/PoojaDetails";
 import PujaBookingPage from "../pages/pooja/PujaBookingPage";
+import RazorpayCheckout from "../component/RazorpayCheckout";
 
 export default function PublicRoutes() {
   return (
@@ -30,6 +31,7 @@ export default function PublicRoutes() {
       <Route path="/terms-conditions" element={<TermsAndConditions />} />
       <Route path="/temple/create" element={<AddTemple />} />
       <Route path="/chadhava/create" element={<AddChadhava/>}/>
+      <Route path="/razorpay" element={<RazorpayCheckout/>}/>
       {/* You can add more routes here */}
     </Routes>
   );
