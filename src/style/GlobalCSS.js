@@ -43,6 +43,8 @@ const GlobalCssStyles = styled(Box)({
     lineHeight: "10px",
     textTransform: "none",
     padding: "0px 2%",
+    fontWeight:500,
+    fontFamily:'Poppins',
     // backgroundColor: "#e59419",
     backgroundColor: "#9a67e6",
     opacity: "70%",

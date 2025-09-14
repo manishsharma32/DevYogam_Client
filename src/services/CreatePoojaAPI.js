@@ -33,6 +33,7 @@ export const CreatePoojaAPI = async (data) => {
     }
     if (data.price?.type?.[0]) {
       const p = data.price.type[0];
+      console.log("family amount ", p.family?.amaount)
       formData.append("price[0][single][amaount]", p.single?.amaount ?? "");
       formData.append(
         "price[0][single][description]",

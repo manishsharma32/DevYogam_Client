@@ -140,6 +140,8 @@ export default function AddPooja({ open, handleClose }) {
   const [poojaData, setPoojaData] = useState(initialValues);
   const [templeList, setTempleList] = useState([]);
   const [templeListHi, setTempleListHi] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const getTemple = async () => {
     const res = await GetAllTempleAPI();
     const english = (res || []).map((item) => ({
@@ -257,7 +259,12 @@ export default function AddPooja({ open, handleClose }) {
         formData.append(key, val[key]);
       }
     });
-    await CreatePoojaAPI(val);
+    setLoading(true);
+    const response = await CreatePoojaAPI(val);
+    setLoading(false);
+    if (response && !response.error) {
+    }
+
   };
 
   return (
@@ -503,8 +510,8 @@ export default function AddPooja({ open, handleClose }) {
                         </Box>
                         <Box>
                           <CustomTextField
-                            id="values.price.type[0].family.amaount"
-                            name="values.price.type[0].family.amaount"
+                            id="price.type[0].family.amaount"
+                            name="price.type[0].family.amaount"
                             type="number"
                             value={values.price?.type[0]?.family?.amaount}
                             onChange={handleChange}
@@ -1245,7 +1252,9 @@ export default function AddPooja({ open, handleClose }) {
                       <Button
                         className="create-btn"
                         type="submit"
-                        // disabled={!isValid || !dirty}
+                        disable={loading}
+                        loading={loading}
+                        // sdisabled={!isValid || !dirty}
                       >
                         Create Pooja
                       </Button>
