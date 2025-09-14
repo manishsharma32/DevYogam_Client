@@ -36,7 +36,7 @@ const initialValues = {
   removedLogoImageIdsHi: [], // Also referenced in remove function
   faq: [{ title: "", titleHi: "", description: "",descriptionHi:"", price: "", img: "" }],
 };
-
+console.log("==>initalvalues", initialValues);
 export default function AddChadhava({ open, handleClose }) {
   const [poojaData, setPoojaData] = useState(initialValues);
   const [templeData, setTempleData] = useState([]);
