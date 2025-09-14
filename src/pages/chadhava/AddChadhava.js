@@ -34,9 +34,9 @@ const initialValues = {
   newLogoImagesHi: [], // Also referenced in upload function
   removedLogoImageIds: [], // Also referenced in remove function
   removedLogoImageIdsHi: [], // Also referenced in remove function
-  faq: [{ title: "", titleHi: "", price: "", img: "" }],
+  faq: [{ title: "", titleHi: "", description: "",descriptionHi:"", price: "", img: "" }],
 };
-console.log("==>initalvalues", initialValues);
+
 export default function AddChadhava({ open, handleClose }) {
   const [poojaData, setPoojaData] = useState(initialValues);
   const [templeData, setTempleData] = useState([]);
@@ -246,7 +246,7 @@ export default function AddChadhava({ open, handleClose }) {
                           autoComplete="off"
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          placeholder="मंदिर का नाम (हिंदी)"
+                          placeholder="उपशीर्षक दर्ज करें (हिंदी)"
                           fullWidth
                           size="small"
                           error={
@@ -588,6 +588,46 @@ export default function AddChadhava({ open, handleClose }) {
                                   />
 
                                   <CustomTextField
+                                    name={`faq.${index}.description`}
+                                    placeholder="Description (English)"
+                                    value={item.description}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    fullWidth
+                                    size="small"
+                                    error={
+                                      touched.faq &&
+                                      touched.faq[index]?.description &&
+                                      Boolean(errors.faq?.[index]?.description)
+                                    }
+                                    helperText={
+                                      touched.faq &&
+                                      touched.faq[index]?.description &&
+                                      errors.faq?.[index]?.description
+                                    }
+                                  />
+
+                                    <CustomTextField
+                                    name={`faq.${index}.descriptionHi`}
+                                    placeholder="विवरण (हिंदी)"
+                                    value={item.descriptionHi}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    fullWidth
+                                    size="small"
+                                    error={
+                                      touched.faq &&
+                                      touched.faq[index]?.descriptionHi &&
+                                      Boolean(errors.faq?.[index]?.descriptionHi)
+                                    }
+                                    helperText={
+                                      touched.faq &&
+                                      touched.faq[index]?.descriptionHi &&
+                                      errors.faq?.[index]?.descriptionHi
+                                    }
+                                  />
+
+                                  <CustomTextField
                                     name={`faq.${index}.price`}
                                     placeholder="Price"
                                     value={item.price}
@@ -712,6 +752,8 @@ export default function AddChadhava({ open, handleClose }) {
                                           push({
                                             title: "",
                                             titleHi: "",
+                                            description:"",
+                                            descriptionHi:"",
                                             price: "",
                                             img: "",
                                             imgName: "",
@@ -719,7 +761,7 @@ export default function AddChadhava({ open, handleClose }) {
                                         }
                                         variant="outlined"
                                       >
-                                        Add FAQ
+                                        Add Items
                                       </Button>
                                     </Box>
                                   )}
