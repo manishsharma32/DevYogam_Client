@@ -26,6 +26,16 @@ export const CreateChadhavaAPI = async (data) => {
         formData.append("images_hi", file);
       });
     }
+    if (Array.isArray(data.faq)) {
+      console.log('==>faq',data.faq)
+      data.faq.forEach((b, i) => {
+        formData.append(`items[${i}][title]`, b.title || "");
+        formData.append(`items[${i}][titleHi]`, b.titleHi || "");
+        formData.append(`items[${i}][price]`, b.price || "");
+        formData.append(`items[${i}][image]`, b.img || "");
+      });
+    }
+
     return formData;
   };
 

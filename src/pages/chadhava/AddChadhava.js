@@ -34,8 +34,9 @@ const initialValues = {
   newLogoImagesHi: [], // Also referenced in upload function
   removedLogoImageIds: [], // Also referenced in remove function
   removedLogoImageIdsHi: [], // Also referenced in remove function
+  faq: [{ title: "", titleHi: "", price: "", img: "" }],
 };
-
+console.log("==>initalvalues", initialValues);
 export default function AddChadhava({ open, handleClose }) {
   const [poojaData, setPoojaData] = useState(initialValues);
   const [templeData, setTempleData] = useState([]);
@@ -53,7 +54,7 @@ export default function AddChadhava({ open, handleClose }) {
 
   useEffect(() => {
     getTemple();
-  }, []);   
+  }, []);
 
   const locationOptions = [
     { value: "new_york", label: "New York" },
@@ -537,9 +538,210 @@ export default function AddChadhava({ open, handleClose }) {
                         }
                       />
                     </Grid>
+                    <Grid item xs={12} sm={12} sx={{ mb: 1 }}>
+                      <Typography
+                        className="policy-form-label policy-text-field-label"
+                        sx={{ mb: 1 }}
+                      >
+                        Items <span className="required-icon">*</span>
+                      </Typography>
+                      <FieldArray name="faq">
+                        {({ push, remove }) => (
+                          <Box>
+                            {values.faq.map((item, index) => (
+                              <Box
+                                key={index}
+                                sx={{
+                                  mb: 3,
+                                  borderRadius: "8px",
+                                }}
+                              >
+                                <Stack spacing={2}>
+                                  <CustomTextField
+                                    name={`faq.${index}.title`}
+                                    placeholder="Title (English)"
+                                    value={item.title}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    fullWidth
+                                    size="small"
+                                    error={
+                                      touched.faq &&
+                                      touched.faq[index]?.title &&
+                                      Boolean(errors.faq?.[index]?.title)
+                                    }
+                                    helperText={
+                                      touched.faq &&
+                                      touched.faq[index]?.title &&
+                                      errors.faq?.[index]?.title
+                                    }
+                                  />
+
+                                  {/* Title (Hindi) */}
+                                  <CustomTextField
+                                    name={`faq.${index}.titleHi`}
+                                    placeholder="शीर्षक (हिंदी)"
+                                    value={item.titleHi}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    fullWidth
+                                    size="small"
+                                    error={
+                                      touched.faq &&
+                                      touched.faq[index]?.titleHi &&
+                                      Boolean(errors.faq?.[index]?.titleHi)
+                                    }
+                                    helperText={
+                                      touched.faq &&
+                                      touched.faq[index]?.titleHi &&
+                                      errors.faq?.[index]?.titleHi
+                                    }
+                                  />
+
+                                  <CustomTextField
+                                    name={`faq.${index}.price`}
+                                    placeholder="Price"
+                                    value={item.price}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    fullWidth
+                                    size="small"
+                                    error={
+                                      touched.faq &&
+                                      touched.faq[index]?.price &&
+                                      Boolean(errors.faq?.[index]?.price)
+                                    }
+                                    helperText={
+                                      touched.faq &&
+                                      touched.faq[index]?.price &&
+                                      errors.faq?.[index]?.price
+                                    }
+                                  />
+
+                                  <Box
+                                    sx={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: 2,
+                                    }}
+                                  >
+                                    <input
+                                      accept="image/*"
+                                      type="file"
+                                      style={{ display: "none" }}
+                                      id={`faq-${index}-image`}
+                                      onChange={(e) => {
+                                        if (
+                                          e.target.files &&
+                                          e.target.files[0]
+                                        ) {
+                                          const file = e.target.files[0];
+                                          setFieldValue(
+                                            `faq.${index}.img`,
+                                            file
+                                          );
+                                          setFieldValue(
+                                            `faq.${index}.imgName`,
+                                            file.name
+                                          );
+                                        }
+                                      }}
+                                    />
+                                    <label htmlFor={`faq-${index}-image`}>
+                                      <Button
+                                        variant="outlined"
+                                        component="span"
+                                        size="small"
+                                        sx={{ borderRadius: "2rem" }}
+                                      >
+                                        <img
+                                          src={UploadIcon}
+                                          alt="Upload"
+                                          style={{ width: 20, marginRight: 8 }}
+                                        />
+                                        Upload Image
+                                      </Button>
+                                    </label>
+
+                                    {item.img && (
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          background: "#f3f2f1",
+                                          padding: "4px 10px",
+                                          borderRadius: 12,
+                                        }}
+                                      >
+                                        <Typography
+                                          sx={{ fontFamily: "Poppins" }}
+                                        >
+                                          {item.img.name || item.imgName}
+                                        </Typography>
+                                        <IconButton
+                                          size="small"
+                                          onClick={() => {
+                                            setFieldValue(
+                                              `faq.${index}.img`,
+                                              ""
+                                            );
+                                            setFieldValue(
+                                              `faq.${index}.imgName`,
+                                              ""
+                                            );
+                                          }}
+                                        >
+                                          <CloseIcon fontSize="small" />
+                                        </IconButton>
+                                      </Box>
+                                    )}
+                                  </Box>
+
+                                  {values.faq.length > 1 && (
+                                    <Box
+                                      sx={{
+                                        display: "flex",
+                                        justifyContent: "flex-end",
+                                      }}
+                                    >
+                                      <IconButton
+                                        onClick={() => remove(index)}
+                                        size="small"
+                                        aria-label="delete"
+                                      >
+                                        <DeleteOutlinedIcon color="error" />
+                                      </IconButton>
+                                    </Box>
+                                  )}
+                                </Stack>
+
+                                {index === values.faq.length - 1 &&
+                                  values.faq.length < 5 && (
+                                    <Box sx={{ mt: 2 }}>
+                                      <Button
+                                        onClick={() =>
+                                          push({
+                                            title: "",
+                                            titleHi: "",
+                                            price: "",
+                                            img: "",
+                                            imgName: "",
+                                          })
+                                        }
+                                        variant="outlined"
+                                      >
+                                        Add FAQ
+                                      </Button>
+                                    </Box>
+                                  )}
+                              </Box>
+                            ))}
+                          </Box>
+                        )}
+                      </FieldArray>
+                    </Grid>
                   </Box>
 
-                  {/* Submit Button */}
                   <Grid item xs={12} sm={6} size={12} sx={{ mt: 2 }}>
                     <Box
                       sx={{
