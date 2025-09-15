@@ -6,14 +6,23 @@ import { Carousel } from "react-responsive-carousel";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useNavigate } from "react-router-dom";
+import { Card, CardContent, Grid, Skeleton } from "@mui/material";
 
 export default function ExploreTemples() {
   const [templeData, setTempleData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const theme = useTheme();
 
   const getTemple = async () => {
-    const res = await GetAllTempleAPI();
-    setTempleData(res);
+    setLoading(true);
+    try {
+      const res = await GetAllTempleAPI();
+      setTempleData(res);
+    } catch (error) {
+      console.error("Error fetching temple data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -22,7 +31,7 @@ export default function ExploreTemples() {
 
   // Map templeData to carousel items taking the first image from images array
   const carouselItems = templeData
-    .map((temple) => {
+    ?.map((temple) => {
       if (temple.images && temple.images.length > 0) {
         return {
           image: temple.images[0],
@@ -37,7 +46,38 @@ export default function ExploreTemples() {
   const reversedItems = [...carouselItems].reverse(); // reversed for second carousel
 
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm")); // <600px
-
+  const skeletons = Array.from(new Array(2)).map((_, index) => (
+    <Grid item key={index} size={{ xs: 12, md: 4, sm: 6, lg: 4 }}>
+      <Card
+        sx={{
+          width: "100%",
+          border: "1px solid #D9D9D9",
+          borderRadius: 2,
+          boxShadow: "none",
+        }}
+      >
+        <Skeleton
+          variant="rectangular"
+          width="100%"
+          height={120}
+          sx={{ borderTopLeftRadius: 8, borderTopRightRadius: 8 }}
+        />
+        <CardContent sx={{ p: 2 }}>
+          <Skeleton variant="text" width="60%" height={30} sx={{ mb: 1 }} />
+          <Skeleton variant="text" width="40%" height={25} sx={{ mb: 1 }} />
+          <Skeleton variant="text" width="95%" height={20} sx={{ mb: 2 }} />
+          <Box display="flex" justifyContent="flex-end">
+            <Skeleton
+              variant="rectangular"
+              width={120}
+              height={36}
+              sx={{ borderRadius: 2 }}
+            />
+          </Box>
+        </CardContent>
+      </Card>
+    </Grid>
+  ));
   return (
     <Box sx={{ width: "88%", maxWidth: 1300, mx: "auto", my: 5 }}>
       <Typography
@@ -52,42 +92,45 @@ export default function ExploreTemples() {
         Explore Temples
       </Typography>
 
-      {/* On mobile, show carousels vertically, second upside down */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: isSmallScreen ? "column" : "row",
-          alignItems: "center",
-          gap: "1rem",
-        }}
-      >
-        {/* First carousel normal */}
-        <CustomCarousel
-          items={carouselItems}
-          showStatus={false}
-          showArrows={true}
-          showIndicators={false}
-          showThumbs={false}
-          // {...carouselProps}
-        />
-
-        {/* Second carousel reversed */}
+      {loading ? (
+        <Grid container spacing={2} justifyContent={"center"} >
+          {skeletons}
+        </Grid>
+      ) : (
         <Box
           sx={{
-            // transform: isSmallScreen ? "rotate(180deg)" : "none",
-            width: isSmallScreen ? "100%" : "auto",
+            display: "flex",
+            flexDirection: isSmallScreen ? "column" : "row",
+            alignItems: "center",
+            gap: "1rem",
+            cursor:'pointer'
           }}
         >
+          {/* First carousel normal */}
           <CustomCarousel
-            items={reversedItems}
+            items={carouselItems}
             showStatus={false}
+            showArrows={true}
             showIndicators={false}
             showThumbs={false}
-            showArrows={false}
-            // also hide "1 of 2" text
           />
+
+          {/* Second carousel reversed */}
+          <Box
+            sx={{
+              width: isSmallScreen ? "100%" : "auto",
+            }}
+          >
+            <CustomCarousel
+              items={reversedItems}
+              showStatus={false}
+              showIndicators={false}
+              showThumbs={false}
+              showArrows={false}
+            />
+          </Box>
         </Box>
-      </Box>
+      )}
     </Box>
   );
 }
@@ -217,8 +260,9 @@ const CustomCarousel = ({
             overflow: "hidden",
             boxSizing: "border-box",
           }}
-           onClick={() => {navigate("/temple")}}
-
+          onClick={() => {
+            navigate("/temple");
+          }}
         >
           <img
             src={item.image}

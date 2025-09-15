@@ -206,7 +206,7 @@ export default function PujaBookingPage() {
         <Grid item size={{ xs: 12, md: 12, lg: 4 }}>
           <Box
             sx={{
-              display: "flex",
+              display: "flex", 
               // width: "40%",
               // mx: "auto",
               gap: 4,
@@ -560,6 +560,7 @@ export default function PujaBookingPage() {
         >
           Book Puja
         </Button>
+        {/* <RazorpayCheckout/> */}
         <Typography variant="caption" sx={{ mt: 1, display: "block" }}>
           Puja booking updates, including photos, videos, and other details,
           will be sent to the WhatsApp number provided below.
