@@ -84,6 +84,18 @@ export const CreatePoojaAPI = async (data) => {
         formData.append(`faq[${i}][answerHi]`, f.answerHi || "");
       });
     }
+
+     if (Array.isArray(data.items)) {
+    
+      data.items.forEach((b, i) => {
+        formData.append(`items[${i}][title]`, b.title || "");
+        formData.append(`items[${i}][titleHi]`, b.titleHi || "");
+        formData.append(`items[${i}[description]`, b.description || "");
+        formData.append(`items[${i}[descriptionHi]`, b.descriptionHi || "");
+        formData.append(`items[${i}][price]`, b.price || "");
+        formData.append(`items[${i}][image]`, b.img || "");
+      });
+    }
     return formData;
   };
 

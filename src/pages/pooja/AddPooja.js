@@ -135,6 +135,7 @@ const initialValues = {
 
   benefit: [{ title: "", titleHi: "", description: "", descriptionHi: "" }],
   faq: [{ question: "", questionHi: "", answer: "", answerHi: "" }],
+   items: [{ title: "", titleHi: "", description: "",descriptionHi:"", price: "", img: "" }],
 };
 
 export default function AddPooja({ open, handleClose }) {
@@ -1241,6 +1242,252 @@ export default function AddPooja({ open, handleClose }) {
                         )}
                       </FieldArray>
                     </Grid>
+
+   <Grid item xs={12} sm={12} sx={{ mb: 1 }}>
+                      <Typography
+                        className="policy-form-label policy-text-field-label"
+                        sx={{ mb: 1 }}
+                      >
+                        Items <span className="required-icon">*</span>
+                      </Typography>
+                      <FieldArray name="faq">
+                        {({ push, remove }) => (
+                          <Box>
+                            {values.items.map((item, index) => (
+                              <Box
+                                key={index}
+                                sx={{
+                                  mb: 3,
+                                  borderRadius: "8px",
+                                }}
+                              >
+                                <Stack spacing={2}>
+                                  <CustomTextField
+                                    name={`items.${index}.title`}
+                                    placeholder="Title (English)"
+                                    value={item.title}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    fullWidth
+                                    size="small"
+                                    error={
+                                      touched.items &&
+                                      touched.items[index]?.title &&
+                                      Boolean(errors.items?.[index]?.title)
+                                    }
+                                    helperText={
+                                      touched.items &&
+                                      touched.items[index]?.title &&
+                                      errors.items?.[index]?.title
+                                    }
+                                  />
+
+                                  {/* Title (Hindi) */}
+                                  <CustomTextField
+                                    name={`items.${index}.titleHi`}
+                                    placeholder="शीर्षक (हिंदी)"
+                                    value={item.titleHi}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    fullWidth
+                                    size="small"
+                                    error={
+                                      touched.items &&
+                                      touched.items[index]?.titleHi &&
+                                      Boolean(errors.items?.[index]?.titleHi)
+                                    }
+                                    helperText={
+                                      touched.items &&
+                                      touched.items[index]?.titleHi &&
+                                      errors.items?.[index]?.titleHi
+                                    }
+                                  />
+
+                                  <CustomTextField
+                                    name={`items.${index}.description`}
+                                    placeholder="Description (English)"
+                                    value={item.description}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    fullWidth
+                                    size="small"
+                                    error={
+                                      touched.items &&
+                                      touched.items[index]?.description &&
+                                      Boolean(errors.items?.[index]?.description)
+                                    }
+                                    helperText={
+                                      touched.items &&
+                                      touched.items[index]?.description &&
+                                      errors.items?.[index]?.description
+                                    }
+                                  />
+
+                                    <CustomTextField
+                                    name={`items.${index}.descriptionHi`}
+                                    placeholder="विवरण (हिंदी)"
+                                    value={item.descriptionHi}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    fullWidth
+                                    size="small"
+                                    error={
+                                      touched.items &&
+                                      touched.items[index]?.descriptionHi &&
+                                      Boolean(errors.items?.[index]?.descriptionHi)
+                                    }
+                                    helperText={
+                                      touched.items &&
+                                      touched.items[index]?.descriptionHi &&
+                                      errors.items?.[index]?.descriptionHi
+                                    }
+                                  />
+
+                                  <CustomTextField
+                                    name={`items.${index}.price`}
+                                    placeholder="Price"
+                                    value={item.price}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    fullWidth
+                                    size="small"
+                                    error={
+                                      touched.items &&
+                                      touched.items[index]?.price &&
+                                      Boolean(errors.items?.[index]?.price)
+                                    }
+                                    helperText={
+                                      touched.items &&
+                                      touched.items[index]?.price &&
+                                      errors.items?.[index]?.price
+                                    }
+                                  />
+
+                                  <Box
+                                    sx={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: 2,
+                                    }}
+                                  >
+                                    <input
+                                      accept="image/*"
+                                      type="file"
+                                      style={{ display: "none" }}
+                                      id={`items-${index}-image`}
+                                      onChange={(e) => {
+                                        if (
+                                          e.target.files &&
+                                          e.target.files[0]
+                                        ) {
+                                          const file = e.target.files[0];
+                                          setFieldValue(
+                                            `items.${index}.img`,
+                                            file
+                                          );
+                                          setFieldValue(
+                                            `items.${index}.imgName`,
+                                            file.name
+                                          );
+                                        }
+                                      }}
+                                    />
+                                    <label htmlFor={`items-${index}-image`}>
+                                      <Button
+                                        variant="outlined"
+                                        component="span"
+                                        size="small"
+                                        sx={{ borderRadius: "2rem" }}
+                                      >
+                                        <img
+                                          src={UploadIcon}
+                                          alt="Upload"
+                                          style={{ width: 20, marginRight: 8 }}
+                                        />
+                                        Upload Image
+                                      </Button>
+                                    </label>
+
+                                    {item.img && (
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          background: "#f3f2f1",
+                                          padding: "4px 10px",
+                                          borderRadius: 12,
+                                        }}
+                                      >
+                                        <Typography
+                                          sx={{ fontFamily: "Poppins" }}
+                                        >
+                                          {item.img.name || item.imgName}
+                                        </Typography>
+                                        <IconButton
+                                          size="small"
+                                          onClick={() => {
+                                            setFieldValue(
+                                              `items.${index}.img`,
+                                              ""
+                                            );
+                                            setFieldValue(
+                                              `items.${index}.imgName`,
+                                              ""
+                                            );
+                                          }}
+                                        >
+                                          <CloseIcon fontSize="small" />
+                                        </IconButton>
+                                      </Box>
+                                    )}
+                                  </Box>
+
+                                  {values.items.length > 1 && (
+                                    <Box
+                                      sx={{
+                                        display: "flex",
+                                        justifyContent: "flex-end",
+                                      }}
+                                    >
+                                      <IconButton
+                                        onClick={() => remove(index)}
+                                        size="small"
+                                        aria-label="delete"
+                                      >
+                                        <DeleteOutlinedIcon color="error" />
+                                      </IconButton>
+                                    </Box>
+                                  )}
+                                </Stack>
+
+                                {index === values.items.length - 1 &&
+                                  values.items.length < 5 && (
+                                    <Box sx={{ mt: 2 }}>
+                                      <Button
+                                        onClick={() =>
+                                          push({
+                                            title: "",
+                                            titleHi: "",
+                                            description:"",
+                                            descriptionHi:"",
+                                            price: "",
+                                            img: "",
+                                            imgName: "",
+                                          })
+                                        }
+                                        
+                                      >
+                                        Add items
+                                      </Button>
+                                    </Box>
+                                  )}
+                              </Box>
+                            ))}
+                          </Box>
+                        )}
+                      </FieldArray>
+                    </Grid>
+
                   </Box>
 
                   {/* Submit Button */}
