@@ -21,6 +21,9 @@ const fontWeight = {
 };
 
 const GlobalCssStyles = styled(Box)({
+  "& .parent-container": {
+    marginTop:'5%'
+  },
   "& .heading-container": {
     display: "flex",
     alignItems: "baseline",

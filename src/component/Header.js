@@ -18,7 +18,8 @@ import Slide from "@mui/material/Slide";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import logo from "../assests/logo.png"
+import logo from "../assests/logo.png";
+import { useNavigate } from "react-router-dom";
 // Nav data
 const navItemsLeft = [
   { label: "Home", link: "/" },
@@ -46,6 +47,7 @@ function HideOnScroll(props) {
 }
 
 export default function Header(props) {
+  const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const trigger = useScrollTrigger({ threshold: 10 });
@@ -103,75 +105,73 @@ export default function Header(props) {
   );
 
   return (
-    <HideOnScroll {...props}>
-      <AppBar
-        position="absolute"
-        elevation={trigger ? 4 : 0}
+    <AppBar
+      position="fixed"
+      // elevation=4
+      sx={{
+        backgroundColor: "white",
+        // backgroundImage:
+        //   "linear-gradient(360deg, #E8DAF9 0%, #C1A4F0 20%, #9a67e6 100%)",
+        // transition: "background-image 0.3s, box-shadow 0.3s",
+        py: 1,
+      }}
+    >
+      <Toolbar
         sx={{
-          backgroundColor:'white',
-          // backgroundImage:
-          //   "linear-gradient(360deg, #E8DAF9 0%, #C1A4F0 20%, #9a67e6 100%)",
-          boxShadow: trigger ? 3 : 0,
-          // transition: "background-image 0.3s, box-shadow 0.3s",
-          py: 1, 
+          minHeight: {xs: "45px", md:"64px", lg:'72px `'},
+          position: "relative",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          px: { xs: 2, md: 4 },
         }}
       >
-        <Toolbar
+        {/* Left Navs or Hamburger */}
+        {!isMobile ? (
+          <Box sx={{ display: "flex", gap: 3 }}>
+            {navItemsLeft.map((item) => (
+              <Button
+                key={item.label}
+                color="inherit"
+                sx={{
+                  fontWeight: 500,
+                  fontSize: "1rem",
+                  fontFamily: "Poppins, sans-serif",
+                  letterSpacing: 1,
+                  color: "#333",
+                  textTransform: "none",
+                  "&:hover": { color: "#aa4466", background: "transparent" },
+                }}
+                href={item.link}
+              >
+                {item.label}
+              </Button>
+            ))}
+          </Box>
+        ) : (
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={() => setDrawerOpen(true)}
+          >
+            <MenuIcon sx={{ color: "#aa4466", fontSize: 32 }} />
+          </IconButton>
+        )}
+
+        {/* Centered Logo */}
+        <Box
           sx={{
-            minHeight: "72px",
-            position: "relative",
+            left: 0,
+            right: 0,
+            position: "absolute",
             display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            px: { xs: 2, md: 4 },
+            justifyContent: "center",
+            pointerEvents: "none",
           }}
         >
-          {/* Left Navs or Hamburger */}
-          {!isMobile ? (
-            <Box sx={{ display: "flex", gap: 3 }}>
-              {navItemsLeft.map((item) => (
-                <Button
-                  key={item.label}
-                  color="inherit"
-                  sx={{
-                    fontWeight: 500,
-                    fontSize: "1rem",
-                    fontFamily: "Poppins, sans-serif",
-                    letterSpacing: 1,
-                    color: "#333",
-                    textTransform: "none",
-                    "&:hover": { color: "#aa4466", background: "transparent" },
-                  }}
-                  href={item.link}
-                >
-                  {item.label}
-                </Button>
-              ))}
-            </Box>
-          ) : (
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              onClick={() => setDrawerOpen(true)}
-            >
-              <MenuIcon sx={{ color: "#aa4466", fontSize: 32 }} />
-            </IconButton>
-          )}
-
-          {/* Centered Logo */}
-          <Box
-            sx={{
-              left: 0,
-              right: 0,
-              position: "absolute",
-              display: "flex",
-              justifyContent: "center",
-              pointerEvents: "none",
-            }}
-          >
-            {/* <Typography
+          {/* <Typography
               variant="h3"
               sx={{
                 fontFamily: "'Playfair Display', serif",
@@ -186,56 +186,66 @@ export default function Header(props) {
             >
               DevYogam
             </Typography> */}
-            <img src={logo} loading="lazy" style={{width:'320px'}} />
-          </Box>
+          <Box
+            component="img"
+            src={logo}
+            loading="lazy"
+            sx={{
+              width: { xs: "140px", sm: "180px", md: "220px", lg: "240px" },
+              height: "auto",
+            }}
+            onClick={()=> navigate("/")}
+          />
 
-          {/* Right Navs + More or empty (on Mobile) */}
-          {!isMobile ? (
-            <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-              {navItemsRight.map((item) => (
-                <Button
-                  key={item.label}
-                  color="inherit"
-                  sx={{
-                    fontWeight: 500,
-                    fontSize: "1rem",
-                    fontFamily: "Poppins, sans-serif",
-                    letterSpacing: 1,
-                    color: "#333",
-                    textTransform: "none",
-                    "&:hover": { color: "#aa4466", background: "transparent" },
-                  }}
-                  href={item.link}
-                >
-                  {item.label}
-                </Button>
-              ))}
-              <IconButton color="inherit" onClick={handleMenuOpen}>
-                <MoreVertIcon sx={{ color: "#333" }} />
-              </IconButton>
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
+          {/* <img src={logo} loading="lazy" style={{width:{md:'220px', lg: '240px', sx:'10px'}}} /> */}
+        </Box>
+
+        {/* Right Navs + More or empty (on Mobile) */}
+        {!isMobile ? (
+          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+            {navItemsRight.map((item) => (
+              <Button
+                key={item.label}
+                color="inherit"
+                sx={{
+                  fontWeight: 500,
+                  fontSize: "1rem",
+                  fontFamily: "Poppins, sans-serif",
+                  letterSpacing: 1,
+                  color: "#333",
+                  textTransform: "none",
+                  "&:hover": { color: "#aa4466", background: "transparent" },
+                }}
+                href={item.link}
               >
-                {moreOptions.map((option) => (
-                  <MenuItem key={option.label} onClick={handleMenuClose}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
-          ) : null}
-        </Toolbar>
-        {/* Drawer for tablet/mobile */}
-        <Drawer
-          anchor="left"
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-        >
-          {drawerList}
-        </Drawer>
-      </AppBar>
-    </HideOnScroll>
+                {item.label}
+              </Button>
+            ))}
+            <IconButton color="inherit" onClick={handleMenuOpen}>
+              <MoreVertIcon sx={{ color: "#333" }} />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+            >
+              {moreOptions.map((option) => (
+                <MenuItem key={option.label} onClick={handleMenuClose}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+        ) : null}
+      </Toolbar>
+      {/* Drawer for tablet/mobile */}
+      <Drawer
+        anchor="left"
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      >
+        {drawerList}
+      </Drawer>
+    </AppBar>
   );
 }

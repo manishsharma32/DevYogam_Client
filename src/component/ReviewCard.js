@@ -54,7 +54,7 @@ export default function ReviewCard() {
               <Card
                 sx={{
                   maxWidth: 340,
-                  minHeight: 390,
+                  maxHeight: 390,
                   backgroundColor: "#DBDBDB",
                   padding: "2%",
                   display: "flex",

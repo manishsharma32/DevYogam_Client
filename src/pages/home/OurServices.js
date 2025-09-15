@@ -21,7 +21,7 @@ const services = [
     icon: <EmojiObjectsOutlinedIcon fontSize="inherit" />,
     title: "Chadhava",
     description:
-    "Offer chadava at India’s most renowned temples and be part of age-old traditions. Seek divine blessings for yourself, all from the comfort of your home.",
+      "Offer chadava at India’s most renowned temples and be part of age-old traditions. Seek divine blessings for yourself, all from the comfort of your home.",
     btnLabel: "Offer Now",
     link: "/chadhava",
   },
@@ -36,18 +36,23 @@ const services = [
 ];
 
 export default function OurServices() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <Box sx={{ width: "90%", margin: "auto" }}>
       <Typography
-        sx={{ fontFamily: "Poppins", fontSize: "2.5rem", fontWeight: 600 }}
+        sx={{
+          fontFamily: "Poppins",
+          fontSize: "2rem",
+          fontWeight: 600,
+          textAlign: "center",
+        }}
       >
         Our Services
       </Typography>
       <Grid container spacing={4} py={4} justifyContent={"center"}>
         {services.map((service, idx) => (
-          <Grid sx={{}} key={idx} item size={{ xs: 6, md: 6, sm: 4, lg: 4 }}>
-            <ServiceCard onClick={() => navigate(service?.link) } {...service} />
+          <Grid sx={{}} key={idx} item size={{ xs: 12, md: 6, sm: 4, lg: 4 }}>
+            <ServiceCard onClick={() => navigate(service?.link)} {...service} />
           </Grid>
         ))}
       </Grid>

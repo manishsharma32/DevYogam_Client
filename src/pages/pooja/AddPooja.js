@@ -14,6 +14,7 @@ import UploadIcon from "../../assests/upload-icon.svg";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect } from "react";
 import { GetAllTempleAPI } from "../../services/GetAllTempleAPI";
+import { useNavigate } from "react-router-dom";
 
 const MAX_LOGOS = 5;
 const MAX_SIZE = 5 * 1024 * 1024;
@@ -141,6 +142,7 @@ export default function AddPooja({ open, handleClose }) {
   const [templeList, setTempleList] = useState([]);
   const [templeListHi, setTempleListHi] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
 
   const getTemple = async () => {
     const res = await GetAllTempleAPI();
@@ -263,6 +265,7 @@ export default function AddPooja({ open, handleClose }) {
     const response = await CreatePoojaAPI(val);
     setLoading(false);
     if (response && !response.error) {
+      navigate("/pooja")
     }
 
   };

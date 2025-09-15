@@ -9,12 +9,9 @@ import avatar5 from "../../assests/avatar5.jpg";
 // import avatar9 from "../assests/avatar9.jpg";
 // import avatar10 from "../assests/avatar10.jpg";
 
-// export const baseURL = process.env.REACT_APP_API_BASE_URL_SERVER
-export const baseURL = process.env.REACT_APP_API_BASE_URL_LOCAL
+//export const baseURL = process.env.REACT_APP_API_BASE_URL_SERVER
+export const baseURL = process.env.REACT_APP_API_BASE_URL_LOCAL;
 // export const baseURL = 'http://localhost:5000'
-
-
-
 export const reviewsData = [
   {
     avatar: avatar1,
@@ -22,7 +19,7 @@ export const reviewsData = [
     designation: "Software Developer",
     mainQuote: "Excellent",
     review:
-      "booked the Baba Mahakal Chadhava from Dev Yogam for my job switch, and within just a few weeks, I started receiving responses on email. Soon, my interview was scheduled, and I got selected for the job. With the help of Dev Yogam, I received the video and prasad, which made me feel truly grateful. This is indeed a rare, authentic, and heartfelt spiritual service.",
+      "Booked the Baba Mahakal Chadhava from Dev Yogam, I clear my job interview. Receiving the video and prasad.",
   },
   {
     avatar: avatar2,
@@ -30,7 +27,7 @@ export const reviewsData = [
     designation: "Graphic Designer",
     mainQuote: "Life Changing",
     review:
-      "The puja services exceeded my expectations. The devotion, punctuality, and the whole experience brought so much peace into my life during hard times.",
+      "The puja services exceeded my expectations and brought peace during challenging times. Every moment felt uplifting and filled with positivity.",
   },
   {
     avatar: avatar3,
@@ -38,7 +35,7 @@ export const reviewsData = [
     mainQuote: "Truly Divine",
     designation: "Teacher",
     review:
-      "From booking to receiving the prasad, every step was smooth. I felt spiritually connected throughout the process.",
+      "From booking to receiving the prasad, everything was seamless and comforting. I felt deeply connected throughout the entire process.",
   },
   {
     avatar: avatar4,
@@ -46,7 +43,7 @@ export const reviewsData = [
     designation: "Business Owner",
     mainQuote: "Heart Touching",
     review:
-      "The personal attention and updates during the puja made me feel valued. It’s a service I’d recommend to every devotee.",
+      "The personal care during the puja made me feel valued and blessed. It’s a service I would happily recommend to every devotee.",
   },
   {
     avatar: avatar5,
@@ -54,46 +51,6 @@ export const reviewsData = [
     designation: "Lawyer",
     mainQuote: "Great Experience",
     review:
-      "I experienced a sense of relief and clarity after the puja. The energy and vibrations were evident even from afar.",
+      "After the puja, I felt a wave of clarity and spiritual relief. The divine energy and blessings were truly felt even from afar.",
   },
-  //   {
-  //     avatar: avatar6,
-  //     name: "VK Mehta",
-  //     designation: "Doctor",
-  //     mainQuote: "Blessed",
-  //     review:
-  //       "This service brought so much positivity into my life. It felt as though every prayer was heard instantly."
-  //   },
-  //   {
-  //     avatar: avatar7,
-  //     name: "Vikram Joshi",
-  //     designation: "Civil Engineer",
-  //     mainQuote: "Highly Recommend",
-  //     review:
-  //       "Professional, genuine, and deeply spiritual — a rare combination in online services."
-  //   },
-  //   {
-  //     avatar: avatar8,
-  //     name: "Ritika Mehta",
-  //     designation: "Content Writer",
-  //     mainQuote: "Peaceful",
-  //     review:
-  //       "The entire experience gave me inner peace and faith. I am truly grateful."
-  //   },
-  //   {
-  //     avatar: avatar9,
-  //     name: "Manoj Patel",
-  //     designation: "Entrepreneur",
-  //     mainQuote: "Uplifting",
-  //     review:
-  //       "I felt a wave of energy and hope after participating virtually. Everything was well organized."
-  //   },
-  //   {
-  //     avatar: avatar10,
-  //     name: "Arun Desai",
-  //     designation: "HR Manager",
-  //     mainQuote: "Tranquil",
-  //     review:
-  //       "A beautiful and calming experience that made me feel closer to the divine."
-  //   }
 ];

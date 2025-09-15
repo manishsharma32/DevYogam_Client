@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SplitHeader from "./SplitHeader";
 import { GlobalCssStyles } from "../../style/GlobalCSS";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Card from "../../component/Card";
 import { GetAllTempleAPI } from "../../services/GetAllTempleAPI";
 
@@ -14,17 +14,24 @@ export default function Mandir() {
   useEffect(() => {
     getTemple();
   }, []);
+const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm")); // <600px
+  const isMediumScreen = useMediaQuery(theme.breakpoints.between("sm", "md")); // 600-900px
 
   return (
     <GlobalCssStyles>
-      <Box sx={{ minHeight: "100vh" }}>
-        <SplitHeader />
-      </Box>
+    <Box className="parent-container" >
+
+      {isSmallScreen || isMediumScreen ? null : (
+        <Box sx={{ minHeight: "100vh" }}>
+          <SplitHeader />
+        </Box>
+      )}
       <Box sx={{ width: "90%", margin: "auto", padding: "2%" }}>
-        <Box className="heading-container">
-          <Typography className="heading-text">
+        <Box sx={{display:'flex', justifyContent:'flex-end', m:2}}>
+          {/* <Typography className="heading-text">
             Explore Temples With Dev Yogam{" "}
-          </Typography>
+          </Typography> */}
           <Button
             className="create-btn"
             onClick={() => {
@@ -36,7 +43,7 @@ export default function Mandir() {
           </Button>
         </Box>
 
-        <Grid container spacing={2}>
+        <Grid container spacing={2} justifyContent={"center"} >
           {Array.isArray(templeData) &&
             templeData.map((item) => (
               <Grid key={item._id} item lg={3} md={4} sm={6} xs={12}>
@@ -45,6 +52,8 @@ export default function Mandir() {
             ))}
         </Grid>
       </Box>
+    </Box>
+
     </GlobalCssStyles>
   );
 }

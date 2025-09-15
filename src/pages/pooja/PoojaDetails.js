@@ -270,12 +270,13 @@ export default function PoojaDetails() {
                           // elevation={1}
                           sx={{
                             borderRadius: 3,
-                            p: 3,
+                            m: 3,
                             position: "relative",
                             height: "100%",
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "flex-start",
+                            mt:8
                             // boxShadow:
                             //   pkg.recommended &&
                             //   "0 2px 8px 2px rgba(237,106,18,0.13)",
