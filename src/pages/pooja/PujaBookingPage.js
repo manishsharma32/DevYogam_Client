@@ -16,6 +16,7 @@ import { GetPoojaByID } from "../../services/GetPoojaByID";
 import { useParams } from "react-router-dom";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import RazorpayCheckout from "../../component/RazorpayCheckout";
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 
 // const poojaData = {
 //   title: "Pitradosh Shanti Puja",
@@ -103,7 +104,7 @@ export default function PujaBookingPage() {
       setSnackbarOpen(true);
       return;
     }
-    window.open("https://wa.me/917024542030", "_blank")
+    window.open("https://wa.me/917024542030", "_blank");
   };
   const handleParticipantChange = (index, field, value) => {
     const newParticipants = [...participants];
@@ -118,96 +119,118 @@ export default function PujaBookingPage() {
   const selectedAmount = selectedPackageData?.amaount;
 
   return (
-    <Box sx={{ marginTop:'3%', width: "90%", mx: "auto" }}>
+    <Box sx={{ marginTop: "3%", width: "90%", mx: "auto" }}>
       <Grid container spacing={2}>
-        <Grid item size={{ xs: 12, md: 12, lg: 8 }}>
+        <Grid item size={{ xs: 12, md: 12, lg: 12 }}>
           <Box
             sx={{
-              display: "flex",
+              // display: "flex",
               // width: "50%",
               // mx: "auto",
-              gap: 4,
+              // gap: 4,
               border: "1px solid lightgrey",
               padding: "1%",
               borderRadius: "1rem",
               // marginTop:'3%'
             }}
           >
-            <img
-              style={{ height: "100%", width: "50%" }}
-              src={poojaData?.images[0]}
-              alt={`slide`}
-            />
-            <Box sx={{}}>
-              <Typography
-                sx={{
-                  fontFamily: "Poppins",
-                  mb: 1,
-                  fontSize: "1.7rem",
-                  fontWeight: 600,
-                  marginTop: "2%",
-                  opacity: "70%",
-                }}
-              >
-                {poojaData?.title}
-              </Typography>
-              <Typography
-                sx={{
-                  fontFamily: "Poppins",
-                  fontSize: "1rem",
-                  fontWeight: 500,
-                  marginTop: "2%",
-                  opacity: "70%",
-                }}
-              >
-                {type?.charAt(0)?.toUpperCase() + type?.slice(1)} Package
-              </Typography>
-              <Typography
-                sx={{
-                  fontFamily: "Poppins",
-                  fontSize: "1rem",
-                  fontWeight: 500,
-                  marginTop: "2%",
-                  opacity: "70%",
-                }}
-              >
-                {poojaData?.subtitle}
-              </Typography>
-              <Typography
-                sx={{
-                  mb: 1,
-                  fontFamily: "Poppins",
-                  fontSize: "1rem",
-                  fontWeight: 500,
-                  marginTop: "2%",
-                  opacity: "70%",
-                }}
-              >
-                {poojaData?.location}
-              </Typography>
-              <Typography
-                sx={{
-                  mb: 3,
-                  fontFamily: "Poppins",
-                  fontSize: "1rem",
-                  fontWeight: 500,
-                  marginTop: "2%",
-                  opacity: "70%",
-                  display: "flex",
-                  gap: 1,
-                }}
-              >
-                <CalendarMonthOutlinedIcon /> Date:{" "}
-                {new Date(poojaData?.capDate).toLocaleDateString()}
-              </Typography>
-            </Box>
+            <Grid container spacing={2} alignContent={"center"}>
+              <Grid item size={{ xs: 12, md: 6, lg: 6 }}>
+                <img
+                  style={{ height: "100%", width: "100%", objectFit: "cover" }}
+                  src={poojaData?.images[0]}
+                  alt={`slide`}
+                />
+              </Grid>
+              <Grid item size={{ xs: 12, md: 6, lg: 6 }}>
+                <Box sx={{}}>
+                  <Typography
+                    sx={{
+                      fontFamily: "Poppins",
+                      mb: 1,
+                      fontSize: "1.7rem",
+                      fontWeight: 600,
+                      marginTop: "2%",
+                      opacity: "70%",
+                      width: "100%",
+                      color: "#79245a",
+                    }}
+                  >
+                    {poojaData?.title}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontFamily: "Poppins",
+                      fontSize: "1rem",
+                      fontWeight: 500,
+                      marginTop: "2%",
+                      opacity: "90%",
+                      color: "#7c3aed",
+                    }}
+                  >
+                    {type?.charAt(0)?.toUpperCase() + type?.slice(1)} Package
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontFamily: "Poppins",
+                      fontSize: "1rem",
+                      fontWeight: 500,
+                      marginTop: "2%",
+                      color: "#79245a",
+                      // fontFamily: "Poppins",
+                      // fontSize: "1rem",
+                      // fontWeight: 500,
+                      // marginTop: "2%",
+                      // opacity: "70%",
+                    }}
+                  >
+                    {poojaData?.subtitle}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      mb: 1,
+                      // fontFamily: "Poppins",
+                      // fontSize: "1rem",
+                      // fontWeight: 500,
+                      // marginTop: "2%",
+                      // opacity: "70%",
+                      fontFamily: "Poppins",
+                      fontSize: "1rem",
+                      fontWeight: 500,
+                      marginTop: "2%",
+                      display: "flex",
+                      gap: "0.5rem",
+                      color: "#cd5200",
+                    }}
+                  >
+                    <LocationOnOutlinedIcon sx={{ color: "#cd5200" }} />{" "}
+                    {poojaData?.location}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      mb: 3,
+                      fontFamily: "Poppins",
+                      fontSize: "1rem",
+                      fontWeight: 500,
+                      marginTop: "2%",
+                      opacity: "70%",
+                      display: "flex",
+                      gap: 1,
+                    }}
+                  >
+                    <CalendarMonthOutlinedIcon /> Date:{" "}
+                    {new Date(poojaData?.capDate).toLocaleDateString()}
+                  </Typography>
+                </Box>
+              </Grid>
+            </Grid>
           </Box>
         </Grid>
 
-        <Grid item size={{ xs: 12, md: 12, lg: 4 }}>
+        <Grid item size={{ xs: 12, md: 12, lg: 6 }}>
           <Box
             sx={{
-              display: "flex", 
+              display: "flex",
               // width: "40%",
               // mx: "auto",
               gap: 4,
@@ -216,15 +239,22 @@ export default function PujaBookingPage() {
               borderRadius: "1rem",
             }}
           >
-            <Box sx={{ width: "100%" }}>
+            <Box sx={{ width: "100%", p: 1 }}>
               <Typography
                 sx={{
                   fontFamily: "Poppins",
-                  fontSize: "1.2rem",
-                  fontWeight: 500,
+                  mb: 1,
+                  fontSize: "1.7rem",
+                  fontWeight: 600,
                   marginTop: "2%",
-                  opacity: "90%",
-                  width: "90%",
+                  opacity: "70%",
+                  mb: 2,
+                  // fontFamily: "Poppins",
+                  // fontSize: "1.2rem",
+                  // fontWeight: 500,
+                  // marginTop: "2%",
+                  // opacity: "90%",
+                  // width: "90%",
                 }}
               >
                 Billing Details
@@ -325,7 +355,7 @@ export default function PujaBookingPage() {
           </Box>
         </Grid>
 
-        <Grid item size={{ xs: 12, md: 12, lg: 8 }}>
+        {/* <Grid item size={{ xs: 12, md: 12, lg: 8 }}>
           <Box
             sx={{
               mt: 4,
@@ -337,12 +367,12 @@ export default function PujaBookingPage() {
           >
             Add On Section 
           </Box>
-        </Grid>
+        </Grid> */}
 
-        <Grid item size={{ xs: 12, md: 12, lg: 4 }}>
+        <Grid item size={{ xs: 12, md: 12, lg: 6 }}>
           <Box
             sx={{
-              mt: 4,
+              // mt: 4,
               p: 3,
               border: "1px solid lightgrey",
               borderRadius: "1rem",

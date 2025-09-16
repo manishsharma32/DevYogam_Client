@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Box, Button, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Paper,
+  Typography,
+} from "@mui/material";
 import { GlobalCssStyles } from "../../style/GlobalCSS";
 import { useNavigate, useParams } from "react-router-dom";
 import { GetPoojaByID } from "../../services/GetPoojaByID";
@@ -12,6 +20,9 @@ import Grid from "@mui/material/Grid";
 import wtspLogo from "../../assests/wtsp.png";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import single from "../../assests/single.png";
+import couple from "../../assests/couples.png";
+import family from "../../assests/family.png";
 
 const Item = styled(Box)(({ theme }) => ({
   backgroundColor: "#fff",
@@ -50,18 +61,21 @@ export default function PoojaDetails() {
       key: "single",
       title: "Single",
       subtitle: "For 1 person",
+      image: single,
       recommended: false,
     },
     {
       key: "couple",
       title: "Couple",
       subtitle: "Upto 2 people",
+      image: couple,
       recommended: true,
     },
     {
       key: "family",
       title: "Family",
       subtitle: "Upto 4 people",
+      image: family,
       recommended: false,
     },
   ];
@@ -77,7 +91,7 @@ export default function PoojaDetails() {
           <Grid container spacing={2}>
             <Grid item size={{ xs: 12, md: 12, lg: 6 }}>
               <Item>
-                <Carousel showThumbs={false} showIndicators infiniteLoop>
+                <Carousel showThumbs={false} showStatus={false} showIndicators infiniteLoop>
                   {images?.map((url, idx) => (
                     <div key={idx}>
                       <img
@@ -99,6 +113,7 @@ export default function PoojaDetails() {
                       fontSize: "1.5rem",
                       fontWeight: 500,
                       marginTop: "2%",
+                      color: "#cd5200",
                     }}
                   >
                     {poojaData?.title}
@@ -109,6 +124,7 @@ export default function PoojaDetails() {
                       fontSize: "1rem",
                       fontWeight: 500,
                       marginTop: "2%",
+                      color: "#79245a",
                     }}
                   >
                     {poojaData?.subtitle}
@@ -124,9 +140,11 @@ export default function PoojaDetails() {
                       marginTop: "2%",
                       display: "flex",
                       gap: "0.5rem",
+                      color: "#cd5200",
                     }}
                   >
-                    <LocationOnOutlinedIcon /> {poojaData?.location}
+                    <LocationOnOutlinedIcon sx={{ color: "#cd5200" }} />{" "}
+                    {poojaData?.location}
                   </Typography>
                   <Typography
                     mt={1}
@@ -150,9 +168,10 @@ export default function PoojaDetails() {
                       fontSize: "1rem",
                       fontWeight: 500,
                       marginTop: "2%",
+                      color: "#79245a",
                     }}
                   >
-                    <strong>1000+ </strong>
+                    <strong style={{ color: "#cd5200" }}>1000+ </strong>
                     Devotees booked this Puja with Dev Yogam
                   </Typography>
 
@@ -181,11 +200,18 @@ export default function PoojaDetails() {
                         "&:hover": { background: "#cd5200" },
                         width: "80%",
                       }}
-                      onClick={()=>{handleNavigate('single', name , id)}}
+                      onClick={() => {
+                        handleNavigate("single", name, id);
+                      }}
                     >
                       Book Pooja
                     </Button>
-                    <Button sx={{ marginTop: "10px" }} onClick={() =>  window.open("https://wa.me/917024542030", "_blank")}>
+                    <Button
+                      sx={{ marginTop: "10px" }}
+                      onClick={() =>
+                        window.open("https://wa.me/917024542030", "_blank")
+                      }
+                    >
                       <img
                         style={{ width: "45px", height: "45px" }}
                         src={wtspLogo}
@@ -240,117 +266,111 @@ export default function PoojaDetails() {
               </Item>
             </Grid>
           </Grid>
-          <Box sx={{ width: "90%", margin: "auto" }}>
-            {/* Price Boxes */}
-            {poojaData?.price?.length > 0 && (
-              <Box sx={{ mt: 5 }}>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontWeight: 500,
-                    mb: 2,
-                    fontFamily: "Poppins",
-                    fontSize: "1.5rem",
-                  }}
-                >
-                  Select Puja Package
-                </Typography>
-                <Grid container spacing={2}>
-                  {pricePackages?.map((pkg, idx) => {
-                    const data = priceDetails[pkg.key];
-                    if (!data || data.amaount == null) return null;
-                    // Optionally split long description into brief benefits using ". " split
-                    const benefits = data.description
-                      ?.split(". ")
-                      .filter(Boolean);
-
-                    return (
-                      <Grid item size={{ xs: 12, md: 12, lg: 4 }} key={pkg.key}>
-                        <Paper
-                          // elevation={1}
+          {poojaData?.price?.length > 0 && (
+            <Box sx={{ mt: 5, width: "90%", mx: "auto" }}>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 600,
+                  mb: 2,
+                  fontFamily: "Poppins",
+                  fontSize: { sx: "1.5rem", md: "2rem", lg: "2rem" },
+                  color: "#79245a",
+                }}
+              >
+                Select Puja Package
+              </Typography>
+              <Grid container spacing={3}>
+                {pricePackages?.map((pkg) => {
+                  const data = priceDetails[pkg.key];
+                  if (!data || data.amaount == null) return null;
+                  const benefits = data.description
+                    ?.split(". ")
+                    .filter(Boolean);
+                  return (
+                    <Grid
+                      item
+                      size={{ xs: 12, md: 4, lg: 4, sm: 12 }}
+                      gap={10}
+                      key={pkg.key}
+                    >
+                      <Box sx={{ p: 1 }}>
+                        <Card
+                          variant="outlined"
                           sx={{
                             borderRadius: 3,
-                            m: 3,
-                            position: "relative",
                             height: "100%",
                             display: "flex",
                             flexDirection: "column",
-                            alignItems: "flex-start",
-                            mt:8
-                            // boxShadow:
-                            //   pkg.recommended &&
-                            //   "0 2px 8px 2px rgba(237,106,18,0.13)",
-                            // border: pkg.recommended && "2px solid #ec407a",
+                            border: "2px solid lighgrey",
+                            p: 2,
+                            transition: "transform 0.3s ease",
+                            boxShadow: 3,
+                            cursor: "pointer",
+                            "&:hover": {
+                              transform: "scale(1.05)",
+                              boxShadow: 6,
+                            },
                           }}
+                          onClick={() => handleNavigate(pkg.key, name, id)}
                         >
-                          {/* {pkg.recommended && (
-                            <Box
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                              mb: 2,
+                            }}
+                          >
+                            <img
+                              style={{
+                                minWidth: "8vw",
+                                height: "15vh",
+                                borderRadius: "1rem",
+                                objectFit: "cover",
+                              }}
+                              src={pkg.image}
+                              alt={pkg.title}
+                            />
+                          </Box>
+                          <CardContent sx={{ flexGrow: 1, p: 0 }}>
+                            <Typography
+                              variant="h5"
                               sx={{
-                                position: "absolute",
-                                top: 18,
-                                left: 18,
-                                background: "#ec407a",
-                                color: "#fff",
-                                px: 1.5,
-                                py: 0.5,
-                                borderRadius: 2,
-                                textTransform: "uppercase",
-                                fontWeight: "bold",
-                                fontSize: 13,
-                                zIndex: 2,
+                                fontWeight: 500,
+                                mb: 1,
+                                fontFamily: "Poppins",
+                                color: "#cd5200",
                               }}
                             >
-                              Recommended
-                            </Box>
-                          )} */}
-                          <Typography
-                            variant="h5"
-                            sx={{
-                              fontWeight: 500,
-                              mb: 1,
-                              fontFamily: "Poppins",
-                            }}
-                          >
-                            {pkg?.title}
-                          </Typography>
-                          <Typography
-                            variant="h6"
-                            sx={{
-                              color: "#7c3aed",
-                              fontWeight: 700,
-                              mb: 1,
-                              fontFamily: "Poppins",
-                            }}
-                          >
-                            {data.amaount !== null
-                              ? `₹${data.amaount}`
-                              : "Contact for price"}
-                          </Typography>
-                          <Typography
-                            variant="subtitle2"
-                            sx={{ mb: 1, color: "#444", fontFamily: "Poppins" }}
-                          >
-                            {pkg.subtitle}
-                          </Typography>
-
-                          <Box sx={{ mb: 2, flexGrow: 1, mt: 3 }}>
-                            {benefits?.map((benefit, bidx) => (
-                              <Box
-                                key={bidx}
-                                display="flex"
-                                alignItems="flex-start"
-                                mb={1}
-                                sx={{ fontFamily: "Poppins" }}
-                              >
-                                {/* <ArrowRightIcon
-                                  sx={{
-                                    color: "#7c3aed",
-                                    fontSize: 20,
-                                    mt: "2px",
-                                    mr: 1,
-                                  }}
-                                /> */}
+                              {pkg.title}
+                            </Typography>
+                            <Typography
+                              variant="h6"
+                              sx={{
+                                color: "#7c3aed",
+                                fontWeight: 700,
+                                mb: 1,
+                                fontFamily: "Poppins",
+                              }}
+                            >
+                              {data.amaount !== null
+                                ? `₹${data.amaount}`
+                                : "Contact for price"}
+                            </Typography>
+                            <Typography
+                              variant="subtitle2"
+                              sx={{
+                                mb: 1,
+                                color: "#444",
+                                fontFamily: "Poppins",
+                              }}
+                            >
+                              {pkg.subtitle}
+                            </Typography>
+                            <Box sx={{ mb: 2, flexGrow: 1, mt: 4 }}>
+                              {benefits?.map((benefit, i) => (
                                 <Typography
+                                  key={i}
                                   variant="body2"
                                   sx={{
                                     fontFamily: "Poppins",
@@ -360,92 +380,149 @@ export default function PoojaDetails() {
                                 >
                                   {benefit}
                                 </Typography>
-                              </Box>
-                            ))}
-                          </Box>
-                          <Button
-                            variant="contained"
-                            sx={{
-                              mt: 1,
-                              background: "#7c3aed",
-                              color: "#fff",
-                              fontWeight: 600,
-                              borderRadius: 2,
-                              width: "100%",
-                              fontFamily: "Poppins",
-                              fontSize: 16,
-                              letterSpacing: 0.1,
-                              "&:hover": { background: "#cd5200" },
-                            }}
-                            onClick={()=>handleNavigate(pkg?.key, name , id)}
-                          >
-                            Confirm Package
-                          </Button>
-                        </Paper>
-                      </Grid>
-                    );
-                  })}
-                </Grid>
+                              ))}
+                            </Box>
+                          </CardContent>
+                          <CardActions sx={{ p: 0 }}>
+                            <Button
+                              variant="contained"
+                              fullWidth
+                              sx={{
+                                mt: 1,
+                                backgroundColor: "#7c3aed",
+                                color: "#fff",
+                                fontWeight: 600,
+                                borderRadius: 2,
+                                fontFamily: "Poppins",
+                                fontSize: 16,
+                                letterSpacing: 0.1,
+                                "&:hover": { background: "#cd5200" },
+                              }}
+                              onClick={() => handleNavigate(pkg.key, name, id)}
+                            >
+                              Confirm Package
+                            </Button>
+                          </CardActions>
+                        </Card>
+                      </Box>
+                    </Grid>
+                  );
+                })}
+              </Grid>
+            </Box>
+          )}
+
+          <Box sx={{ width: "90%", margin: "auto" }}>
+            {poojaData?.benefit?.length > 0 && (
+              <Box sx={{ mt: 6, width: "100%" }}>
+                <Typography
+                  variant="h5"
+                  gutterBottom
+                  sx={{
+                    fontWeight: 700,
+                    mb: 3,
+                    fontFamily: "Poppins",
+                    color: "#2c7a7b",
+                  }}
+                >
+                  Benefits
+                </Typography>
+                {poojaData.benefit.map((item) => (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "1rem",
+                    }}
+                  >
+                    <Typography
+                      key={item._id}
+                      variant="body1"
+                      sx={{
+                        mb: 1,
+                        fontFamily: "Poppins",
+                        lineHeight: 1.5,
+                        color: "#79245a",
+                        fontSize: "1.2rem",
+                        fontWeight: 600,
+                      }}
+                    >
+                      {item?.title}
+                    </Typography>
+                    <Typography
+                      key={item._id}
+                      variant="body1"
+                      sx={{
+                        mb: 2,
+                        fontFamily: "Poppins",
+                        // lineHeight: 1.5,
+                        color: "#444",
+                      }}
+                    >
+                      {item?.description}
+                    </Typography>
+                  </Box>
+                ))}
+              </Box>
+            )}
+
+            {poojaData?.faq?.length > 0 && (
+              <Box sx={{ mt: 6, width: "100%" }}>
+                <Typography
+                  variant="h5"
+                  gutterBottom
+                  sx={{
+                    fontWeight: 700,
+                    mb: 3,
+                    fontFamily: "Poppins",
+                    color: "#2c7a7b",
+                  }}
+                >
+                  FAQs
+                </Typography>
+                {poojaData.faq.map((item) => (
+                  <Box
+                    key={item._id}
+                    sx={{
+                      mb: 2,
+                      borderRadius: 2,
+                      overflow: "hidden",
+                      boxShadow: 1,
+                    }}
+                  >
+                    <Accordion
+                      sx={{
+                        bgcolor: "white",
+                        "&:before": { display: "none" },
+                        "&.Mui-expanded": { bgcolor: "#f0f0f0" },
+                      }}
+                    >
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        sx={{ px: 2 }}
+                      >
+                        <Typography
+                          variant="subtitle1"
+                          fontWeight={600}
+                          sx={{ fontFamily: "Poppins" }}
+                        >
+                          {item?.question}
+                        </Typography>
+                      </AccordionSummary>
+                      <AccordionDetails sx={{ px: 3, py: 2 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{ whiteSpace: "pre-line", fontFamily: "Poppins" }}
+                        >
+                          {item?.answer}
+                        </Typography>
+                      </AccordionDetails>
+                    </Accordion>
+                  </Box>
+                ))}
               </Box>
             )}
           </Box>
-          {/* Benefits Section */}
-          {poojaData?.benefit && poojaData?.benefit?.length > 0 && (
-            <Box sx={{ marginTop: "8%", width: "90%", mx:'auto' }}>
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: "bold",
-                  mb: 2,
-                  fontFamily: "Poppins",
-                }}
-              >
-                Benefits
-              </Typography>
-              {poojaData.benefit.map((item) => (
-                <Typography
-                  key={item._id}
-                  variant="body1"
-                  sx={{
-                    mb: 2,
-                    whiteSpace: "pre-line",
-                    fontFamily: "Poppins",
-                  }}
-                >
-                  {item.description}
-                </Typography>
-              ))}
-            </Box>
-          )}
-          {/* FAQ Accordion */}
-          {poojaData?.faq && poojaData?.faq?.length > 0 && (
-            <Box sx={{ mt: 5, width: "90%", mx:'auto' }}>
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: "bold",
-                  mb: 2,
-                  fontFamily: "Poppins",
-                }}
-              >
-                FAQs
-              </Typography>
-              {poojaData?.faq?.map((item) => (
-                <Accordion key={item._id} sx={{ mb: 1, fontFamily: "Poppins" }}>
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography variant="subtitle1">
-                      {item?.question}
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Typography variant="body2" sx={{ whiteSpace: "pre-line" }}>
-                      {item?.answer}
-                    </Typography>
-                  </AccordionDetails>
-                </Accordion>
-              ))}
-            </Box>
-          )}
         </Box>
         <Box display="flex" gap="2rem" alignItems="flex-start">
           <Box flex="1 1 0%"></Box>

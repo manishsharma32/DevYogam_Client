@@ -91,6 +91,8 @@ export default function Pooja() {
           ) : Array.isArray(poojaData) && poojaData.length > 0 ? (
             poojaData.map((item, index) => (
               <Grid item key={index} size={{ xs: 12, md: 4, sm: 6, lg: 4 }}>
+              <Box sx={{p:1}} >
+
                 <PujaCard
                   bannerImg={item?.images?.[0]}
                   badge={item?.badge}
@@ -98,13 +100,14 @@ export default function Pooja() {
                   dateBg={item?.dateBg || "#FFD700"}
                   headingHi={item?.titleHi}
                   headingEn={item?.title}
-                  highlight={item?.highlight}
+                  highlight={item?.subtitle}
                   highlightColor={item?.highlightColor || "#ED6A12"}
                   location={item?.location}
                   ctaText={item?.ctaText || "Participate Now"}
                   ctaColor={item?.ctaColor || "#ED6A12"}
                   onCtaClick={() => handeNavigate(item?._id, item?.title)}
                 />
+              </Box>
               </Grid>
             ))
           ) : (

@@ -1,192 +1,197 @@
 import React from "react";
-import { Card, Box, Typography, Button, CardContent } from "@mui/material";
+import {
+  Card,
+  Box,
+  Typography,
+  Button,
+  CardContent,
+  CardMedia,
+} from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import { motion } from "framer-motion";
 
-// Helper to get day and month
+// Extracts day and short month from date string
 function getDateParts(dateString) {
   const d = new Date(dateString);
   return {
     day: d.getDate(),
-    month: d.toLocaleString("default", { month: "long" }),
+    month: d.toLocaleString("default", { month: "short" }),
   };
 }
 
 export default function PujaCard({
-  bannerImg, // Banner image URL
-  badge, // JSX or string for top-left badge
-  date, // "YYYY-MM-DD"
-  dateBg = "#FFD700",
-  headingHi, // Hindi/main heading (string, can include <br/> tag or \n)
-  headingEn, // English heading
-  highlight, // JSX or string-highlighted desc
+  bannerImg,
+  badge,
+  date,
+  headingEn,
+  highlight,
   highlightColor = "#ED6A12",
-  location, // string
+  location,
   locationIconColor = "#ED6A12",
-  ctaText = "Limited Slots",
-  ctaColor = "#ED6A12",
+  ctaText = "Participate Now",
   onCtaClick,
 }) {
   const { day, month } = getDateParts(date);
 
   return (
-    <Card
-      sx={{
-        borderRadius: 3,
-        boxShadow: 3,
-        width: 360,
-        p: 0,
-        overflow: "visible",
-        position: "relative",
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{
+        scale: 1.05,
+        boxShadow: "0 8px 20px rgba(124, 58, 237, 0.3)",
       }}
+      transition={{ duration: 0.3 }}
+      style={{ height: "100%" }}
     >
-      {/* Top Banner with overlay badges */}
-      <Box sx={{ position: "relative" }}>
-        <img
-          src={bannerImg}
-          alt="banner"
-          style={{
-            width: "100%",
-            height: 142,
-            objectFit: "cover",
+      <Card
+        sx={{
+          borderRadius: 3,
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          border: "1.5px solid #ddd",
+          boxShadow: 3,
+          cursor: "pointer",
+          fontFamily: "Poppins",
+          backgroundColor: "#fff",
+          overflow: "hidden",
+        }}
+        onClick={onCtaClick}
+      >
+        <CardMedia
+          component="img"
+          height="180"
+          image={bannerImg}
+          alt="puja-banner"
+          sx={{
             borderTopLeftRadius: 12,
             borderTopRightRadius: 12,
+            objectFit: "cover",
           }}
         />
-        {/* Top LEFT badge */}
-        {badge && (
-          <Box
-            sx={{
-              position: "absolute",
-              top: 6,
-              left: 8,
-              background: "#B2041A",
-              color: "#fff",
-              fontWeight: 700,
-              fontSize: 14,
-              px: 1.5,
-              py: "2px",
-              borderRadius: "6px",
-              minWidth: 40,
-              zIndex: 2,
-              boxShadow: 1,
-              letterSpacing: 0.3,
-            }}
-          >
-            {badge}
-          </Box>
-        )}
-        {/* Date badge */}
         <Box
           sx={{
-            position: "absolute",
-            top: 10,
-            right: 10,
-            background: dateBg,
-            color: "#222",
-            borderRadius: "8px",
-            px: 1.2,
-            py: 0.6,
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: "#f3eaff",
+            py: 1,
+            borderBottomLeftRadius: 12,
+            borderBottomRightRadius: 12,
+            borderTop: "1px solid #d1bee7",
             fontWeight: 700,
-            minWidth: 60,
-            textAlign: "center",
-            zIndex: 2,
-            boxShadow: 1,
             letterSpacing: 1,
+            color: "#7c3aed",
+            fontSize: "1.1rem",
+            gap: 1,
+            userSelect: "none",
           }}
         >
           <Typography
             variant="body1"
-            sx={{ fontWeight: 600, fontSize: 17, m: 0, p: 0, lineHeight: 1 }}
+            sx={{ fontWeight: 700, fontFamily: "Poppins" }}
           >
             {day}
           </Typography>
           <Typography
             variant="body2"
-            sx={{ fontSize: 13, m: 0, p: 0, mt: "-2px" }}
+            sx={{
+              fontWeight: 600,
+              textTransform: "uppercase",
+              mt: "4px",
+              fontFamily: "Poppins",
+            }}
           >
             {month}
           </Typography>
         </Box>
-        {/* Hindi Heading overlay - bottom right */}
-        {headingHi && (
-          <Box
-            sx={{
-              position: "absolute",
-              bottom: 12,
-              right: 12,
-              textAlign: "right",
-              background: "rgba(255,255,255,0.00)",
-              p: 0,
-              zIndex: 2,
-            }}
-          >
-            <Typography
-              variant="h6"
+        <CardContent sx={{ flexGrow: 1, px: 3, pt: 3 }}>
+          {badge && (
+            <Box
               sx={{
+                backgroundColor: "#B2041A",
                 color: "#fff",
-                fontWeight: 900,
-                textShadow: "0 0 7px #490101",
+                fontWeight: 700,
+                fontSize: 13,
+                px: 2,
+                py: "3px",
+                borderRadius: 2,
+                display: "inline-block",
+                mb: 1,
+                letterSpacing: 0.5,
+                userSelect: "none",
+                fontFamily: "Poppins",
               }}
             >
-              {headingHi}
+              {badge}
+            </Box>
+          )}
+          <Typography
+            variant="h5"
+            sx={{ fontWeight: 700, mb: 1, fontFamily: "Poppins" }}
+          >
+            {headingEn}
+          </Typography>
+          {highlight && (
+            <Typography
+              variant="body1"
+              sx={{
+                color: highlightColor,
+                fontWeight: 600,
+                mb: 1,
+                userSelect: "none",
+                fontFamily: "Poppins",
+              }}
+            >
+              {highlight}
+            </Typography>
+          )}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              mb: 2,
+              color: "#555",
+              gap: 0.7,
+            }}
+          >
+            <LocationOnIcon
+              sx={{
+                color: locationIconColor,
+                fontSize: 20,
+                fontFamily: "Poppins",
+              }}
+            />
+            <Typography
+              variant="body2"
+              sx={{ fontSize: 15, fontFamily: "Poppins" }}
+            >
+              {location}
             </Typography>
           </Box>
-        )}
-      </Box>
-      {/* Card Content */}
-      <CardContent sx={{ pt: 2, pb: 2, px: 2 }}>
-        <Typography
-          variant="subtitle1"
-          sx={{ fontWeight: 700, mb: 0.2, fontSize: 19 }}
-        >
-          {headingEn}
-        </Typography>
-        <Typography
-          variant="body2"
-          sx={{
-            color: highlightColor,
-            mb: 0.5,
-            fontWeight: 500,
-            fontSize: 15,
-            display: "flex",
-            alignItems: "center",
-            gap: 0.8,
-          }}
-        >
-          {/* Example highlight: <span role="img" aria-label="star">&#x2728;</span> Bring peace to ancestral souls */}
-          {highlight}
-        </Typography>
-        <Box sx={{ display: "flex", alignItems: "center", mb: 1, mt: 1 }}>
-          <LocationOnIcon
-            sx={{ color: locationIconColor, fontSize: 20, mr: 0.7 }}
-          />
-          <Typography variant="body2" sx={{ color: "#555", fontSize: 15 }}>
-            {location}
-          </Typography>
-        </Box>
-        <Button
-          fullWidth
-          onClick={onCtaClick}
-          sx={{
-            // background: ctaColor,
-            backgroundColor: "#9a67e6",
-            color: "#fff",
-            borderRadius: 2,
-            textTransform: "none",
-            fontFamily:'Poppins',
-            fontWeight: 600,
-            py: 0.5,
-            fontSize: 16,
-            boxShadow: "0 2px 8px 2px rgba(237,106,18,0.09)",
-            mt: 1,
-            letterSpacing: 0.1,
-            "&:hover": { background: "#cd5200" },
-          }}
-          endIcon={<span style={{ fontSize: "22px" }}>→</span>}
-        >
-          {ctaText}
-        </Button>
-      </CardContent>
-    </Card>
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{
+              backgroundColor: "#7c3aed",
+              fontFamily: "Poppins",
+              color: "#fff",
+              borderRadius: 2,
+              textTransform: "none",
+              fontWeight: 600,
+              py: 1,
+              fontSize: 16,
+              boxShadow: "0 4px 12px rgba(124, 58, 237, 0.4)",
+              "&:hover": { backgroundColor: "#5b20c9" },
+              transition: "background-color 0.3s ease",
+            }}
+            endIcon={<span style={{ fontSize: 22 }}>→</span>}
+            onClick={onCtaClick}
+          >
+            {ctaText}
+          </Button>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 }

@@ -30,19 +30,23 @@ export default function ExploreTemples() {
   }, []);
 
   // Map templeData to carousel items taking the first image from images array
-  const carouselItems = templeData?.map((temple) => {
-      if (temple.images && temple.images.length > 0) {
-        return {
-          image: temple.images[0],
-          title: temple.title || "Temple",
-          description: temple.location || "",
-        };
-      }
-      return null;
-    })
-    .filter(Boolean);
+  const carouselItems =
+    Array.isArray(templeData) &&
+    templeData
+      ?.map((temple) => {
+        if (temple?.images && temple?.images?.length > 0) {
+          return {
+            image: temple?.images[0],
+            title: temple?.title || "Temple",
+            description: temple?.location || "",
+          };
+        }
+        return null;
+      })
+      .filter(Boolean);
 
-  const reversedItems = [...carouselItems].reverse(); // reversed for second carousel
+  const reversedItems =
+    Array.isArray(carouselItems) && [...carouselItems].reverse(); // reversed for second carousel
 
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm")); // <600px
   const skeletons = Array.from(new Array(2)).map((_, index) => (
@@ -92,7 +96,7 @@ export default function ExploreTemples() {
       </Typography>
 
       {loading ? (
-        <Grid container spacing={2} justifyContent={"center"} >
+        <Grid container spacing={2} justifyContent={"center"}>
           {skeletons}
         </Grid>
       ) : (
@@ -102,7 +106,7 @@ export default function ExploreTemples() {
             flexDirection: isSmallScreen ? "column" : "row",
             alignItems: "center",
             gap: "1rem",
-            cursor:'pointer'
+            cursor: "pointer",
           }}
         >
           {/* First carousel normal */}
@@ -246,7 +250,7 @@ const CustomCarousel = ({
       }
       {...carouselProps}
     >
-      {items.map((item, idx) => (
+      { Array.isArray(items)  && items?.map((item, idx) => (
         <div
           key={idx}
           style={{
