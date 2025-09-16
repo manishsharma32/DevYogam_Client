@@ -74,6 +74,7 @@ export default function PujaCard({
           sx={{
             display: "flex",
             justifyContent: "center",
+            alignItems: "anchor-center",
             backgroundColor: "#f3eaff",
             py: 1,
             borderBottomLeftRadius: 12,
@@ -98,7 +99,7 @@ export default function PujaCard({
             sx={{
               fontWeight: 600,
               textTransform: "uppercase",
-              mt: "4px",
+              // mt: "4px",
               fontFamily: "Poppins",
             }}
           >
@@ -128,19 +129,24 @@ export default function PujaCard({
           )}
           <Typography
             variant="h5"
-            sx={{ fontWeight: 700, mb: 1, fontFamily: "Poppins" }}
+            sx={{
+              fontWeight: 700,
+              mb: 1,
+              fontFamily: "Poppins",
+              color: "#79245a",
+            }}
           >
             {headingEn}
           </Typography>
           {highlight && (
             <Typography
-              variant="body1"
               sx={{
                 color: highlightColor,
                 fontWeight: 600,
                 mb: 1,
                 userSelect: "none",
                 fontFamily: "Poppins",
+                color: "#7c3aed",
               }}
             >
               {highlight}
@@ -164,7 +170,11 @@ export default function PujaCard({
             />
             <Typography
               variant="body2"
-              sx={{ fontSize: 15, fontFamily: "Poppins" }}
+              sx={{
+                fontSize: 15,
+                fontFamily: "Poppins",
+                color: locationIconColor,
+              }}
             >
               {location}
             </Typography>
@@ -182,7 +192,9 @@ export default function PujaCard({
               py: 1,
               fontSize: 16,
               boxShadow: "0 4px 12px rgba(124, 58, 237, 0.4)",
-              "&:hover": { backgroundColor: "#5b20c9" },
+              // "&:hover": { backgroundColor: "#5b20c9" }
+              "&:hover": { background: "#cd5200" },
+
               transition: "background-color 0.3s ease",
             }}
             endIcon={<span style={{ fontSize: 22 }}>→</span>}

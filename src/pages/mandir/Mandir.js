@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
 import SplitHeader from "./SplitHeader";
 import { GlobalCssStyles } from "../../style/GlobalCSS";
-import { Box, Button, Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import Card from "../../component/Card";
 import { GetAllTempleAPI } from "../../services/GetAllTempleAPI";
 
-export default function Mandir() {
+export default function Mandir({user}) {
   const [templeData, setTempleData] = useState([]);
   const getTemple = async () => {
     const res = await GetAllTempleAPI();
@@ -14,46 +21,46 @@ export default function Mandir() {
   useEffect(() => {
     getTemple();
   }, []);
-const theme = useTheme()
+  const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm")); // <600px
   const isMediumScreen = useMediaQuery(theme.breakpoints.between("sm", "md")); // 600-900px
 
   return (
     <GlobalCssStyles>
-    <Box className="parent-container" >
-
-      {isSmallScreen || isMediumScreen ? null : (
-        <Box sx={{ minHeight: "100vh" }}>
-          <SplitHeader />
-        </Box>
-      )}
-      <Box sx={{ width: "90%", margin: "auto", padding: "2%" }}>
-        <Box sx={{display:'flex', justifyContent:'flex-end', m:2}}>
-          {/* <Typography className="heading-text">
+      <Box className="parent-container">
+        {isSmallScreen || isMediumScreen ? null : (
+          <Box sx={{ minHeight: "100vh" }}>
+            <SplitHeader />
+          </Box>
+        )}
+        <Box sx={{ width: "90%", margin: "auto", padding: "2%" }}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", m: 2 }}>
+            {/* <Typography className="heading-text">
             Explore Temples With Dev Yogam{" "}
           </Typography> */}
-          <Button
-            className="create-btn"
-            onClick={() => {
-              window.open(`${window?.location?.origin}/temple/create`);
-              // setOpenCreatePoOja(true);
-            }}
-          >
-            Add Temple
-          </Button>
+            {user?.role === "admin" && (
+              <Button
+                className="create-btn"
+                onClick={() => {
+                  window.open(`${window?.location?.origin}/temple/create`);
+                  // setOpenCreatePoOja(true);
+                }}
+              >
+                Add Temple
+              </Button>
+            )}
+          </Box>
+
+          <Grid container spacing={2} justifyContent={"center"}>
+            {Array.isArray(templeData) &&
+              templeData?.map((item) => (
+                <Grid key={item._id} item lg={3} md={4} sm={6} xs={12}>
+                  <Card item={item} />
+                </Grid>
+              ))}
+          </Grid>
         </Box>
-
-        <Grid container spacing={2} justifyContent={"center"} >
-          {Array.isArray(templeData) &&
-            templeData?.map((item) => (
-              <Grid key={item._id} item lg={3} md={4} sm={6} xs={12}>
-                <Card item={item} />
-              </Grid>
-            ))}
-        </Grid>
       </Box>
-    </Box>
-
     </GlobalCssStyles>
   );
 }

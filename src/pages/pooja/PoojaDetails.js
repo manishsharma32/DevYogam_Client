@@ -4,6 +4,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import {
   Box,
   Button,
+  capitalize,
   Card,
   CardActions,
   CardContent,
@@ -23,6 +24,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import single from "../../assests/single.png";
 import couple from "../../assests/couples.png";
 import family from "../../assests/family.png";
+import process from "../../assests/process.jpg";
 
 const Item = styled(Box)(({ theme }) => ({
   backgroundColor: "#fff",
@@ -91,7 +93,12 @@ export default function PoojaDetails() {
           <Grid container spacing={2}>
             <Grid item size={{ xs: 12, md: 12, lg: 6 }}>
               <Item>
-                <Carousel showThumbs={false} showStatus={false} showIndicators infiniteLoop>
+                <Carousel
+                  showThumbs={false}
+                  showStatus={false}
+                  showIndicators
+                  infiniteLoop
+                >
                   {images?.map((url, idx) => (
                     <div key={idx}>
                       <img
@@ -111,7 +118,7 @@ export default function PoojaDetails() {
                     sx={{
                       fontFamily: "Poppins",
                       fontSize: "1.5rem",
-                      fontWeight: 500,
+                      fontWeight: 600,
                       marginTop: "2%",
                       color: "#cd5200",
                     }}
@@ -267,7 +274,7 @@ export default function PoojaDetails() {
             </Grid>
           </Grid>
           {poojaData?.price?.length > 0 && (
-            <Box sx={{ mt: 5, width: "90%", mx: "auto" }}>
+            <Box sx={{ mt: 5, width: "90%", display: "block", mx: "auto" }}>
               <Typography
                 variant="h6"
                 sx={{
@@ -411,16 +418,39 @@ export default function PoojaDetails() {
               </Grid>
             </Box>
           )}
+          <Box sx={{ mt: 5, width: "90%", mx: "auto" }}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 600,
+                mb: 2,
+                fontFamily: "Poppins",
+                fontSize: { sx: "1.5rem", md: "2rem", lg: "2rem" },
+                // color: "#79245a",
+                color: "#cd5200",
+              }}
+            >
+              How it works?
+            </Typography>
+            <Box sx={{ p: 1, display:'flex', justifyContent:'center', alignItems:'center' }}>
+              <img
+                src={process}
+                style={{ width: "80%", mx: "auto" }}
+                alt="process"
+              />
+            </Box>
+          </Box>
 
           <Box sx={{ width: "90%", margin: "auto" }}>
             {poojaData?.benefit?.length > 0 && (
               <Box sx={{ mt: 6, width: "100%" }}>
                 <Typography
-                  variant="h5"
+                  // variant="h5"
                   gutterBottom
                   sx={{
                     fontWeight: 700,
                     mb: 3,
+                    fontSize:'1.5rem',
                     fontFamily: "Poppins",
                     color: "#2c7a7b",
                   }}
@@ -469,11 +499,12 @@ export default function PoojaDetails() {
             {poojaData?.faq?.length > 0 && (
               <Box sx={{ mt: 6, width: "100%" }}>
                 <Typography
-                  variant="h5"
+                  // variant="h5"
                   gutterBottom
                   sx={{
                     fontWeight: 700,
                     mb: 3,
+                    fontSize:'1.5rem',
                     fontFamily: "Poppins",
                     color: "#2c7a7b",
                   }}

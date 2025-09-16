@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import PujaCard from "../../component/PoojaCard";
 import { GetAllPoojasAPI } from "../../services/GetAllPoojasAPI";
 
-export default function Pooja() {
+export default function Pooja({user}) {
   const navigate = useNavigate();
   const [poojaData, setPoojaData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -74,14 +74,16 @@ export default function Pooja() {
       <Box sx={{ padding: "2%", width: "90%", margin: "auto" }}>
         <Box className="heading-container">
           <Typography className="heading-text">Pooja List</Typography>
-          <Button
-            className="create-btn"
-            onClick={() => {
-              window.open(`${window?.location?.origin}/pooja/create`);
-            }}
-          >
-            Add Pooja
-          </Button>
+          {user?.role === "admin" && (
+            <Button
+              className="create-btn"
+              onClick={() => {
+                window.open(`${window?.location?.origin}/pooja/create`);
+              }}
+            >
+              Add Pooja
+            </Button>
+          )}
         </Box>
 
         {/* Pooja List */}
@@ -91,23 +93,22 @@ export default function Pooja() {
           ) : Array.isArray(poojaData) && poojaData.length > 0 ? (
             poojaData.map((item, index) => (
               <Grid item key={index} size={{ xs: 12, md: 4, sm: 6, lg: 4 }}>
-              <Box sx={{p:1}} >
-
-                <PujaCard
-                  bannerImg={item?.images?.[0]}
-                  badge={item?.badge}
-                  date={item?.capDate}
-                  dateBg={item?.dateBg || "#FFD700"}
-                  headingHi={item?.titleHi}
-                  headingEn={item?.title}
-                  highlight={item?.subtitle}
-                  highlightColor={item?.highlightColor || "#ED6A12"}
-                  location={item?.location}
-                  ctaText={item?.ctaText || "Participate Now"}
-                  ctaColor={item?.ctaColor || "#ED6A12"}
-                  onCtaClick={() => handeNavigate(item?._id, item?.title)}
-                />
-              </Box>
+                <Box sx={{ p: 1 }}>
+                  <PujaCard
+                    bannerImg={item?.images?.[0]}
+                    badge={item?.badge}
+                    date={item?.capDate}
+                    dateBg={item?.dateBg || "#FFD700"}
+                    headingHi={item?.titleHi}
+                    headingEn={item?.title}
+                    highlight={item?.subtitle}
+                    highlightColor={item?.highlightColor || "#ED6A12"}
+                    location={item?.location}
+                    ctaText={item?.ctaText || "Participate Now"}
+                    ctaColor={item?.ctaColor || "#ED6A12"}
+                    onCtaClick={() => handeNavigate(item?._id, item?.title)}
+                  />
+                </Box>
               </Grid>
             ))
           ) : (

@@ -40,7 +40,7 @@ export default function RazorpayCheckout() {
         key: "rzp_live_RHWbkMMBTyv7oi",
         amount: data.amount,
         currency: data.currency,
-        name: "Your Company",
+        name: "Dev Yogam",
         description: "Test Transaction",
         order_id: data.id,
         handler: async function (response) {

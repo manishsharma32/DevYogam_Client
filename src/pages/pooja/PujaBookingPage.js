@@ -469,6 +469,7 @@ export default function PujaBookingPage() {
         <TextField
           label="Mobile Number"
           fullWidth
+          autoCapitalize="off"
           value={mobile}
           onChange={(e) => setMobile(e.target.value)}
           error={mobile.length > 0 && !isMobileValid}

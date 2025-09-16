@@ -13,25 +13,34 @@ import AddChadhava from "../pages/chadhava/AddChadhava";
 import PoojaDetails from "../pages/pooja/PoojaDetails";
 import PujaBookingPage from "../pages/pooja/PujaBookingPage";
 import RazorpayCheckout from "../component/RazorpayCheckout";
+import ProtectedRoute from "./ProtectedRoute";
 
-export default function PublicRoutes() {
+export default function PublicRoutes({ user }) {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       {/* <Route path="/about" element={<About />} /> */}
       {/* <Route path="/contact" element={<Contact />} /> */}
-      <Route path="/pooja" element={<Pooja />} />
-      <Route path="/pooja/create" element={<AddPooja />} />
+      <Route path="/pooja" element={<Pooja user={user} />} />
+
+      <Route element={<ProtectedRoute />}>
+        <>
+          <Route path="/pooja/create" element={<AddPooja />} />
+          <Route path="/temple/create" element={<AddTemple />} />
+          <Route path="/chadhava/create" element={<AddChadhava />} />
+        </>
+      </Route>
       <Route path="/pooja-details/:name/:id" element={<PoojaDetails />} />
-      <Route path="/pooja-booking/:type/:name/:id" element={<PujaBookingPage />} />
-      <Route path="/chadhava" element={<Chadhava />} />
-      <Route path="/temple" element={<Mandir />} />
+      <Route
+        path="/pooja-booking/:type/:name/:id"
+        element={<PujaBookingPage />}
+      />
+      <Route path="/chadhava" element={<Chadhava user={user} />} />
+      <Route path="/temple" element={<Mandir user={user} />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/disclaimer" element={<Disclamer />} />
       <Route path="/terms-conditions" element={<TermsAndConditions />} />
-      <Route path="/temple/create" element={<AddTemple />} />
-      <Route path="/chadhava/create" element={<AddChadhava/>}/>
-      <Route path="/razorpay" element={<RazorpayCheckout/>}/>
+      <Route path="/razorpay" element={<RazorpayCheckout />} />
       {/* You can add more routes here */}
     </Routes>
   );

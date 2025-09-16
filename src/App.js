@@ -10,6 +10,7 @@ import Footer from "./component/Footer";
 import { GlobalCssStyles } from "./style/GlobalCSS";
 
 function App() {
+  const user = JSON?.parse(localStorage.getItem("user"))
   return (
     <div>
       {/* <ThemeProvider theme={theme}> */}
@@ -21,7 +22,7 @@ function App() {
             top: "1%",  
           }}
         >
-          <PublicRoutes/>
+          <PublicRoutes user={user}   />
         </Box>
         {/* <Home /> */}
         {/* <Box sx={{minHeight:"190vh", overflowY:'auto'}}>
