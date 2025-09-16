@@ -13,7 +13,7 @@ import {
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { GetPoojaByID } from "../../services/GetPoojaByID";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import RazorpayCheckout from "../../component/RazorpayCheckout";
 
@@ -80,7 +80,7 @@ export default function PujaBookingPage() {
         noGotra: false,
       }));
   };
-
+  const navigate = useNavigate();
   const [participants, setParticipants] = useState(getInitialParticipants());
 
   useEffect(() => {
@@ -98,13 +98,7 @@ export default function PujaBookingPage() {
   // Simple mobile validation
   const isMobileValid = /^\d{10}$/.test(mobile);
 
-  const handleLoginClick = () => {
-    if (!isMobileValid || !termsAccepted) {
-      setSnackbarOpen(true);
-      return;
-    }
-    window.open("https://wa.me/917024542030", "_blank")
-  };
+ 
   const handleParticipantChange = (index, field, value) => {
     const newParticipants = [...participants];
     newParticipants[index][field] = value;
@@ -116,21 +110,35 @@ export default function PujaBookingPage() {
 
   const selectedPackageData = poojaData?.price?.[0]?.[type];
   const selectedAmount = selectedPackageData?.amaount;
-
+ 
+  const handleLoginClick = () => {
+    if (!isMobileValid || !termsAccepted) {
+      setSnackbarOpen(true);
+      return;
+    }
+  
+    navigate("/razorpay", {
+      state: {
+        amount: selectedAmount,
+        username: participants[0]?.fullName,
+        userGotra: participants[0]?.gotra,
+        mobile: mobile,
+        id: poojaData?._id,
+      },
+    });
+    // window.open("https://wa.me/917024542030", "_blank")
+  };
   return (
-    <Box sx={{ marginTop:'3%', width: "90%", mx: "auto" }}>
+    <Box sx={{ marginTop: "3%", width: "90%", mx: "auto" }}>
       <Grid container spacing={2}>
         <Grid item size={{ xs: 12, md: 12, lg: 8 }}>
           <Box
             sx={{
               display: "flex",
-              // width: "50%",
-              // mx: "auto",
               gap: 4,
               border: "1px solid lightgrey",
               padding: "1%",
               borderRadius: "1rem",
-              // marginTop:'3%'
             }}
           >
             <img
@@ -207,7 +215,7 @@ export default function PujaBookingPage() {
         <Grid item size={{ xs: 12, md: 12, lg: 4 }}>
           <Box
             sx={{
-              display: "flex", 
+              display: "flex",
               // width: "40%",
               // mx: "auto",
               gap: 4,
@@ -335,7 +343,7 @@ export default function PujaBookingPage() {
               height: "50vh",
             }}
           >
-            Add On Section 
+            Add On Section
           </Box>
         </Grid>
 
@@ -409,97 +417,7 @@ export default function PujaBookingPage() {
           </Box>
         </Grid>
       </Grid>
-      {/* Header */}
 
-      {/* Carousel */}
-
-      {/* Packages */}
-      {/* <Box sx={{ mt: 4 }}>
-        <Typography variant="h5" fontWeight="bold" sx={{ mb: 3 }}>
-          Puja Packages
-        </Typography>
-        <Grid container spacing={3}>
-          {poojaData.packages.map((pkg) => (
-            <Grid item xs={12} sm={6} key={pkg.key}>
-              <Paper
-                elevation={3}
-                sx={{
-                  p: 3,
-                  border: pkg.recommended
-                    ? "2px solid #ec407a"
-                    : "1px solid #ddd",
-                  position: "relative",
-                }}
-              >
-                {pkg.recommended && (
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      top: 16,
-                      left: 16,
-                      bgcolor: "#ec407a",
-                      color: "#fff",
-                      px: 1.5,
-                      py: 0.5,
-                      borderRadius: 1,
-                      fontSize: 12,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Recommended
-                  </Box>
-                )}
-                <Typography variant="h6" fontWeight="600" sx={{ mb: 1 }}>
-                  {pkg.title}
-                </Typography>
-                <Typography
-                  variant="h5"
-                  color="primary"
-                  fontWeight="bold"
-                  sx={{ mb: 1 }}
-                >
-                  ₹{pkg.price}
-                </Typography>
-                <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                  {pkg.subtitle}
-                </Typography>
-                <Box sx={{ mb: 2 }}>
-                  {pkg.benefits.map((benefit, i) => (
-                    <Typography
-                      key={i}
-                      variant="body2"
-                      sx={{ display: "flex", alignItems: "center", mb: 0.5 }}
-                    >
-                      <Box
-                        component="span"
-                        sx={{
-                          width: 12,
-                          height: 12,
-                          borderRadius: "50%",
-                          bgcolor: "primary.main",
-                          display: "inline-block",
-                          mr: 1,
-                        }}
-                      />
-                      {benefit}
-                    </Typography>
-                  ))}
-                </Box>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  sx={{ textTransform: "none" }}
-                >
-                  Confirm Package
-                </Button>
-              </Paper>
-            </Grid>
-          ))}
-        </Grid>
-      </Box> */}
-
-      {/* Booking form */}
       <Box sx={{ mt: 5 }}>
         <Typography
           variant="h6"
