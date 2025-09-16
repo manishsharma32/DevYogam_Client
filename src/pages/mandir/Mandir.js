@@ -45,7 +45,7 @@ const theme = useTheme()
 
         <Grid container spacing={2} justifyContent={"center"} >
           {Array.isArray(templeData) &&
-            templeData.map((item) => (
+            templeData?.map((item) => (
               <Grid key={item._id} item lg={3} md={4} sm={6} xs={12}>
                 <Card item={item} />
               </Grid>
