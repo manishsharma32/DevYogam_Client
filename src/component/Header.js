@@ -1,26 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import Slide from "@mui/material/Slide";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
-import logo from "../assests/logo.png";
+import { useTheme, styled, alpha } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
-// Nav data
+import logo from "../assests/logo.png";
+import LoginModal from "./LoginModal"; // Your login modal component
+
 const navItemsLeft = [
   { label: "Home", link: "/" },
   { label: "Pooja", link: "/pooja" },
@@ -30,73 +30,87 @@ const navItemsRight = [
   { label: "Temples", link: "/temple" },
 ];
 const moreOptions = [
-  { label: "Login", link: "/login" },
-  // { label: "Crystals", link: "#" },
+  { label: "Login" },
   { label: "Contact Us", link: "/contact" },
 ];
 
-// Hide on scroll helper
-function HideOnScroll(props) {
-  const { children } = props;
-  const trigger = useScrollTrigger();
-  return (
-    <Slide appear={false} direction="down" in={!trigger}>
-      {children}
-    </Slide>
-  );
-}
+const NavButton = styled(Button)(({ theme }) => ({
+  fontWeight: 500,
+  fontSize: "1rem",
+  fontFamily: "Poppins, sans-serif",
+  letterSpacing: 1,
+  color: "#333",
+  textTransform: "none",
+  position: "relative",
+  "&:hover": {
+    color: "#aa4466",
+    background: "transparent",
+    "&::after": {
+      width: "100%",
+    },
+  },
+  "&::after": {
+    content: '""',
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    height: 2,
+    width: 0,
+    backgroundColor: "#aa4466",
+    transition: "width 0.3s ease",
+    borderRadius: 2,
+  },
+}));
 
 export default function Header(props) {
-  const navigate = useNavigate()
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
   const trigger = useScrollTrigger({ threshold: 10 });
-
-  // Responsive breakpoints
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
+  const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
+  const handleMenuClose = () => setAnchorEl(null);
 
-  // Drawer content for mobile/tablet
+  // Drawer content without LoginModal inside it
   const drawerList = (
-    <Box
-      sx={{ width: 260, py: 2 }}
-      role="presentation"
-      onClick={() => setDrawerOpen(false)}
+    <Box sx={{ width: 260, py: 2, bgcolor: "background.paper", height: "100%" }} role="presentation"
       onKeyDown={() => setDrawerOpen(false)}
     >
-      <List>
-        {[...navItemsLeft, ...navItemsRight].map((item) => (
+      <IconButton
+        onClick={() => setDrawerOpen(false)}
+        sx={{ color: "#aa4466", width: 40, height: 40, cursor: "pointer", float: "right", mr: 1 }}
+        aria-label="close drawer"
+      >
+        <CloseIcon />
+      </IconButton>
+
+      <List sx={{ pt: 3 }}>
+        {[...navItemsLeft, ...navItemsRight, ...moreOptions].map((item, idx) => (
           <ListItem key={item.label} disablePadding>
-            <ListItemButton component="a" href={item.link}>
-              <ListItemText primary={item.label} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-        <ListItem>
-          <ListItemText
-            primary="More"
-            primaryTypographyProps={{
-              sx: {
-                fontWeight: "bold",
-                pt: 1,
-                pl: 0.5,
-                fontSize: "1.1rem",
-                color: "#aa4466",
-              },
-            }}
-          />
-        </ListItem>
-        {moreOptions.map((option) => (
-          <ListItem key={option.label} disablePadding>
-            <ListItemButton component="a" href={option.link}>
-              <ListItemText primary={option.label} />
+            <ListItemButton
+              component="a"
+              href={item.link || "#"}
+              onClick={(e) => {
+                if (item.label.toLowerCase() === "login") {
+                  e.preventDefault();
+                  setDrawerOpen(false);
+                  setLoginOpen(true);
+                }
+              }}
+              sx={{
+                "&.Mui-focusVisible, &:hover": {
+                  bgcolor: alpha("#aa4466", 0.15),
+                  color: "#aa4466",
+                },
+                transition: "background-color 0.25s ease, color 0.25s ease",
+                ml: 1,
+                borderRadius: 1,
+              }}
+            >
+              <ListItemText primary={item.label} primaryTypographyProps={{ fontWeight: 600 }} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -105,147 +119,117 @@ export default function Header(props) {
   );
 
   return (
-    <AppBar
-      position="fixed"
-      // elevation=4
-      sx={{
-        backgroundColor: "white",
-        // backgroundImage:
-        //   "linear-gradient(360deg, #E8DAF9 0%, #C1A4F0 20%, #9a67e6 100%)",
-        // transition: "background-image 0.3s, box-shadow 0.3s",
-        py: 1,
-      }}
-    >
-      <Toolbar
+    <>
+      <AppBar
+        position="sticky"
         sx={{
-          minHeight: {xs: "45px", md:"64px", lg:'72px `'},
-          position: "relative",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          px: { xs: 2, md: 4 },
+          backgroundColor: "white",
+          py: 1,
+          boxShadow: trigger ? "0 2px 15px rgba(0,0,0,0.1)" : "none",
+          transition: "box-shadow 0.3s ease",
         }}
       >
-        {/* Left Navs or Hamburger */}
-        {!isMobile ? (
-          <Box sx={{ display: "flex", gap: 3 }}>
-            {navItemsLeft.map((item) => (
-              <Button
-                key={item.label}
-                color="inherit"
-                sx={{
-                  fontWeight: 500,
-                  fontSize: "1rem",
-                  fontFamily: "Poppins, sans-serif",
-                  letterSpacing: 1,
-                  color: "#333",
-                  textTransform: "none",
-                  "&:hover": { color: "#aa4466", background: "transparent" },
-                }}
-                href={item.link}
-              >
-                {item.label}
-              </Button>
-            ))}
-          </Box>
-        ) : (
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={() => setDrawerOpen(true)}
-          >
-            <MenuIcon sx={{ color: "#aa4466", fontSize: 32 }} />
-          </IconButton>
-        )}
-
-        {/* Centered Logo */}
-        <Box
+        <Toolbar
           sx={{
-            left: 0,
-            right: 0,
-            position: "absolute",
+            minHeight: { xs: "45px", md: "64px", lg: "72px" },
+            position: "relative",
             display: "flex",
-            justifyContent: "center",
-            pointerEvents: "none",
+            justifyContent: "space-between",
+            alignItems: "center",
+            px: { xs: 2, md: 4 },
           }}
         >
-          {/* <Typography
-              variant="h3"
-              sx={{
-                fontFamily: "'Playfair Display', serif",
-                fontWeight: 700,
-                fontSize: { xs: "2rem", md: "2.7rem" },
-                color: "#333",
-                letterSpacing: "0.16em",
-                pointerEvents: "auto",
-                userSelect: "none",
-                textShadow: "0 2px 24px #ffe5ed80",
-              }}
-            >
-              DevYogam
-            </Typography> */}
-          <Box
-            component="img"
-            src={logo}
-            loading="lazy"
-            sx={{
-              width: { xs: "140px", sm: "180px", md: "220px", lg: "240px" },
-              height: "auto",
-            }}
-            onClick={()=> navigate("/")}
-          />
-
-          {/* <img src={logo} loading="lazy" style={{width:{md:'220px', lg: '240px', sx:'10px'}}} /> */}
-        </Box>
-
-        {/* Right Navs + More or empty (on Mobile) */}
-        {!isMobile ? (
-          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-            {navItemsRight.map((item) => (
-              <Button
-                key={item.label}
-                color="inherit"
-                sx={{
-                  fontWeight: 500,
-                  fontSize: "1rem",
-                  fontFamily: "Poppins, sans-serif",
-                  letterSpacing: 1,
-                  color: "#333",
-                  textTransform: "none",
-                  "&:hover": { color: "#aa4466", background: "transparent" },
-                }}
-                href={item.link}
-              >
-                {item.label}
-              </Button>
-            ))}
-            <IconButton color="inherit" onClick={handleMenuOpen}>
-              <MoreVertIcon sx={{ color: "#333" }} />
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-            >
-              {moreOptions.map((option) => (
-                <MenuItem key={option.label} onClick={handleMenuClose}>
-                  {option.label}
-                </MenuItem>
+          {/* Left Navs or Hamburger */}
+          {!isMobile ? (
+            <Box sx={{ display: "flex", gap: 3 }}>
+              {navItemsLeft.map((item) => (
+                <NavButton key={item.label} href={item.link}>{item.label}</NavButton>
               ))}
-            </Menu>
+            </Box>
+          ) : (
+            <IconButton
+              size="large"
+              edge="start"
+              aria-label={drawerOpen ? "close menu" : "open menu"}
+              onClick={() => setDrawerOpen(!drawerOpen)}
+              sx={{ color: "#aa4466" }}
+            >
+              {drawerOpen ? <CloseIcon sx={{ fontSize: 32 }} /> : <MenuIcon sx={{ fontSize: 32 }} />}
+            </IconButton>
+          )}
+
+          {/* Centered Logo */}
+          <Box
+            sx={{
+              left: 0,
+              right: 0,
+              position: "absolute",
+              display: "flex",
+              justifyContent: "center",
+              pointerEvents: "none",
+            }}
+          >
+            <Box
+              component="img"
+              src={logo}
+              loading="lazy"
+              sx={{ width: { xs: 140, sm: 180, md: 220, lg: 240 }, height: "auto", cursor: "pointer" }}
+              onClick={() => navigate("/")}
+            />
           </Box>
-        ) : null}
-      </Toolbar>
-      {/* Drawer for tablet/mobile */}
-      <Drawer
-        anchor="left"
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-      >
-        {drawerList}
-      </Drawer>
-    </AppBar>
+
+          {/* Right Navs + More */}
+          {!isMobile && (
+            <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+              {navItemsRight.map((item) => (
+                <NavButton key={item.label} href={item.link}>{item.label}</NavButton>
+              ))}
+              <IconButton color="inherit" onClick={handleMenuOpen} sx={{ color: "#333" }}>
+                <MoreVertIcon />
+              </IconButton>
+              <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                {moreOptions.map((option) => (
+                  <MenuItem
+                    key={option.label}
+                    onClick={() => {
+                      handleMenuClose();
+                      if (option.label.toLowerCase() === "login") {
+                        setLoginOpen(true);
+                      } else if (option.link) {
+                        navigate(option.link);
+                      }
+                    }}
+                    sx={{
+                      transition: "background-color 0.3s, color 0.3s",
+                      "&:hover": { backgroundColor: alpha("#aa4466", 0.1), color: "#aa4466" },
+                    }}
+                  >
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          )}
+        </Toolbar>
+        <Drawer
+          anchor="left"
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+          PaperProps={{ sx: { maxWidth: 280 } }}
+        >
+          {drawerList}
+        </Drawer>
+      </AppBar>
+
+      <LoginModal
+        open={loginOpen}
+        onClose={() => setLoginOpen(false)}
+        onLogin={(values) => {
+          console.log("Login form submitted with", values);
+          // Add your login logic here
+          setLoginOpen(false);
+        }}
+      />
+    </>
   );
 }

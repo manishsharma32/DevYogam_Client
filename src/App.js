@@ -18,7 +18,7 @@ function App() {
         <Box
           sx={{
             position: "relative",
-            top: "4rem",
+            top: "1%",  
           }}
         >
           <PublicRoutes/>

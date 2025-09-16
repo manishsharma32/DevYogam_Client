@@ -30,8 +30,7 @@ export default function ExploreTemples() {
   }, []);
 
   // Map templeData to carousel items taking the first image from images array
-  const carouselItems = templeData
-    ?.map((temple) => {
+  const carouselItems = templeData?.map((temple) => {
       if (temple.images && temple.images.length > 0) {
         return {
           image: temple.images[0],

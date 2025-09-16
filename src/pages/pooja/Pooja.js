@@ -110,7 +110,7 @@ export default function Pooja() {
           ) : (
             <Grid item xs={12}>
               <Typography sx={{ fontFamily: "Poppins", textAlign: "center" }}>
-                No Pooja Data Found
+                No Pooja Found
               </Typography>
             </Grid>
           )}

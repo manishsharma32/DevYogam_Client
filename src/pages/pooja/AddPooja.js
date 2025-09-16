@@ -135,7 +135,16 @@ const initialValues = {
 
   benefit: [{ title: "", titleHi: "", description: "", descriptionHi: "" }],
   faq: [{ question: "", questionHi: "", answer: "", answerHi: "" }],
-   items: [{ title: "", titleHi: "", description: "",descriptionHi:"", price: "", img: "" }],
+  items: [
+    {
+      title: "",
+      titleHi: "",
+      description: "",
+      descriptionHi: "",
+      price: "",
+      img: "",
+    },
+  ],
 };
 
 export default function AddPooja({ open, handleClose }) {
@@ -143,7 +152,7 @@ export default function AddPooja({ open, handleClose }) {
   const [templeList, setTempleList] = useState([]);
   const [templeListHi, setTempleListHi] = useState([]);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const getTemple = async () => {
     const res = await GetAllTempleAPI();
@@ -241,35 +250,49 @@ export default function AddPooja({ open, handleClose }) {
     updated.splice(index, 1);
     setFieldValue("logoImagesHi", updated);
   };
-  const handleSubmit = async (val) => {
-    const formData = new FormData();
-    Object.keys(val).forEach((key) => {
-      if (key === "logoImages") {
-        val.logoImages.forEach((file) => {
-          formData.append("logoImages", file);
-        });
-      } else if (key === "logoImagesHi") {
-        val.logoImages.forEach((file) => {
-          formData.append("logoImagesHi", file);
-        });
-      } else if (key === "price") {
-        formData.append("price", JSON.stringify(val.price));
-      } else if (key === "originator" || key === "originatorHi") {
-        formData.append(key, val[key]?.value || "");
-      } else if (key === "capDate") {
-        formData.append(key, val[key] || "");
-      } else if (val[key] !== null && val[key] !== undefined) {
-        formData.append(key, val[key]);
-      }
-    });
-    setLoading(true);
-    const response = await CreatePoojaAPI(val);
-    setLoading(false);
-    if (response && !response.error) {
-      navigate("/pooja")
-    }
+//   const handleSubmit = async (val) => {
+//     const formData = new FormData();
+//     Object.keys(val).forEach((key) => {
+//       if (key === "logoImages") {
+//         val.logoImages.forEach((file) => {
+//           formData.append("logoImages", file);
+//         });
+//       } else if (key === "logoImagesHi") {
+//         val.logoImages.forEach((file) => {
+//           formData.append("logoImagesHi", file);
+//         });
+//       } else if (key === "price") {
+//         formData.append("price", JSON.stringify(val.price));
+//       } else if (key === "originator" || key === "originatorHi") {
+//         formData.append(key, val[key]?.value || "");
+//       } else if (key === "capDate") {
+//         formData.append(key, val[key] || "");
+//       } else if (val[key] !== null && val[key] !== undefined) {
+//         formData.append(key, val[key]);
+//       }
+//     });
+//     setLoading(true);
+//     const response = await CreatePoojaAPI(val);
+//    console.log(response)
+//     setLoading(false);
+// console.log("response --> ", response)
+//     if (response?.status) {
+//       await alert("Puja created sucessfully")
+//       // navigate("/pooja");
+//     }
+//   };
 
-  };
+const handleSubmit = async (val) => {
+  setLoading(true);
+  const response = await CreatePoojaAPI(val);
+  setLoading(false);
+  if (response.status === 200 || response.status === 200) {
+    alert("Puja created successfully");
+    navigate("/pooja");
+  } else if (response.error) {
+    alert(`Error: ${response.error}`); 
+  }
+};
 
   return (
     <GlobalCssStyles>
@@ -1243,14 +1266,14 @@ export default function AddPooja({ open, handleClose }) {
                       </FieldArray>
                     </Grid>
 
-   <Grid item xs={12} sm={12} sx={{ mb: 1 }}>
+                    <Grid item xs={12} sm={12} sx={{ mb: 1 }}>
                       <Typography
                         className="policy-form-label policy-text-field-label"
                         sx={{ mb: 1 }}
                       >
-                        Items <span className="required-icon">*</span>
+                        Add On Item List
                       </Typography>
-                      <FieldArray name="faq">
+                      <FieldArray name="items">
                         {({ push, remove }) => (
                           <Box>
                             {values.items.map((item, index) => (
@@ -1314,7 +1337,9 @@ export default function AddPooja({ open, handleClose }) {
                                     error={
                                       touched.items &&
                                       touched.items[index]?.description &&
-                                      Boolean(errors.items?.[index]?.description)
+                                      Boolean(
+                                        errors.items?.[index]?.description
+                                      )
                                     }
                                     helperText={
                                       touched.items &&
@@ -1323,7 +1348,7 @@ export default function AddPooja({ open, handleClose }) {
                                     }
                                   />
 
-                                    <CustomTextField
+                                  <CustomTextField
                                     name={`items.${index}.descriptionHi`}
                                     placeholder="विवरण (हिंदी)"
                                     value={item.descriptionHi}
@@ -1334,7 +1359,9 @@ export default function AddPooja({ open, handleClose }) {
                                     error={
                                       touched.items &&
                                       touched.items[index]?.descriptionHi &&
-                                      Boolean(errors.items?.[index]?.descriptionHi)
+                                      Boolean(
+                                        errors.items?.[index]?.descriptionHi
+                                      )
                                     }
                                     helperText={
                                       touched.items &&
@@ -1468,14 +1495,13 @@ export default function AddPooja({ open, handleClose }) {
                                           push({
                                             title: "",
                                             titleHi: "",
-                                            description:"",
-                                            descriptionHi:"",
+                                            description: "",
+                                            descriptionHi: "",
                                             price: "",
                                             img: "",
                                             imgName: "",
                                           })
                                         }
-                                        
                                       >
                                         Add items
                                       </Button>
@@ -1487,7 +1513,6 @@ export default function AddPooja({ open, handleClose }) {
                         )}
                       </FieldArray>
                     </Grid>
-
                   </Box>
 
                   {/* Submit Button */}

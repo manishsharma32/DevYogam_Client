@@ -33,7 +33,7 @@ export default function Chadhava() {
           </Button>
         </Box>
 
-        <Grid container spacing={2}>
+        <Grid container spacing={2} justifyContent={"center"} >
           {Array.isArray(chadhavaData) &&
             chadhavaData.map((item) => (
               <Grid key={item._id} item lg={3} md={4} sm={6} xs={12}>

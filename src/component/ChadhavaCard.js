@@ -9,7 +9,9 @@ import Typography from "@mui/material/Typography";
 export default function ChadhavaCard({ item }) {
   console.log("iniiiniiiiiiiiiii", item);
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card
+      sx={{ maxWidth: 345, boxShadow: "0 2px 8px 2px rgba(237,106,18,0.09)" }}
+    >
       <CardMedia
         component="img"
         alt="green iguana"
@@ -24,9 +26,7 @@ export default function ChadhavaCard({ item }) {
           {item?.subtitle}
         </Typography>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          {item?.desc} Lizards are a widespread group of squamate
-          reptiles, with over 6,000 species, ranging across all continents
-          except Antarctica
+          {item?.desc}
         </Typography>
         <Typography>Rs. {item.chadhava}</Typography>
       </CardContent>
@@ -34,8 +34,8 @@ export default function ChadhavaCard({ item }) {
         <Button
           sx={{
             height: "33px",
-            width:'100%',
-            borderRadius:'1rem',
+            width: "100%",
+            borderRadius: "1rem",
             border: "2px solid #9a67e6",
             color: " #9a67e6",
             minWidth: "100px",
@@ -44,7 +44,7 @@ export default function ChadhavaCard({ item }) {
             alignItems: "center",
           }}
         >
-          Look Chadhava
+          Participate Now 
         </Button>
       </CardActions>
     </Card>

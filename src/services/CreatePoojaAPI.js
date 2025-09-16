@@ -1,8 +1,6 @@
 import axiosInstance from "../utils/axiosConfig";
 
 export const CreatePoojaAPI = async (data) => {
-  console.log("apicall", data);
-
   const transformData = (data) => {
     const formData = new FormData();
 
@@ -100,28 +98,23 @@ export const CreatePoojaAPI = async (data) => {
   };
 
   try {
-    const formattedData = transformData(data);
-
-    const response = await axiosInstance.post("/api/poojas", formattedData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    if (response?.status === 200) {
-      return response?.data;
-    }
-  } catch (error) {
-    if (error.response?.data) {
-      return { error: error.response.data.msg };
-    } else if (
-      error.code === "ECONNABORTED" ||
-      error.message === "Network Error"
-    ) {
-      return { error: "Connection timed out. Please try again later." };
-    }
-    // Log other unexpected errors
-    console.error(error);
-    return { error: "Something went wrong." };
+  const formattedData = transformData(data);
+  const response = await axiosInstance.post("/api/poojas", formattedData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return { status: response.status, data: response.data };  // Always return an object
+} catch (error) {
+  if (error.response?.data) {
+    return { status: error.response.status, error: error.response.data.message };
+  } else if (
+    error.code === "ECONNABORTED" ||
+    error.message === "Network Error"
+  ) {
+    return { status: 0, error: "Connection timed out. Please try again later." };
   }
+  return { status: 0, error: "Something went wrong." };
+}
+
 };

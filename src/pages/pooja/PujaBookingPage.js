@@ -15,6 +15,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { GetPoojaByID } from "../../services/GetPoojaByID";
 import { useParams } from "react-router-dom";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import RazorpayCheckout from "../../component/RazorpayCheckout";
 
 // const poojaData = {
 //   title: "Pitradosh Shanti Puja",
