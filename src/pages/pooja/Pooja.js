@@ -9,19 +9,24 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { GlobalCssStyles } from "../../style/GlobalCSS";
-import AddPooja from "./AddPooja";
 import { useNavigate } from "react-router-dom";
 import PujaCard from "../../component/PoojaCard";
 import { GetAllPoojasAPI } from "../../services/GetAllPoojasAPI";
 
-export default function Pooja({user}) {
+export default function Pooja() {
   const navigate = useNavigate();
   const [poojaData, setPoojaData] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // ✅ Get user from localStorage
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const userRole = storedUser?.role || "user";
+
   const getPooja = async () => {
     setLoading(true);
     const res = await GetAllPoojasAPI();
+
+    // just store all data (admin filter will be applied later in render)
     setPoojaData(res);
     setLoading(false);
   };
@@ -35,9 +40,16 @@ export default function Pooja({user}) {
     navigate(`/pooja-details/${s}/${id}`);
   };
 
-  // Skeleton styling to closely match PujaCard (edit heights/widths as per your card)
+  // Skeleton UI
   const skeletons = Array.from(new Array(6)).map((_, index) => (
-    <Grid item key={index} size={{ xs: 12, md: 4, sm: 6, lg: 4 }}>
+    <Grid
+      item
+      key={index}
+      xs={12}
+      sm={6}
+      md={4}
+      size={{ xs: 12, sm: 6, md: 4, lg: 4 }}
+    >
       <Card
         sx={{
           width: "100%",
@@ -69,12 +81,18 @@ export default function Pooja({user}) {
     </Grid>
   ));
 
+  // ✅ Apply filtering based on role
+  const visiblePoojas =
+    userRole === "admin"
+      ? poojaData // admin sees all
+      : poojaData.filter((item) => !item.isDeleted); // normal user sees only active
+
   return (
     <GlobalCssStyles>
       <Box sx={{ padding: "2%", width: "90%", margin: "auto" }}>
         <Box className="heading-container">
           <Typography className="heading-text">Pooja List</Typography>
-          {user?.role === "admin" && (
+          {userRole === "admin" && (
             <Button
               className="create-btn"
               onClick={() => {
@@ -90,11 +108,21 @@ export default function Pooja({user}) {
         <Grid container spacing={2}>
           {loading ? (
             skeletons
-          ) : Array.isArray(poojaData) && poojaData.length > 0 ? (
-            poojaData.map((item, index) => (
-              <Grid item key={index} size={{ xs: 12, md: 4, sm: 6, lg: 4 }}>
+          ) : visiblePoojas.length > 0 ? (
+            visiblePoojas.map((item, index) => (
+              <Grid
+                item
+                key={index}
+                size={{ xs: 12, sm: 6, md: 4, lg: 4 }}
+                xs={12}
+                sm={6}
+                md={4}
+                lg={4}
+              >
                 <Box sx={{ p: 1 }}>
                   <PujaCard
+                    user={storedUser}
+                    isDeleted={item?.isDeleted}
                     bannerImg={item?.images?.[0]}
                     badge={item?.badge}
                     date={item?.capDate}

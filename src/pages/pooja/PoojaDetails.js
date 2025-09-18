@@ -8,13 +8,19 @@ import {
   Card,
   CardActions,
   CardContent,
+  IconButton,
+  Menu,
+  MenuItem,
   Paper,
   Typography,
 } from "@mui/material";
 import { GlobalCssStyles } from "../../style/GlobalCSS";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import MenuIcon from "@mui/icons-material/Menu";
+
 import { useNavigate, useParams } from "react-router-dom";
 import { GetPoojaByID } from "../../services/GetPoojaByID";
-import { styled } from "@mui/material/styles";
+import { alpha, styled } from "@mui/material/styles";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import Grid from "@mui/material/Grid";
@@ -25,6 +31,7 @@ import single from "../../assests/single.png";
 import couple from "../../assests/couples.png";
 import family from "../../assests/family.png";
 import process from "../../assests/process.jpg";
+import { HidePoojaAPI } from "../../services/HidePoojaAPI";
 
 const Item = styled(Box)(({ theme }) => ({
   backgroundColor: "#fff",
@@ -37,7 +44,7 @@ const Item = styled(Box)(({ theme }) => ({
   }),
 }));
 
-export default function PoojaDetails() {
+export default function PoojaDetails({ user }) {
   const navigate = useNavigate();
   const { name, id } = useParams();
   const [poojaData, setPoojaData] = useState(null);
@@ -50,13 +57,17 @@ export default function PoojaDetails() {
     getPooja();
   }, [id]);
 
-  // Use the product data directly instead of API response
-  // const poojaData = product;
+  const [anchorEl, setAnchorEl] = useState(null);
 
-  // Combine images and images_hi arrays for the carousel
+  const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
+  const handleMenuClose = () => setAnchorEl(null);
+
   const priceData = poojaData?.price;
   const images = (poojaData?.images || []).concat(poojaData?.images_hi || []);
   const priceDetails = poojaData?.price?.[0] || {};
+
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const userRole = storedUser?.role || "user";
 
   const pricePackages = [
     {
@@ -84,6 +95,10 @@ export default function PoojaDetails() {
 
   const handleNavigate = (type, name, id) => {
     navigate(`/pooja-booking/${type}/${name}/${id}`);
+  };
+  const handleHidePooja = async (id) => {
+    handleMenuClose();
+    const res = await HidePoojaAPI(id);
   };
 
   return (
@@ -114,17 +129,76 @@ export default function PoojaDetails() {
             <Grid size={{ xs: 12, md: 12, lg: 6 }}>
               <Item>
                 <Box sx={{ textAlign: "start", fontFamily: "Poppins" }}>
-                  <Typography
+                  <Box
                     sx={{
-                      fontFamily: "Poppins",
-                      fontSize: "1.5rem",
-                      fontWeight: 600,
-                      marginTop: "2%",
-                      color: "#cd5200",
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
                     }}
                   >
-                    {poojaData?.title}
-                  </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: "Poppins",
+                        fontSize: "1.5rem",
+                        fontWeight: 600,
+                        marginTop: "2%",
+                        color: "#cd5200",
+                      }}
+                    >
+                      {poojaData?.title}
+                    </Typography>
+                    {userRole === "admin" ? (
+                      <>
+                        <IconButton
+                          color="inherit"
+                          onClick={handleMenuOpen}
+                          sx={{ color: "#333" }}
+                        >
+                          <MoreVertIcon />
+                        </IconButton>
+                        <Menu
+                          anchorEl={anchorEl}
+                          open={Boolean(anchorEl)}
+                          onClose={handleMenuClose}
+                        >
+                          <MenuItem
+                            // onClick={() => {
+                            //   handleMenuClose();
+                            //   if (option.label.toLowerCase() === "login") {
+                            //     setLoginOpen(true);
+                            //   } else if (option.link) {
+                            //     navigate(option.link);
+                            //   }
+                            // }}
+                            sx={{
+                              transition: "background-color 0.3s, color 0.3s",
+                              "&:hover": {
+                                backgroundColor: alpha("#aa4466", 0.1),
+                                color: "#aa4466",
+                              },
+                            }}
+                          >
+                            Edit
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => {
+                              handleHidePooja(id);
+                            }}
+                            sx={{
+                              transition: "background-color 0.3s, color 0.3s",
+                              "&:hover": {
+                                backgroundColor: alpha("#aa4466", 0.1),
+                                color: "#aa4466",
+                              },
+                            }}
+                          >
+                            Hide
+                          </MenuItem>
+                        </Menu>{" "}
+                      </>
+                    ) : null}
+                  </Box>
                   <Typography
                     sx={{
                       fontFamily: "Poppins",
@@ -321,59 +395,68 @@ export default function PoojaDetails() {
                           }}
                           onClick={() => handleNavigate(pkg.key, name, id)}
                         >
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "center",
-                              mb: 2,
-                            }}
-                          >
-                            <img
-                              style={{
-                                minWidth: "8vw",
-                                height: "15vh",
-                                borderRadius: "1rem",
-                                objectFit: "cover",
-                              }}
-                              src={pkg.image}
-                              alt={pkg.title}
-                            />
-                          </Box>
                           <CardContent sx={{ flexGrow: 1, p: 0 }}>
-                            <Typography
-                              variant="h5"
+                            <Box
                               sx={{
-                                fontWeight: 500,
-                                mb: 1,
-                                fontFamily: "Poppins",
-                                color: "#cd5200",
+                                display: "flex",
+                                justifyContent: "space-between",
                               }}
                             >
-                              {pkg.title}
-                            </Typography>
-                            <Typography
-                              variant="h6"
-                              sx={{
-                                color: "#7c3aed",
-                                fontWeight: 700,
-                                mb: 1,
-                                fontFamily: "Poppins",
-                              }}
-                            >
-                              {data.amaount !== null
-                                ? `₹${data.amaount}`
-                                : "Contact for price"}
-                            </Typography>
-                            <Typography
-                              variant="subtitle2"
-                              sx={{
-                                mb: 1,
-                                color: "#444",
-                                fontFamily: "Poppins",
-                              }}
-                            >
-                              {pkg.subtitle}
-                            </Typography>
+                              <Box>
+                                <Typography
+                                  variant="h5"
+                                  sx={{
+                                    fontWeight: 500,
+                                    mb: 1,
+                                    fontFamily: "Poppins",
+                                    color: "#cd5200",
+                                  }}
+                                >
+                                  {pkg.title}
+                                </Typography>
+                                <Typography
+                                  variant="h6"
+                                  sx={{
+                                    color: "#7c3aed",
+                                    fontWeight: 700,
+                                    mb: 1,
+                                    fontFamily: "Poppins",
+                                  }}
+                                >
+                                  {data.amaount !== null
+                                    ? `₹${data.amaount}`
+                                    : "Contact for price"}
+                                </Typography>
+                                <Typography
+                                  variant="subtitle2"
+                                  sx={{
+                                    mb: 1,
+                                    color: "#444",
+                                    fontFamily: "Poppins",
+                                  }}
+                                >
+                                  {pkg.subtitle}
+                                </Typography>
+                              </Box>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  mb: 2,
+                                }}
+                              >
+                                <img
+                                  style={{
+                                    minWidth: "8vw",
+                                    height: "15vh",
+                                    borderRadius: "1rem",
+                                    objectFit: "cover",
+                                  }}
+                                  src={pkg.image}
+                                  alt={pkg.title}
+                                />
+                              </Box>
+                            </Box>
                             <Box sx={{ mb: 2, flexGrow: 1, mt: 4 }}>
                               {benefits?.map((benefit, i) => (
                                 <Typography
@@ -432,10 +515,24 @@ export default function PoojaDetails() {
             >
               How it works?
             </Typography>
-            <Box sx={{ p: 1, display:'flex', justifyContent:'center', alignItems:'center' }}>
+            <Box
+              sx={{
+                // p: 1,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <img
                 src={process}
-                style={{ width: "80%", mx: "auto" }}
+                style={{
+                  width: "90%",
+                  mx: "auto",
+                  border: "1px solid lightgrey",
+                  borderRadius: "1.5rem",
+                  boxShadow: 5,
+                  p: 2,
+                }}
                 alt="process"
               />
             </Box>
@@ -450,7 +547,7 @@ export default function PoojaDetails() {
                   sx={{
                     fontWeight: 700,
                     mb: 3,
-                    fontSize:'1.5rem',
+                    fontSize: "1.5rem",
                     fontFamily: "Poppins",
                     color: "#2c7a7b",
                   }}
@@ -479,6 +576,7 @@ export default function PoojaDetails() {
                     >
                       {item?.title}
                     </Typography>
+
                     <Typography
                       key={item._id}
                       variant="body1"
@@ -504,7 +602,7 @@ export default function PoojaDetails() {
                   sx={{
                     fontWeight: 700,
                     mb: 3,
-                    fontSize:'1.5rem',
+                    fontSize: "1.5rem",
                     fontFamily: "Poppins",
                     color: "#2c7a7b",
                   }}

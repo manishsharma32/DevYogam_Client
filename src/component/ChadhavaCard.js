@@ -7,14 +7,13 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 export default function ChadhavaCard({ item }) {
-  console.log("iniiiniiiiiiiiiii", item);
   return (
     <Card
       sx={{ maxWidth: 345, boxShadow: "0 2px 8px 2px rgba(237,106,18,0.09)" }}
     >
       <CardMedia
         component="img"
-        alt="green iguana"
+        alt={item?.title}
         height="140"
         image={item?.mandir?.images?.[0]}
       />

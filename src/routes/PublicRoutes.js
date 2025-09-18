@@ -14,6 +14,7 @@ import PoojaDetails from "../pages/pooja/PoojaDetails";
 import PujaBookingPage from "../pages/pooja/PujaBookingPage";
 import RazorpayCheckout from "../component/RazorpayCheckout";
 import ProtectedRoute from "./ProtectedRoute";
+import EditPooja from "../pages/pooja/EditPooja";
 
 export default function PublicRoutes({ user }) {
   return (
@@ -26,11 +27,12 @@ export default function PublicRoutes({ user }) {
       <Route element={<ProtectedRoute />}>
         <>
           <Route path="/pooja/create" element={<AddPooja />} />
+          <Route path="/pooja-edit/:id" element={<EditPooja />} />
           <Route path="/temple/create" element={<AddTemple />} />
           <Route path="/chadhava/create" element={<AddChadhava />} />
         </>
       </Route>
-      <Route path="/pooja-details/:name/:id" element={<PoojaDetails />} />
+      <Route path="/pooja-details/:name/:id" element={<PoojaDetails user={user}  />} />
       <Route
         path="/pooja-booking/:type/:name/:id"
         element={<PujaBookingPage />}

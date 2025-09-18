@@ -10,7 +10,6 @@ import {
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { motion } from "framer-motion";
 
-// Extracts day and short month from date string
 function getDateParts(dateString) {
   const d = new Date(dateString);
   return {
@@ -30,6 +29,8 @@ export default function PujaCard({
   locationIconColor = "#ED6A12",
   ctaText = "Participate Now",
   onCtaClick,
+  user,
+  isDeleted,
 }) {
   const { day, month } = getDateParts(date);
 
@@ -56,6 +57,8 @@ export default function PujaCard({
           fontFamily: "Poppins",
           backgroundColor: "#fff",
           overflow: "hidden",
+          maxHeight: "70vh",
+          opacity: isDeleted ? 0.4 : 1,
         }}
         onClick={onCtaClick}
       >
@@ -183,7 +186,8 @@ export default function PujaCard({
             fullWidth
             variant="contained"
             sx={{
-              backgroundColor: "#7c3aed",
+              backgroundColor: "#79245a",
+              // backgroundColor: "#7c3aed",
               fontFamily: "Poppins",
               color: "#fff",
               borderRadius: 2,

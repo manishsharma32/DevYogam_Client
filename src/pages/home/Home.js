@@ -3,14 +3,9 @@ import CustomCarousel from "../../component/CustomCarousel";
 import OurServices from "./OurServices";
 import ExploreTemples from "./ExploreTemples";
 import ReviewSection from "./ReviewSection";
+import img2 from "../../assests/banner1.jpg"
 import img1 from "../../assests/1.png"
-import img2 from "../../assests/2.png"
 const slides = [
-  {
-    image: img1,
-    title: "Welcome to DevYogam",
-    description: "A divine journey begins here.",
-  },
   {
     image: img2,
     title: "Spiritual Pooja Services",
@@ -18,6 +13,11 @@ const slides = [
   },
   {
     image: img1,
+    title: "Welcome to DevYogam",
+    description: "A divine journey begins here.",
+  },
+  {
+    image: img2,
     title: "Visit Mandir",
     description: "Explore famous temples and holy places.",
   },

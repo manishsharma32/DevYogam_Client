@@ -15,6 +15,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { CreateTempleAPI } from "../../services/CreateTempleAPI";
 import { CreateChadhavaAPI } from "../../services/CreateChadhavaAPI";
 import { GetAllTempleAPI } from "../../services/GetAllTempleAPI";
+import AsyncCreatableSelect from "react-select/async-creatable";
+
 const MAX_LOGOS = 5;
 
 const initialValues = {
@@ -34,7 +36,16 @@ const initialValues = {
   newLogoImagesHi: [], // Also referenced in upload function
   removedLogoImageIds: [], // Also referenced in remove function
   removedLogoImageIdsHi: [], // Also referenced in remove function
-  faq: [{ title: "", titleHi: "", description: "",descriptionHi:"", price: "", img: "" }],
+  faq: [
+    {
+      title: "",
+      titleHi: "",
+      description: "",
+      descriptionHi: "",
+      price: "",
+      img: "",
+    },
+  ],
 };
 console.log("==>initalvalues", initialValues);
 export default function AddChadhava({ open, handleClose }) {
@@ -280,7 +291,9 @@ export default function AddChadhava({ open, handleClose }) {
                       <Typography className="policy-form-label policy-text-field-label">
                         Mandir <span className="required-icon">*</span>
                       </Typography>
-                      <AsyncSelect
+                      <AsyncCreatableSelect
+                        id="originator"
+                        name="originator"
                         cacheOptions
                         defaultOptions={mandirOptions}
                         options={mandirOptions}
@@ -607,7 +620,7 @@ export default function AddChadhava({ open, handleClose }) {
                                     }
                                   />
 
-                                    <CustomTextField
+                                  <CustomTextField
                                     name={`faq.${index}.descriptionHi`}
                                     placeholder="विवरण (हिंदी)"
                                     value={item.descriptionHi}
@@ -618,7 +631,9 @@ export default function AddChadhava({ open, handleClose }) {
                                     error={
                                       touched.faq &&
                                       touched.faq[index]?.descriptionHi &&
-                                      Boolean(errors.faq?.[index]?.descriptionHi)
+                                      Boolean(
+                                        errors.faq?.[index]?.descriptionHi
+                                      )
                                     }
                                     helperText={
                                       touched.faq &&
@@ -752,8 +767,8 @@ export default function AddChadhava({ open, handleClose }) {
                                           push({
                                             title: "",
                                             titleHi: "",
-                                            description:"",
-                                            descriptionHi:"",
+                                            description: "",
+                                            descriptionHi: "",
                                             price: "",
                                             img: "",
                                             imgName: "",

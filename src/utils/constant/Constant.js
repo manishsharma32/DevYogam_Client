@@ -9,8 +9,8 @@ import avatar5 from "../../assests/avatar5.jpg";
 // import avatar9 from "../assests/avatar9.jpg";
 // import avatar10 from "../assests/avatar10.jpg";
 
-export const baseURL = process.env.REACT_APP_API_BASE_URL_SERVER
-// export const baseURL = process.env.REACT_APP_API_BASE_URL_LOCAL;
+// export const baseURL = process.env.REACT_APP_API_BASE_URL_SERVER
+export const baseURL = process.env.REACT_APP_API_BASE_URL_LOCAL;
 // export const baseURL = 'http://localhost:5000'
 export const reviewsData = [
   {
@@ -19,7 +19,7 @@ export const reviewsData = [
     designation: "Software Developer",
     mainQuote: "Excellent",
     review:
-      "Booked the Baba Mahakal Chadhava from Dev Yogam, I clear my job interview. Receiving the video and prasad.",
+      "Booked  the Baba Mahakal Chadhava from Dev Yogam, I clear my job interview. Receiving the video and prasad.",
   },
   {
     avatar: avatar2,

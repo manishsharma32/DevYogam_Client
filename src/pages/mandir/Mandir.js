@@ -9,21 +9,32 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import Card from "../../component/Card";
+import PujaCard from "../../component/PoojaCard"; 
+import temple2 from "../../assests/temple2.png"
 import { GetAllTempleAPI } from "../../services/GetAllTempleAPI";
+import { useNavigate } from "react-router-dom";
 
-export default function Mandir({user}) {
+export default function Mandir({ user }) {
   const [templeData, setTempleData] = useState([]);
+  const navigate = useNavigate();
+
   const getTemple = async () => {
     const res = await GetAllTempleAPI();
     setTempleData(res);
   };
+
   useEffect(() => {
     getTemple();
   }, []);
+
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm")); // <600px
   const isMediumScreen = useMediaQuery(theme.breakpoints.between("sm", "md")); // 600-900px
+
+  const handleNavigate = (id, name) => {
+    let s = name.split(" ").join("-");
+    navigate(`/temple-details/${s}/${id}`);
+  };
 
   return (
     <GlobalCssStyles>
@@ -35,15 +46,11 @@ export default function Mandir({user}) {
         )}
         <Box sx={{ width: "90%", margin: "auto", padding: "2%" }}>
           <Box sx={{ display: "flex", justifyContent: "flex-end", m: 2 }}>
-            {/* <Typography className="heading-text">
-            Explore Temples With Dev Yogam{" "}
-          </Typography> */}
             {user?.role === "admin" && (
               <Button
                 className="create-btn"
                 onClick={() => {
                   window.open(`${window?.location?.origin}/temple/create`);
-                  // setOpenCreatePoOja(true);
                 }}
               >
                 Add Temple
@@ -51,36 +58,45 @@ export default function Mandir({user}) {
             )}
           </Box>
 
-          <Grid container spacing={2} justifyContent={"center"}>
-            {Array.isArray(templeData) &&
-              templeData?.map((item) => (
-                <Grid key={item._id} item lg={3} md={4} sm={6} xs={12}>
-                  <Card item={item} />
+          <Grid container spacing={2} justifyContent="center">
+            {Array.isArray(templeData) && templeData.length > 0 ? (
+              templeData.map((item) => (
+                <Grid
+                  key={item._id}
+                  item
+                  size={{ xs: 12, sm: 6, md: 4, lg: 4 }}
+                  lg={3}
+                  md={4}
+                  sm={6}
+                  xs={12}
+                >
+                  <Box sx={{ p: 1 }}>
+                    <PujaCard
+                      bannerImg={item?.images?.[0] || temple2}
+                      date={item?.createdAt}
+                      headingEn={item?.title}
+                      highlight={item?.templeDescription}
+                      location={item?.location}
+                      isDeleted={item?.isDeleted}
+                      ctaText="Explore Temple"
+                      onCtaClick={() => handleNavigate(item?._id, item?.title)}
+                      user={user}
+                    />
+                  </Box>
                 </Grid>
-              ))}
+              ))
+            ) : (
+              <Grid item xs={12}>
+                <Typography
+                  sx={{ fontFamily: "Poppins", textAlign: "center", mt: 4 }}
+                >
+                  No Temple Found
+                </Typography>
+              </Grid>
+            )}
           </Grid>
         </Box>
       </Box>
     </GlobalCssStyles>
   );
 }
-
-//  {
-//       "_id": "68b440799ab7ef8b34c064ba",
-//       "title": "string",
-//       "location": "string",
-//       "bhagwan": "string",
-//       "templeDescription": "string",
-//       "longDescription": "string",
-//       "is_active": true,
-//       "images": [
-//           "https://i.ibb.co/MDLn4sqy/3a1f7a6673279a4e068c2020bc0a1a16.jpg"
-//       ],
-//       "benefit_tags": [],
-//       "deity": [],
-//       "creatives": [],
-//       "multilingual_data": [],
-//       "createdAt": "2025-08-31T12:30:49.198Z",
-//       "updatedAt": "2025-08-31T12:30:49.198Z",
-//       "__v": 0
-//   },

@@ -64,12 +64,12 @@ const NavButton = styled(Button)(({ theme }) => ({
 
 export default function Header(props) {
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const trigger = useScrollTrigger({ threshold: 10 });
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);

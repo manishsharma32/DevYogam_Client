@@ -7,6 +7,8 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, Grid, Skeleton } from "@mui/material";
+import temple1 from "../../assests/temple 1.png";
+import temple2 from "../../assests/temple2.png";
 
 export default function ExploreTemples() {
   const [templeData, setTempleData] = useState([]);
@@ -46,9 +48,9 @@ export default function ExploreTemples() {
       .filter(Boolean);
 
   const reversedItems =
-    Array.isArray(carouselItems) && [...carouselItems].reverse(); // reversed for second carousel
+    Array.isArray(carouselItems) && [...carouselItems].reverse();
 
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm")); // <600px
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const skeletons = Array.from(new Array(2)).map((_, index) => (
     <Grid item key={index} size={{ xs: 12, md: 4, sm: 6, lg: 4 }}>
       <Card
@@ -111,7 +113,17 @@ export default function ExploreTemples() {
         >
           {/* First carousel normal */}
           <CustomCarousel
-            items={carouselItems}
+            items={
+              carouselItems?.length > 0
+                ? carouselItems
+                : [
+                    {
+                      image: temple1,
+                      title: "Baglamukhi Mata Temple",
+                      description: "",
+                    },
+                  ]
+            }
             showStatus={false}
             showArrows={true}
             showIndicators={false}
@@ -125,7 +137,17 @@ export default function ExploreTemples() {
             }}
           >
             <CustomCarousel
-              items={reversedItems}
+              items={
+                reversedItems?.length > 0
+                  ? reversedItems
+                  : [
+                      {
+                        image: temple2,
+                        title: "Mahakal Temple",
+                        description: "",
+                      },
+                    ]
+              }
               showStatus={false}
               showIndicators={false}
               showThumbs={false}
@@ -250,39 +272,40 @@ const CustomCarousel = ({
       }
       {...carouselProps}
     >
-      { Array.isArray(items)  && items?.map((item, idx) => (
-        <div
-          key={idx}
-          style={{
-            position: "relative",
-            width: "100%",
-            height: carouselHeight,
-            maxHeight: 400,
-            minHeight: 200,
-            padding: 10,
-            overflow: "hidden",
-            boxSizing: "border-box",
-          }}
-          onClick={() => {
-            navigate("/temple");
-          }}
-        >
-          <img
-            src={item.image}
-            alt={item.title || "Temple"}
+      {Array.isArray(items) &&
+        items?.map((item, idx) => (
+          <div
+            key={idx}
             style={{
-              width: "auto",
-              maxWidth: "100%",
-              height: "100%",
-              objectFit: "contain",
-              objectPosition: "center",
-              display: "block",
-              borderRadius: "12px",
-              margin: "0 auto",
+              position: "relative",
+              width: "100%",
+              height: carouselHeight,
+              maxHeight: 400,
+              minHeight: 200,
+              padding: 10,
+              overflow: "hidden",
+              boxSizing: "border-box",
             }}
-          />
-        </div>
-      ))}
+            onClick={() => {
+              navigate("/temple");
+            }}
+          >
+            <img
+              src={item.image}
+              alt={item.title || "Temple"}
+              style={{
+                width: "auto",
+                maxWidth: "100%",
+                height: "100%",
+                objectFit: "contain",
+                objectPosition: "center",
+                display: "block",
+                borderRadius: "12px",
+                margin: "0 auto",
+              }}
+            />
+          </div>
+        ))}
     </Carousel>
   );
 };
