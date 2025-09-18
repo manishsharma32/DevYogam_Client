@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 
 export default function RazorpayCheckout() {
   const location = useLocation();
-  const amount = location.state?.amount || 0;
+  const amount = location.state?.amount  || 500;
   const username = location.state?.username || "";
   const userGotra = location.state?.userGotra || "";
   const mobile = location.state?.mobile || "";
@@ -32,18 +32,19 @@ export default function RazorpayCheckout() {
       const result = await fetch(`${baseURL}/api/payment/create-order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, username, userGotra, mobile, pooja:id }),
+        body: JSON.stringify({ amount:amount , username, userGotra, mobile, pooja:id }),
       });
       const data = await result.json();
-
+console.log('==>data',data.order.amount )
       const options = {
         key: "rzp_live_RHWbkMMBTyv7oi",
-        amount: data.amount,
-        currency: data.currency,
+        amount: data?.order?.amount ,
+        currency: data?.order?.currency,
         name: "Your Company",
         description: "Test Transaction",
-        order_id: data.id,
+        order_id: data?.order?.id,
         handler: async function (response) {
+          console.log('==>response',response)
           const verifyRes = await fetch(`${baseURL}/api/payment/verify-payment`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
