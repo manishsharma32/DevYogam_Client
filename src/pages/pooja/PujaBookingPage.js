@@ -96,7 +96,6 @@ export default function PujaBookingPage() {
     setParticipants(getInitialParticipants());
   }, [type]);
 
-  // Simple mobile validation
   const isMobileValid = /^\d{10}$/.test(mobile);
 
  
