@@ -147,7 +147,7 @@ export default function PujaBookingPage() {
               <Grid item size={{ xs: 12, md: 6, lg: 6 }}>
                 <img
                   style={{ height: "100%", width: "100%", objectFit: "cover" }}
-                  src={poojaData?.images[0]}
+                  src={poojaData?.images[0]?.url}
                   alt={`slide`}
                 />
               </Grid>

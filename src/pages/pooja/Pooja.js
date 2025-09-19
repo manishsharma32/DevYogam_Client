@@ -81,12 +81,10 @@ export default function Pooja() {
     </Grid>
   ));
 
-  // ✅ Apply filtering based on role
   const visiblePoojas =
     userRole === "admin"
-      ? poojaData // admin sees all
-      : poojaData.filter((item) => !item.isDeleted); // normal user sees only active
-
+      ? poojaData 
+      : poojaData.filter((item) => !item.isDeleted); 
   return (
     <GlobalCssStyles>
       <Box sx={{ padding: "2%", width: "90%", margin: "auto" }}>
@@ -123,7 +121,7 @@ export default function Pooja() {
                   <PujaCard
                     user={storedUser}
                     isDeleted={item?.isDeleted}
-                    bannerImg={item?.images?.[0]}
+                    bannerImg={item?.images?.[0]?.url}
                     badge={item?.badge}
                     date={item?.capDate}
                     dateBg={item?.dateBg || "#FFD700"}

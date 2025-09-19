@@ -19,16 +19,16 @@ export const CreatePoojaAPI = async (data) => {
       formData.append("capDate", new Date(data.capDate).toISOString());
     }
 
-    if (Array.isArray(data.logoImages)) {
-      data.logoImages.forEach((file) => {
-        formData.append("images", file);
-      });
-    }
-    if (Array.isArray(data.logoImagesHi)) {
-      data.logoImagesHi.forEach((file) => {
-        formData.append("images_hi", file);
-      });
-    }
+    // if (Array.isArray(data.logoImages)) {
+    //   data.logoImages.forEach((file) => {
+    //     formData.append("images", file);
+    //   });
+    // }
+    // if (Array.isArray(data.logoImagesHi)) {
+    //   data.logoImagesHi.forEach((file) => {
+    //     formData.append("imagesHi", file);
+    //   });
+    // }
     if (data.price?.type?.[0]) {
       const p = data.price.type[0];
       console.log("family amount ", p.family?.amaount)

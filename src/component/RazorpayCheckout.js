@@ -29,7 +29,7 @@ export default function RazorpayCheckout() {
       }
 
     try {
-      const result = await fetch(`${baseURL}/api/payment/create-order`, {
+      const result = await fetch(`${baseURL}api/payment/create-order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount:amount , username, userGotra, mobile, pooja:id }),

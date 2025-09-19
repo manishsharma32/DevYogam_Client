@@ -15,6 +15,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useEffect } from "react";
 import { GetAllTempleAPI } from "../../services/GetAllTempleAPI";
 import { useNavigate } from "react-router-dom";
+import { CreatePoojaFile } from "../../services/CreatePoojaFile";
 
 const MAX_LOGOS = 5;
 const MAX_SIZE = 5 * 1024 * 1024;
@@ -286,7 +287,9 @@ const handleSubmit = async (val) => {
   setLoading(true);
   const response = await CreatePoojaAPI(val);
   setLoading(false);
-  if (response.status === 200 || response.status === 200) {
+  // console.log("response is ===> ", response)
+  if (response?.data?.status) {
+    const res = await CreatePoojaFile(response?.data?.data?._id , val);
     alert("Puja created successfully");
     navigate("/pooja");
   } else if (response.error) {
