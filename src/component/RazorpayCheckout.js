@@ -44,7 +44,7 @@ console.log('==>data',data.order.amount )
         description: "Transaction",
         order_id: data?.order?.id,
         handler: async function (response) {
-          const verifyRes = await fetch(`${baseURL}/api/payment/verify-payment`, {
+          const verifyRes = await fetch(`${baseURL}api/payment/verify-payment`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
