@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Carousel } from "react-responsive-carousel";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -7,9 +7,11 @@ import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import { reviewsData } from "../../utils/constant/Constant";
+import { LanguageContext } from "../../context/LanguageContext";
 
 export default function ReviewCard() {
   const [selectedItem, setSelectedItem] = useState(0);
+  const { language } = useContext(LanguageContext);
 
   // Handler for slide change
   const onChange = (index) => {
@@ -23,6 +25,15 @@ export default function ReviewCard() {
     return 33.33; // 3 cards on desktop
   };
 
+  // Map reviews with selected language fields
+  const localizedReviews = reviewsData.map((item) => ({
+    ...item,
+    mainQuote: language === "hi" ? item.mainQuoteHi || item.mainQuote : item.mainQuote,
+    review: language === "hi" ? item.reviewHi || item.review : item.review,
+    name: language === "hi" ? item.nameHi || item.name : item.name,
+    designation: language === "hi" ? item.designationHi || item.designation : item.designation,
+  }));
+
   return (
     <>
       <Typography
@@ -30,11 +41,10 @@ export default function ReviewCard() {
           fontFamily: "Poppins",
           fontSize: "2rem",
           fontWeight: 600,
-          fontFamily: "Poppins",
           textAlign: "center",
         }}
       >
-        Customer Reviews
+        {language === "hi" ? "उपयोगकर्ताओं की राय" : "Users Reviews"}
       </Typography>
       <div style={{ margin: "40px auto", maxWidth: 1200 }}>
         <Carousel
@@ -55,7 +65,7 @@ export default function ReviewCard() {
           selectedItem={selectedItem}
           transitionTime={500}
         >
-          {reviewsData.map((item, i) => {
+          {localizedReviews.map((item, i) => {
             const isCenter = i === selectedItem;
 
             const slideStyle = {

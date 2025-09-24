@@ -1,33 +1,25 @@
 import axiosInstance from "../utils/axiosConfig";
 
-export const CreatePoojaFile = async (id, data, type) => {
-  let url;
-  if (type === "pooja") {
-    url = `/api/files/${id}`;
-  } else if (type === "temple") {
-    url = `/api/files/${id}/templeImage`;
-  } else if (type === "chadhava") {
-    url = `/api/files/${id}/chadhavaImage`;
-  }
+export const UploadItemImg = async (data) => {
   const transformData = (data) => {
     const formData = new FormData();
 
-    if (Array.isArray(data.logoImages)) {
-      data.logoImages.forEach((file) => {
-        formData.append("images", file);
+    if (Array.isArray(data)) {
+      data.forEach((file) => {
+        if (file instanceof File) {
+          formData.append("images", file); // append file
+        }
       });
+    } else if (data instanceof File) {
+      formData.append("images", data);
     }
-    if (Array.isArray(data.logoImagesHi)) {
-      data.logoImagesHi.forEach((file) => {
-        formData.append("imagesHi", file);
-      });
-    }
+
     return formData;
   };
 
   try {
     const formattedData = transformData(data);
-    const response = await axiosInstance.post(url, formattedData, {
+    const response = await axiosInstance.post(`/api/files/getImageUrl`, formattedData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -51,3 +43,4 @@ export const CreatePoojaFile = async (id, data, type) => {
     return { status: 0, error: "Something went wrong." };
   }
 };
+

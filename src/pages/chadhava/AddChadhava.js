@@ -16,6 +16,9 @@ import { CreateTempleAPI } from "../../services/CreateTempleAPI";
 import { CreateChadhavaAPI } from "../../services/CreateChadhavaAPI";
 import { GetAllTempleAPI } from "../../services/GetAllTempleAPI";
 import AsyncCreatableSelect from "react-select/async-creatable";
+import { UploadItemImg } from "../../services/UploadItemImg";
+import { CreatePoojaFile } from "../../services/CreatePoojaFile";
+import { useNavigate } from "react-router-dom";
 
 const MAX_LOGOS = 5;
 
@@ -31,11 +34,11 @@ const initialValues = {
   file: null,
   fileHi: null,
   logoImages: [],
-  logoImagesHi: [], // Add this
-  newLogoImages: [], // Also referenced in upload function
-  newLogoImagesHi: [], // Also referenced in upload function
-  removedLogoImageIds: [], // Also referenced in remove function
-  removedLogoImageIdsHi: [], // Also referenced in remove function
+  logoImagesHi: [],
+  newLogoImages: [],
+  newLogoImagesHi: [],
+  removedLogoImageIds: [],
+  removedLogoImageIdsHi: [],
   faq: [
     {
       title: "",
@@ -46,10 +49,18 @@ const initialValues = {
       img: "",
     },
   ],
+  benefit: [
+    {
+      title: "",
+      titleHi: "",
+      description: "",
+      descriptionHi: "",
+    },
+  ],
 };
-console.log("==>initalvalues", initialValues);
 export default function AddChadhava({ open, handleClose }) {
   const [poojaData, setPoojaData] = useState(initialValues);
+  const navigate  = useNavigate();
   const [templeData, setTempleData] = useState([]);
   const [mandirOptions, setMandirOptions] = useState([]);
   const [templeList, setTempleList] = useState([]);
@@ -151,21 +162,28 @@ export default function AddChadhava({ open, handleClose }) {
     setFieldValue("logoImagesHi", updated);
   };
   const handleSubmit = async (val) => {
-    const formData = new FormData();
-    Object.keys(val).forEach((key) => {
-      if (key === "logoImages") {
-        val.logoImages.forEach((file) => {
-          formData.append("logoImages", file);
-        });
-      } else if (key === "logoImagesHi") {
-        val.logoImages.forEach((file) => {
-          formData.append("logoImagesHi", file);
-        });
-      } else if (val[key] !== null && val[key] !== undefined) {
-        formData.append(key, val[key]);
+    console.log("Submitted values:", val);
+    let itemImg;
+    if (val?.faq?.length > 0) {
+      const images = val.faq.map((i) => i.img);
+      itemImg = await UploadItemImg(images);
+    }
+    const response = await CreateChadhavaAPI(val, itemImg);
+    console.log(response);
+    if (response?._id) {
+      const res = await CreatePoojaFile(
+        response?._id,
+        val,
+        "chadhava"
+      );
+      alert("Puja created successfully");
+      if (res?.data?.status) {
+        navigate("/chadhava");
       }
-    });
-    await CreateChadhavaAPI(val);
+    } else if (response?.error) {
+      alert(`Error: ${response?.error}`);
+    }
+    console.log("Uploaded Image URLs:", itemImg?.data?.images);
   };
   return (
     <GlobalCssStyles>
@@ -190,7 +208,13 @@ export default function AddChadhava({ open, handleClose }) {
             dirty,
             setFieldTouched,
           }) => (
-            <Form>
+            <Form
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && e.target.tagName !== "TEXTAREA") {
+                  e.preventDefault();
+                }
+              }}
+            >
               <Box style={{ width: "90%", margin: "auto" }}>
                 <Typography className="policies-text" sx={{ mb: 2 }}>
                   Add New Chadhava
@@ -539,6 +563,160 @@ export default function AddChadhava({ open, handleClose }) {
                           errors.descriptionHi
                         }
                       />
+                    </Grid>
+                    {/* Benefit array */}
+                    <Grid item xs={12} sm={12} sx={{ mb: 2 }}>
+                      <Typography
+                        className="policy-form-label policy-text-field-label"
+                        sx={{ mb: 1 }}
+                      >
+                        Benefits <span className="required-icon">*</span>
+                      </Typography>
+                      <FieldArray name="benefits">
+                        {({ push, remove }) => (
+                          <Box>
+                            {values?.benefit?.map((item, index) => (
+                              <Grid
+                                container
+                                spacing={2}
+                                key={index}
+                                alignItems="center"
+                                sx={{ mb: 1, position: "relative" }}
+                              >
+                                <Grid item xs={11} size={11}>
+                                  <Stack spacing={2}>
+                                    <CustomTextField
+                                      name={`benefit.${index}.title`}
+                                      placeholder="Add Title (English)"
+                                      value={item.title}
+                                      onChange={handleChange}
+                                      onBlur={handleBlur}
+                                      fullWidth
+                                      size="small"
+                                      error={
+                                        touched.benefit &&
+                                        touched.benefit[index]?.title &&
+                                        Boolean(errors.benefit?.[index]?.title)
+                                      }
+                                      helperText={
+                                        touched.benefit &&
+                                        touched.benefit[index]?.title &&
+                                        errors.benefit?.[index]?.title
+                                      }
+                                    />
+                                    <CustomTextField
+                                      name={`benefit.${index}.titleHi`}
+                                      placeholder="शीर्षक जोड़ें (हिंदी)"
+                                      value={item.titleHi}
+                                      onChange={handleChange}
+                                      onBlur={handleBlur}
+                                      fullWidth
+                                      size="small"
+                                      error={
+                                        touched.benefit &&
+                                        touched.benefit[index]?.titleHi &&
+                                        Boolean(
+                                          errors.benefit?.[index]?.titleHi
+                                        )
+                                      }
+                                      helperText={
+                                        touched.benefit &&
+                                        touched.benefit[index]?.titleHi &&
+                                        errors.benefit?.[index]?.titleHi
+                                      }
+                                    />
+                                    <CustomTextField
+                                      as="textarea"
+                                      name={`benefit.${index}.description`}
+                                      placeholder="Description (English)"
+                                      value={item.description}
+                                      onChange={handleChange}
+                                      onBlur={handleBlur}
+                                      fullWidth
+                                      size="small"
+                                      rows={3}
+                                      error={
+                                        touched.benefit &&
+                                        touched.benefit[index]?.description &&
+                                        Boolean(
+                                          errors.benefit?.[index]?.description
+                                        )
+                                      }
+                                      helperText={
+                                        touched.benefit &&
+                                        touched.benefit[index]?.description &&
+                                        errors.benefit?.[index]?.description
+                                      }
+                                    />
+                                    <CustomTextField
+                                      as="textarea"
+                                      name={`benefit.${index}.descriptionHi`}
+                                      placeholder="विवरण (हिंदी)"
+                                      value={item.descriptionHi}
+                                      onChange={handleChange}
+                                      onBlur={handleBlur}
+                                      fullWidth
+                                      size="small"
+                                      rows={3}
+                                      error={
+                                        touched.benefit &&
+                                        touched.benefit[index]?.descriptionHi &&
+                                        Boolean(
+                                          errors.benefit?.[index]?.descriptionHi
+                                        )
+                                      }
+                                      helperText={
+                                        touched.benefit &&
+                                        touched.benefit[index]?.descriptionHi &&
+                                        errors.benefit?.[index]?.descriptionHi
+                                      }
+                                    />
+                                  </Stack>
+                                </Grid>
+                                <Grid
+                                  item
+                                  xs={1}
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "flex-end",
+                                    justifyContent: "flex-end",
+                                    pt: 1,
+                                  }}
+                                >
+                                  {values.benefit.length > 1 && (
+                                    <IconButton
+                                      onClick={() => remove(index)}
+                                      size="small"
+                                      aria-label="delete"
+                                      sx={{ m: 0, p: 0 }}
+                                    >
+                                      <DeleteOutlinedIcon color="error" />
+                                    </IconButton>
+                                  )}
+                                </Grid>
+                                {index === values.benefit.length - 1 &&
+                                  values.benefit.length < 3 && (
+                                    <Grid item xs={12} sx={{ pt: 1 }}>
+                                      <Button
+                                        onClick={() =>
+                                          push({
+                                            title: "",
+                                            titleHi: "",
+                                            description: "",
+                                            descriptionHi: "",
+                                          })
+                                        }
+                                        variant="text"
+                                      >
+                                        Add Benefit
+                                      </Button>
+                                    </Grid>
+                                  )}
+                              </Grid>
+                            ))}
+                          </Box>
+                        )}
+                      </FieldArray>
                     </Grid>
                     <Grid item xs={12} sm={12} sx={{ mb: 1 }}>
                       <Typography

@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Box,
   Typography,
   Grid,
-  Paper,
   Button,
   TextField,
   Checkbox,
@@ -15,53 +14,11 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { GetPoojaByID } from "../../services/GetPoojaByID";
 import { useNavigate, useParams } from "react-router-dom";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
-import RazorpayCheckout from "../../component/RazorpayCheckout";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-
-// const poojaData = {
-//   title: "Pitradosh Shanti Puja",
-//   location: "Siddhvat Mandir, Ram Ghat, Ujjain",
-//   capDate: "2025-09-30T18:30:00.000Z",
-//   images: ["https://example.com/image1.jpg", "https://example.com/image2.jpg"],
-//   packages: [
-//     {
-//       key: "single",
-//       title: "Single Person Package",
-//       price: 901,
-//       subtitle: "For 1 person",
-//       benefits: [
-//         "Puja with Name & Gotra",
-//         "Video sent on phone",
-//         "Good results on Shubh Muhurat",
-//       ],
-//     },
-//     {
-//       key: "couple",
-//       title: "Couple Package",
-//       price: 1401,
-//       subtitle: "Up to 2 people",
-//       benefits: [
-//         "Puja with Name & Gotra of both",
-//         "Video sent on phone",
-//         "Good results on Shubh Muhurat",
-//       ],
-//       recommended: true,
-//     },
-//     {
-//       key: "family",
-//       title: "Family + Bhog",
-//       price: 2101,
-//       subtitle: "Up to 4 people",
-//       benefits: [
-//         "Puja with Name & Gotra of family",
-//         "Bhog offered",
-//         "Video & Prasad delivery",
-//       ],
-//     },
-//   ],
-// };
+import { LanguageContext } from "../../context/LanguageContext";
 
 export default function PujaBookingPage() {
+  const { language } = useContext(LanguageContext);
   const [mobile, setMobile] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
   const { id, type } = useParams();
@@ -76,11 +33,12 @@ export default function PujaBookingPage() {
     return Array(count)
       .fill()
       .map(() => ({
-        fullName: "",
+        username: "",
         gotra: "",
         noGotra: false,
       }));
   };
+
   const navigate = useNavigate();
   const [participants, setParticipants] = useState(getInitialParticipants());
 
@@ -98,7 +56,6 @@ export default function PujaBookingPage() {
 
   const isMobileValid = /^\d{10}$/.test(mobile);
 
- 
   const handleParticipantChange = (index, field, value) => {
     const newParticipants = [...participants];
     newParticipants[index][field] = value;
@@ -109,35 +66,47 @@ export default function PujaBookingPage() {
   };
 
   const selectedPackageData = poojaData?.price?.[0]?.[type];
-  const selectedAmount = selectedPackageData?.amaount;
- 
+  const selectedAmount = selectedPackageData?.amaount || 0;
+
+  const handleDontKnowGotraChange = (checked) => {
+    setDontKnowGotra(checked);
+    const newParticipants = participants.map((p) => ({
+      ...p,
+      gotra: checked ? "Kashyap" : p.gotra,
+    }));
+    setParticipants(newParticipants);
+  };
+  const isFormValid = () => {
+    if (!isMobileValid || !termsAccepted) return false;
+    return participants.every(
+      (p) => p.username.trim() !== "" && p.gotra.trim() !== ""
+    );
+  };
   const handleLoginClick = () => {
     if (!isMobileValid || !termsAccepted) {
       setSnackbarOpen(true);
       return;
     }
-  
+
     navigate("/razorpay", {
       state: {
         amount: selectedAmount,
-        username: participants[0]?.fullName,
-        userGotra: participants[0]?.gotra,
+        participants: participants,
+        pkg: type,
+        username: participants.map((p) => p.username).join(", "),
+        userGotra: participants.map((p) => p.gotra).join(", "),
         mobile: mobile,
         id: poojaData?._id,
       },
     });
-    // window.open("https://wa.me/917024542030", "_blank")
   };
+
   return (
     <Box sx={{ marginTop: "3%", width: "90%", mx: "auto" }}>
       <Grid container spacing={2}>
         <Grid item size={{ xs: 12, md: 12, lg: 12 }}>
           <Box
             sx={{
-              // display: "flex",
-              // width: "50%",
-              // mx: "auto",
-              // gap: 4,
               border: "1px solid lightgrey",
               padding: "1%",
               borderRadius: "1rem",
@@ -147,7 +116,11 @@ export default function PujaBookingPage() {
               <Grid item size={{ xs: 12, md: 6, lg: 6 }}>
                 <img
                   style={{ height: "100%", width: "100%", objectFit: "cover" }}
-                  src={poojaData?.images[0]?.url}
+                  src={
+                    language === "hi"
+                      ? poojaData?.images_hi?.[0]?.url
+                      : poojaData?.images?.[0]?.url
+                  }
                   alt={`slide`}
                 />
               </Grid>
@@ -165,7 +138,7 @@ export default function PujaBookingPage() {
                       color: "#79245a",
                     }}
                   >
-                    {poojaData?.title}
+                    {language === "hi" ? poojaData?.titleHi : poojaData?.title}
                   </Typography>
                   <Typography
                     sx={{
@@ -177,7 +150,12 @@ export default function PujaBookingPage() {
                       color: "#7c3aed",
                     }}
                   >
-                    {type?.charAt(0)?.toUpperCase() + type?.slice(1)} Package
+                    {type
+                      ? type.charAt(0).toUpperCase() +
+                        type.slice(1) +
+                        " " +
+                        (language === "hi" ? "पैकेज" : "Package")
+                      : ""}
                   </Typography>
                   <Typography
                     sx={{
@@ -186,23 +164,15 @@ export default function PujaBookingPage() {
                       fontWeight: 500,
                       marginTop: "2%",
                       color: "#79245a",
-                      // fontFamily: "Poppins",
-                      // fontSize: "1rem",
-                      // fontWeight: 500,
-                      // marginTop: "2%",
-                      // opacity: "70%",
                     }}
                   >
-                    {poojaData?.subtitle}
+                    {language === "hi"
+                      ? poojaData?.subtitleHi
+                      : poojaData?.subtitle}
                   </Typography>
                   <Typography
                     sx={{
                       mb: 1,
-                      // fontFamily: "Poppins",
-                      // fontSize: "1rem",
-                      // fontWeight: 500,
-                      // marginTop: "2%",
-                      // opacity: "70%",
                       fontFamily: "Poppins",
                       fontSize: "1rem",
                       fontWeight: 500,
@@ -213,7 +183,9 @@ export default function PujaBookingPage() {
                     }}
                   >
                     <LocationOnOutlinedIcon sx={{ color: "#cd5200" }} />{" "}
-                    {poojaData?.location}
+                    {language === "hi"
+                      ? poojaData?.locationHi
+                      : poojaData?.location}
                   </Typography>
                   <Typography
                     sx={{
@@ -227,7 +199,8 @@ export default function PujaBookingPage() {
                       gap: 1,
                     }}
                   >
-                    <CalendarMonthOutlinedIcon /> Date:{" "}
+                    <CalendarMonthOutlinedIcon />{" "}
+                    {language === "hi" ? "तारीख: " : "Date: "}
                     {new Date(poojaData?.capDate).toLocaleDateString()}
                   </Typography>
                 </Box>
@@ -240,8 +213,6 @@ export default function PujaBookingPage() {
           <Box
             sx={{
               display: "flex",
-              // width: "40%",
-              // mx: "auto",
               gap: 4,
               border: "1px solid lightgrey",
               padding: "2%",
@@ -258,15 +229,9 @@ export default function PujaBookingPage() {
                   marginTop: "2%",
                   opacity: "70%",
                   mb: 2,
-                  // fontFamily: "Poppins",
-                  // fontSize: "1.2rem",
-                  // fontWeight: 500,
-                  // marginTop: "2%",
-                  // opacity: "90%",
-                  // width: "90%",
                 }}
               >
-                Billing Details
+                {language === "hi" ? "बिलिंग विवरण" : "Billing Details"}
               </Typography>
               <Box
                 sx={{
@@ -286,7 +251,7 @@ export default function PujaBookingPage() {
                     opacity: "70%",
                   }}
                 >
-                  Puja Package
+                  {language === "hi" ? "पूजा पैकेज" : "Puja Package"}
                 </Typography>
                 <Typography
                   sx={{
@@ -319,7 +284,7 @@ export default function PujaBookingPage() {
                     opacity: "70%",
                   }}
                 >
-                  Total
+                  {language === "hi" ? "कुल" : "Total"}
                 </Typography>
                 <Typography
                   sx={{
@@ -381,7 +346,6 @@ export default function PujaBookingPage() {
         <Grid item size={{ xs: 12, md: 12, lg: 6 }}>
           <Box
             sx={{
-              // mt: 4,
               p: 3,
               border: "1px solid lightgrey",
               borderRadius: "1rem",
@@ -398,16 +362,20 @@ export default function PujaBookingPage() {
                 mb: 2,
               }}
             >
-              Participant Details
+              {language === "hi"
+                ? "भाग लेने वाले का विवरण"
+                : "Participant Details"}
             </Typography>
             <FormControlLabel
               control={
                 <Checkbox
                   checked={dontKnowGotra}
-                  onChange={(e) => setDontKnowGotra(e.target.checked)}
+                  onChange={(e) => handleDontKnowGotraChange(e.target.checked)}
                 />
               }
-              label="Don't Know Gotra?"
+              label={
+                language === "hi" ? "गोत्र नहीं पता?" : "Don't Know Gotra?"
+              }
               sx={{ mb: 2, fontFamily: "Poppins" }}
             />
             <Grid container spacing={2}>
@@ -415,11 +383,13 @@ export default function PujaBookingPage() {
                 <React.Fragment key={idx}>
                   <Grid item size={{ xs: 12, sm: 6 }}>
                     <TextField
-                      placeholder="Enter Name"
+                      placeholder={
+                        language === "hi" ? "नाम दर्ज करें" : "Enter Name"
+                      }
                       fullWidth
-                      value={p.fullName}
+                      value={p.username}
                       onChange={(e) =>
-                        handleParticipantChange(idx, "fullName", e.target.value)
+                        handleParticipantChange(idx, "username", e.target.value)
                       }
                       sx={{ fontFamily: "Poppins" }}
                       inputProps={{ style: { fontFamily: "Poppins" } }}
@@ -427,7 +397,9 @@ export default function PujaBookingPage() {
                   </Grid>
                   <Grid item size={{ xs: 12, sm: 6 }}>
                     <TextField
-                      placeholder="Add Gotra"
+                      placeholder={
+                        language === "hi" ? "गोत्र जोड़ें" : "Add Gotra"
+                      }
                       fullWidth
                       value={
                         dontKnowGotra && p.gotra === "" ? "Kashyap" : p.gotra
@@ -463,10 +435,10 @@ export default function PujaBookingPage() {
             opacity: "70%",
           }}
         >
-          Book Puja
+          {language === "hi" ? "बुक पूजा" : "Book Puja"}
         </Typography>
         <TextField
-          label="Mobile Number"
+          label={language === "hi" ? "मोबाइल नंबर" : "Mobile Number"}
           fullWidth
           autoCapitalize="off"
           value={mobile}
@@ -474,7 +446,9 @@ export default function PujaBookingPage() {
           error={mobile.length > 0 && !isMobileValid}
           helperText={
             mobile.length > 0 && !isMobileValid
-              ? "Enter a valid 10-digit mobile number"
+              ? language === "hi"
+                ? "वैध 10 अंकों का मोबाइल नंबर दर्ज करें"
+                : "Enter a valid 10-digit mobile number"
               : ""
           }
         />
@@ -485,8 +459,12 @@ export default function PujaBookingPage() {
               onChange={(e) => setTermsAccepted(e.target.checked)}
             />
           }
-          label="I agree to the Terms & Conditions and Privacy Policy"
-          sx={{ mt: 2, fontFamily: "Popins" }}
+          label={
+            language === "hi"
+              ? "मैं नियम और शर्तें और गोपनीयता नीति से सहमत हूं"
+              : "I agree to the Terms & Conditions and Privacy Policy"
+          }
+          sx={{ mt: 2, fontFamily: "Poppins" }}
         />
         <Button
           variant="contained"
@@ -506,48 +484,18 @@ export default function PujaBookingPage() {
             "&:hover": { background: "#cd5200" },
             "&:disabled": { background: "lightgrey" },
           }}
-          disabled={!isMobileValid || !termsAccepted}
+          disabled={!isFormValid()}
           onClick={handleLoginClick}
         >
-          Book Puja
+          {language === "hi" ? "बुक पूजा" : "Book Puja"}
         </Button>
         {/* <RazorpayCheckout/> */}
         <Typography variant="caption" sx={{ mt: 1, display: "block" }}>
-          Puja booking updates, including photos, videos, and other details,
-          will be sent to the WhatsApp number provided below.
+          {language === "hi"
+            ? "पूजा बुकिंग अपडेट, जिसमें फोटो, वीडियो और अन्य विवरण शामिल हैं, नीचे दिए गए WhatsApp नंबर पर भेजे जाएंगे।"
+            : "Puja booking updates, including photos, videos, and other details, will be sent to the WhatsApp number provided below."}
         </Typography>
       </Box>
     </Box>
   );
 }
-// const openPaymentModal = () =>{
-//   <Modal
-//         open={open}
-//         onClose={onClose}
-//         BackdropProps={{ className: "blur-backdrop" }}
-//         style={{
-//           display: "flex",
-//           justifyContent: "center",
-//           alignItems: "center",
-//           height: "92vh",
-//           marginTop: "8vh",
-//           borderRadius: "20px",
-//           width: "100%",
-//         }}
-//       >
-//         <Sheet
-//           variant="outlined"
-//           style={{
-//             padding: "2%",
-//             border: "1px solid #01D9D1",
-//             borderRadius: "20px",
-//             backgroundColor: "white",
-//             maxHeight: "90vh",
-//             minHeight: '90vh',
-//             overflowY: "auto",
-//             width: "100%",
-//           }}
-//         >
-//       </Sheet>
-//       </Modal>
-// }

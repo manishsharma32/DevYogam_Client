@@ -14,7 +14,7 @@ function getDateParts(dateString) {
   const d = new Date(dateString);
   return {
     day: d.getDate(),
-    month: d.toLocaleString("default", { month: "short" }),
+    month: d.toLocaleString("default", { month: "long" }),
   };
 }
 
@@ -22,7 +22,7 @@ export default function PujaCard({
   bannerImg,
   badge,
   date,
-  headingEn,
+  heading,
   highlight,
   highlightColor = "#ED6A12",
   location,
@@ -139,7 +139,7 @@ export default function PujaCard({
               color: "#79245a",
             }}
           >
-            {headingEn}
+            {heading}
           </Typography>
           {highlight && (
             <Typography

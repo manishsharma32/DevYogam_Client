@@ -1,6 +1,6 @@
 import axiosInstance from "../utils/axiosConfig";
 
-export const CreateChadhavaAPI = async (data) => {
+export const CreateChadhavaAPI = async (data, itemImage) => {
   console.log("apicall", data);
 
   const transformData = (data) => {
@@ -27,14 +27,25 @@ export const CreateChadhavaAPI = async (data) => {
       });
     }
     if (Array.isArray(data.faq)) {
-    
       data.faq.forEach((b, i) => {
         formData.append(`items[${i}][title]`, b.title || "");
         formData.append(`items[${i}][titleHi]`, b.titleHi || "");
-        formData.append(`items[${i}[description]`, b.description || "");
-        formData.append(`items[${i}[descriptionHi]`, b.descriptionHi || "");
+        formData.append(`items[${i}][description]`, b.description || "");
+        formData.append(`items[${i}][descriptionHi]`, b.descriptionHi || "");
         formData.append(`items[${i}][price]`, b.price || "");
-        formData.append(`items[${i}][image]`, b.img || "");
+        // formData.append(`items[${i}][image]`, b.img || "");
+        if (itemImage?.data?.images?.[i]) {
+          formData.append(`items[${i}][image]`, itemImage.data.images[i]);
+        }
+      });
+    }
+
+    if (Array.isArray(data.benefit)) {
+      data.benefit.forEach((b, i) => {
+        formData.append(`benefit[${i}][title]`, b.title || "");
+        formData.append(`benefit[${i}][titleHi]`, b.titleHi || "");
+        formData.append(`benefit[${i}][description]`, b.description || "");
+        formData.append(`benefit[${i}][descriptionHi]`, b.descriptionHi || "");
       });
     }
 
@@ -50,7 +61,7 @@ export const CreateChadhavaAPI = async (data) => {
       },
     });
 
-    if (response?.status === 200) {
+    if (response?.status === 200 || response?.status === 201) {
       return response?.data;
     }
   } catch (error) {

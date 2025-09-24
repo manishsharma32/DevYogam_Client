@@ -15,14 +15,19 @@ import PujaBookingPage from "../pages/pooja/PujaBookingPage";
 import RazorpayCheckout from "../component/RazorpayCheckout";
 import ProtectedRoute from "./ProtectedRoute";
 import EditPooja from "../pages/pooja/EditPooja";
+import ContactUs from "../pages/contact-us/ContactUs";
+import ChadhavaDetails from "../pages/chadhava/ChadhavaDetails";
+import PaymentHistory from "../pages/payment-history/PaymentHistory";
 
 export default function PublicRoutes({ user }) {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      {/* <Route path="/about" element={<About />} /> */}
-      {/* <Route path="/contact" element={<Contact />} /> */}
+      <Route path="/hi/" element={<Home />} />
+      <Route path="/contact" element={<ContactUs />} />
+      <Route path="/hi/contact" element={<ContactUs />} />
       <Route path="/pooja" element={<Pooja user={user} />} />
+      <Route path="/hi/pooja" element={<Pooja user={user} />} />
 
       <Route element={<ProtectedRoute />}>
         <>
@@ -30,15 +35,26 @@ export default function PublicRoutes({ user }) {
           <Route path="/pooja-edit/:id" element={<EditPooja />} />
           <Route path="/temple/create" element={<AddTemple />} />
           <Route path="/chadhava/create" element={<AddChadhava />} />
+          <Route path="/payment-history" element={<PaymentHistory />} />
+          <Route path="/hi/payment-history" element={<PaymentHistory />} />
         </>
       </Route>
       <Route path="/pooja-details/:name/:id" element={<PoojaDetails user={user}  />} />
+      <Route path="/hi/pooja-details/:name/:id" element={<PoojaDetails user={user}  />} />
       <Route
         path="/pooja-booking/:type/:name/:id"
         element={<PujaBookingPage />}
       />
+      <Route
+        path="/hi/pooja-booking/:type/:name/:id"
+        element={<PujaBookingPage />}
+      />
       <Route path="/chadhava" element={<Chadhava user={user} />} />
+      <Route path="/hi/chadhava" element={<Chadhava user={user} />} />
+      <Route path="/chadhava-details/:name/:id" element={<ChadhavaDetails user={user}  />} />
+      <Route path="/hi/chadhava-details/:name/:id" element={<ChadhavaDetails user={user}  />} />
       <Route path="/temple" element={<Mandir user={user} />} />
+      <Route path="/hi/temple" element={<Mandir user={user} />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/disclaimer" element={<Disclamer />} />
       <Route path="/terms-conditions" element={<TermsAndConditions />} />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import SplitHeader from "./SplitHeader";
 import { GlobalCssStyles } from "../../style/GlobalCSS";
 import {
@@ -9,23 +9,46 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import PujaCard from "../../component/PoojaCard"; 
-import temple2 from "../../assests/temple2.png"
+import PujaCard from "../../component/PoojaCard";
+import temple2 from "../../assests/temple2.png";
 import { GetAllTempleAPI } from "../../services/GetAllTempleAPI";
 import { useNavigate } from "react-router-dom";
+import { LanguageContext } from "../../context/LanguageContext";
 
 export default function Mandir({ user }) {
   const [templeData, setTempleData] = useState([]);
   const navigate = useNavigate();
+  const { language } = useContext(LanguageContext);
 
+  // Fetch and prefilter temple data on language or initial load change
   const getTemple = async () => {
     const res = await GetAllTempleAPI();
-    setTempleData(res);
+
+    const lang = language === "hi" ? "Hi" : "";
+
+    const pickLang = (obj, base) => obj?.[`${base}${lang}`] ?? obj?.[base];
+
+    const filteredData = Array.isArray(res)
+      ? res.map((item) => ({
+          ...item,
+          title: pickLang(item, "title"),
+          location: pickLang(item, "location"),
+          bhagwan: pickLang(item, "bhagwan"),
+          templeDescription: pickLang(item, "templeDescription"),
+          longDescription: pickLang(item, "longDescription"),
+          // Use images_hi in Hindi if available, fallback to images
+          images:
+            lang === "Hi" && Array.isArray(item.images_hi) && item.images_hi.length > 0
+              ? item.images_hi
+              : item.images || [],
+        }))
+      : [];
+    setTempleData(filteredData);
   };
 
   useEffect(() => {
     getTemple();
-  }, []);
+  }, [language]);
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm")); // <600px
@@ -39,6 +62,7 @@ export default function Mandir({ user }) {
   return (
     <GlobalCssStyles>
       <Box className="parent-container">
+        {/* Show header only on large screens */}
         {isSmallScreen || isMediumScreen ? null : (
           <Box sx={{ minHeight: "100vh" }}>
             <SplitHeader />
@@ -53,7 +77,7 @@ export default function Mandir({ user }) {
                   window.open(`${window?.location?.origin}/temple/create`);
                 }}
               >
-                Add Temple
+                {language === "hi" ? "मंदिर जोड़ें" : "Add Temple"}
               </Button>
             )}
           </Box>
@@ -72,13 +96,13 @@ export default function Mandir({ user }) {
                 >
                   <Box sx={{ p: 1 }}>
                     <PujaCard
-                      bannerImg={item?.images?.[0] || temple2}
+                      bannerImg={item?.images?.[0]?.url || temple2}
                       date={item?.createdAt}
                       headingEn={item?.title}
                       highlight={item?.templeDescription}
                       location={item?.location}
                       isDeleted={item?.isDeleted}
-                      ctaText="Explore Temple"
+                      ctaText={language === "hi" ? "मंदिर देखें" : "Explore Temple"}
                       onCtaClick={() => handleNavigate(item?._id, item?.title)}
                       user={user}
                     />
@@ -90,7 +114,7 @@ export default function Mandir({ user }) {
                 <Typography
                   sx={{ fontFamily: "Poppins", textAlign: "center", mt: 4 }}
                 >
-                  No Temple Found
+                  {language === "hi" ? "कोई मंदिर नहीं मिला" : "No Temple Found"}
                 </Typography>
               </Grid>
             )}

@@ -120,7 +120,7 @@ export default function CustomCarousel({ items = [], carouselProps = {} }) {
               objectPosition: "center",
               display: "block",
               height: "auto",
-              borderRadius: "12px",
+              // borderRadius: "12px",
             }}
           />
         </div>

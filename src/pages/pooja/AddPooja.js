@@ -289,7 +289,7 @@ const handleSubmit = async (val) => {
   setLoading(false);
   // console.log("response is ===> ", response)
   if (response?.data?.status) {
-    const res = await CreatePoojaFile(response?.data?.data?._id , val);
+    const res = await CreatePoojaFile(response?.data?.data?._id , val, "pooja");
     alert("Puja created successfully");
     navigate("/pooja");
   } else if (response.error) {

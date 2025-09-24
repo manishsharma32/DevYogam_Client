@@ -7,27 +7,101 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GlobalCssStyles } from "../../style/GlobalCSS";
 import { useNavigate } from "react-router-dom";
 import PujaCard from "../../component/PoojaCard";
 import { GetAllPoojasAPI } from "../../services/GetAllPoojasAPI";
+import { LanguageContext } from "../../context/LanguageContext";
 
 export default function Pooja() {
   const navigate = useNavigate();
   const [poojaData, setPoojaData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { language } = useContext(LanguageContext);
 
   // ✅ Get user from localStorage
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const userRole = storedUser?.role || "user";
 
+  // const getPooja = async () => {
+  //   setLoading(true);
+  //   const res = await GetAllPoojasAPI();
+  //   console.log("response:====", res)
+
+  //   // just store all data (admin filter will be applied later in render)
+  //   setPoojaData(res);
+  //   setLoading(false);
+  // };
   const getPooja = async () => {
     setLoading(true);
     const res = await GetAllPoojasAPI();
 
-    // just store all data (admin filter will be applied later in render)
-    setPoojaData(res);
+    // Map data based on language
+    const filtered = await res?.map((p) => {
+      const lang = language === "hi" ? "Hi" : "";
+
+      // Helper to pick lang field or fallback
+      const pickLang = (obj, base) => obj?.[`${base}${lang}`] ?? obj?.[base];
+
+      // Map price array
+      const price = Array.isArray(p.price)
+        ? p.price.map((pr) => ({
+            single: {
+              ...pr.single,
+              description: pickLang(pr.single, "description"),
+            },
+            couple: {
+              ...pr.couple,
+              description: pickLang(pr.couple, "description"),
+            },
+            family: {
+              ...pr.family,
+              description: pickLang(pr.family, "description"),
+            },
+            _id: pr._id,
+          }))
+        : [];
+
+      // Map benefit array
+      const benefit = Array.isArray(p.benefit)
+        ? p.benefit.map((b) => ({
+            ...b,
+            title: pickLang(b, "title"),
+            description: pickLang(b, "description"),
+          }))
+        : [];
+
+      // Map faq
+      const faq = Array.isArray(p.faq)
+        ? p.faq.map((f) => ({
+            ...f,
+            question: pickLang(f, "question"),
+            answer: pickLang(f, "answer"),
+          }))
+        : [];
+
+      // Map images
+      const images =
+        language === "hi" &&
+        Array.isArray(p.images_hi) &&
+        p.images_hi.length > 0
+          ? p.images_hi
+          : p.images;
+
+      return {
+        ...p,
+        title: pickLang(p, "title"),
+        subtitle: pickLang(p, "subtitle"),
+        location: pickLang(p, "location"),
+        images,
+        price,
+        benefit,
+        faq,
+      };
+    });
+
+    setPoojaData(filtered);
     setLoading(false);
   };
 
@@ -83,13 +157,15 @@ export default function Pooja() {
 
   const visiblePoojas =
     userRole === "admin"
-      ? poojaData 
-      : poojaData.filter((item) => !item.isDeleted); 
+      ? poojaData
+      : poojaData.filter((item) => !item.isDeleted);
   return (
     <GlobalCssStyles>
       <Box sx={{ padding: "2%", width: "90%", margin: "auto" }}>
         <Box className="heading-container">
-          <Typography className="heading-text">Pooja List</Typography>
+          <Typography className="heading-text">
+            {language === "hi" ? "पूजा सुची" : "Pooja List"}
+          </Typography>
           {userRole === "admin" && (
             <Button
               className="create-btn"
@@ -121,16 +197,36 @@ export default function Pooja() {
                   <PujaCard
                     user={storedUser}
                     isDeleted={item?.isDeleted}
-                    bannerImg={item?.images?.[0]?.url}
-                    badge={item?.badge}
+                    bannerImg={
+                      language === "hi"
+                        ? item?.images_hi?.[0]?.url
+                        : item?.images?.[0]?.url
+                    }
+                    badge={
+                      language === "hi"
+                        ? item?.badgeHi || item?.badge
+                        : item?.badge
+                    }
                     date={item?.capDate}
                     dateBg={item?.dateBg || "#FFD700"}
                     headingHi={item?.titleHi}
-                    headingEn={item?.title}
-                    highlight={item?.subtitle}
+                    heading={language === "hi" ? item?.titleHi : item?.title}
+                    highlight={
+                      language === "hi"
+                        ? item?.subtitleHi || item?.subtitle
+                        : item?.subtitle
+                    }
                     highlightColor={item?.highlightColor || "#ED6A12"}
-                    location={item?.location}
-                    ctaText={item?.ctaText || "Participate Now"}
+                    location={
+                      language === "hi"
+                        ? item?.locationHi || item?.location
+                        : item?.location
+                    }
+                    ctaText={
+                      language === "hi"
+                        ? item?.ctaTextHi || item?.ctaText || "पूजा में भाग लेवे"
+                        : item?.ctaText || "Participate Now"
+                    }
                     ctaColor={item?.ctaColor || "#ED6A12"}
                     onCtaClick={() => handeNavigate(item?._id, item?.title)}
                   />

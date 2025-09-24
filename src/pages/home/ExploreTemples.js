@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { GetAllTempleAPI } from "../../services/GetAllTempleAPI";
@@ -9,9 +9,11 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent, Grid, Skeleton } from "@mui/material";
 import temple1 from "../../assests/temple 1.png";
 import temple2 from "../../assests/temple2.png";
+import { LanguageContext } from "../../context/LanguageContext";
 
 export default function ExploreTemples() {
   const [templeData, setTempleData] = useState([]);
+  const { language } = useContext(LanguageContext);
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
 
@@ -94,7 +96,9 @@ export default function ExploreTemples() {
           textAlign: "center",
         }}
       >
-        Explore Temples
+        {language === "hi"
+          ? "प्राचीन मंदिरों के दर्शन करें"
+          : "Explore Temples"}
       </Typography>
 
       {loading ? (
