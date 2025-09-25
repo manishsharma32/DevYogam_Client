@@ -3,48 +3,44 @@ import axiosInstance from "../utils/axiosConfig";
 export const CreateTempleAPI = async (data) => {
   console.log("apicall", data);
 
+  // Transform form values to JSON payload as per mongoose schema
   const transformData = (data) => {
-    const formData = new FormData();
-
-    // Simple Strings
-    formData.append("title", data.title);
-    formData.append("titleHi", data.titleHi);
-    formData.append("bhagwan", data.subtitle);
-    formData.append("bhagwanHi", data.subtitleHi);
-
-    // Locations
-    formData.append("location", data.originator?.value || "");
-    formData.append("locationHi", data.originatorHi?.value || "");
-    formData.append("templeDescription",data.description)
-    formData.append("templeDescriptionHi",data.descriptionHi)
-    formData.append("longDescription",data.longDescription)
-    formData.append("longDescriptionHi",data.longDescriptionHi)
- 
-
-    if (Array.isArray(data.logoImages)) {
-      data.logoImages.forEach((file) => {
-        formData.append("images", file);
-      });
-    }
-    if (Array.isArray(data.logoImagesHi)) {
-      data.logoImagesHi.forEach((file) => {
-        formData.append("images_hi", file);
-      });
-    }
-
-    return formData;
+    return {
+      title: data.title,
+      titleHi: data.titleHi,
+      location: data.location?.value || "",
+      locationHi: data.locationHi?.value || "",
+      subTitle: data.subtitle,
+      subTitleHi: data.subtitleHi,
+      bhagwan: data.bhagwan,
+      bhagwanHi: data.bhagwanHi,
+      templeDescription: data.description,
+      templeDescriptionHi: data.descriptionHi,
+      longDescription: data.longDescription,
+      longDescriptionHi: data.longDescriptionHi,
+      // If images and images_hi are arrays of files, you must upload these separately first and provide URLs here.
+      // images: data.logoImages?.map((file) => ({
+      //   url: file.uploadedUrl || "", // assuming uploadedUrl is set after upload
+      //   delete_url: file.deleteUrl || "",
+      // })) || [],
+      // images_hi: data.logoImagesHi?.map((file) => ({
+      //   url: file.uploadedUrl || "",
+      //   delete_url: file.deleteUrl || "",
+      // })) || [],
+      // Add other fields if needed, e.g., is_active, sequence_number, items, etc.
+    };
   };
 
   try {
-    const formattedData = transformData(data);
+    const jsonPayload = transformData(data);
 
-    const response = await axiosInstance.post("/api/temples", formattedData, {
+    const response = await axiosInstance.post("/api/temples", jsonPayload, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
       },
     });
 
-    if (response?.status === 200) {
+    if (response?.status === 200 || response?.status === 201) {
       return response?.data;
     }
   } catch (error) {
@@ -56,7 +52,6 @@ export const CreateTempleAPI = async (data) => {
     ) {
       return { error: "Connection timed out. Please try again later." };
     }
-    // Log other unexpected errors
     console.error(error);
     return { error: "Something went wrong." };
   }

@@ -33,21 +33,27 @@ export default function ExploreTemples() {
     getTemple();
   }, []);
 
-  // Map templeData to carousel items taking the first image from images array
+  const defaultImages = [temple1, temple2];
+
   const carouselItems =
     Array.isArray(templeData) &&
     templeData
-      ?.map((temple) => {
-        if (temple?.images && temple?.images?.length > 0) {
-          return {
-            image: temple?.images[0],
-            title: temple?.title || "Temple",
-            description: temple?.location || "",
-          };
+      ?.map((temple, index) => {
+        let imageUrl = null;
+        if (temple?.images && temple.images.length > 0) {
+          imageUrl =
+            typeof temple.images[0] === "string"
+              ? temple.images[0]
+              : temple.images[0]?.url;
+        } else {
+          imageUrl = defaultImages[index % defaultImages.length];
         }
-        return null;
-      })
-      .filter(Boolean);
+        return {
+          image: imageUrl,
+          title: temple?.title || "Temple",
+          description: temple?.location || "",
+        };
+      });
 
   const reversedItems =
     Array.isArray(carouselItems) && [...carouselItems].reverse();
@@ -96,9 +102,7 @@ export default function ExploreTemples() {
           textAlign: "center",
         }}
       >
-        {language === "hi"
-          ? "प्राचीन मंदिरों के दर्शन करें"
-          : "Explore Temples"}
+        {language === "hi" ? "प्राचीन मंदिरों के दर्शन करें" : "Explore Temples"}
       </Typography>
 
       {loading ? (
@@ -115,7 +119,6 @@ export default function ExploreTemples() {
             cursor: "pointer",
           }}
         >
-          {/* First carousel normal */}
           <CustomCarousel
             items={
               carouselItems?.length > 0
@@ -133,8 +136,6 @@ export default function ExploreTemples() {
             showIndicators={false}
             showThumbs={false}
           />
-
-          {/* Second carousel reversed */}
           <Box
             sx={{
               width: isSmallScreen ? "100%" : "auto",
@@ -173,21 +174,18 @@ const CustomCarousel = ({
 }) => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm")); // <600px
-  const isMediumScreen = useMediaQuery(theme.breakpoints.between("sm", "md")); // 600-900px
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMediumScreen = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
-  // Responsive height
   let carouselHeight = "40vh";
   if (isSmallScreen) {
     carouselHeight = "30vh";
   } else if (isMediumScreen) {
     carouselHeight = "35vh";
   }
-  const isXs = useMediaQuery(theme.breakpoints.down("sm")); // <600px
-  const isSm = useMediaQuery(theme.breakpoints.between("sm", "md")); // 600-900px
-  const isLg = useMediaQuery(theme.breakpoints.up("md")); // >900px
+  const isXs = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSm = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
-  // Define responsive sizes for arrows
   let arrowSize = 40;
   let fontSize = "1.5rem";
   let topPosition = "50%";

@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 import { GlobalCssStyles } from "../../style/GlobalCSS";
-
+import Pixel from "../pixel/Pixel";
 const getPoojaPackageType = (participants = []) => {
   if (participants.length === 1) return "Single";
   if (participants.length === 2) return "Couple";
@@ -53,9 +53,7 @@ export default function PaymentHistory() {
                 // onClick={() => handleRowClicked(params?.row?._id)}
                 className="table-row-hover"
               >
-                {params?.row?.poojaDate
-                  ? params?.row?.poojaDate
-                  : "N/A"}
+                {params?.row?.poojaDate ? params?.row?.poojaDate : "N/A"}
               </span>
             </Box>
           )}
@@ -118,7 +116,6 @@ export default function PaymentHistory() {
             Refresh
           </Button>
         </Box>
-
         <Box sx={{ width: "90%", margin: "auto" }}>
           <DataGrid
             rows={dataRows}

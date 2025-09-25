@@ -1,63 +1,36 @@
 import axiosInstance from "../utils/axiosConfig";
-
 export const CreateChadhavaAPI = async (data, itemImage) => {
-  console.log("apicall", data);
-
-  const transformData = (data) => {
-    const formData = new FormData();
-
-    // Simple Strings
-    formData.append("title", data.title);
-    formData.append("titleHi", data.titleHi);
-    formData.append("subtitle", data.subtitle);
-    formData.append("subtitleHi", data.subtitleHi);
-    formData.append("chadhava", data.chadhava);
-    formData.append("desc", data.description);
-    formData.append("descHi", data.descriptionHi);
-    formData.append("mandir", data.mandir.value);
-
-    if (Array.isArray(data.logoImages)) {
-      data.logoImages.forEach((file) => {
-        formData.append("images", file);
-      });
-    }
-    if (Array.isArray(data.logoImagesHi)) {
-      data.logoImagesHi.forEach((file) => {
-        formData.append("images_hi", file);
-      });
-    }
-    if (Array.isArray(data.faq)) {
-      data.faq.forEach((b, i) => {
-        formData.append(`items[${i}][title]`, b.title || "");
-        formData.append(`items[${i}][titleHi]`, b.titleHi || "");
-        formData.append(`items[${i}][description]`, b.description || "");
-        formData.append(`items[${i}][descriptionHi]`, b.descriptionHi || "");
-        formData.append(`items[${i}][price]`, b.price || "");
-        // formData.append(`items[${i}][image]`, b.img || "");
-        if (itemImage?.data?.images?.[i]) {
-          formData.append(`items[${i}][image]`, itemImage.data.images[i]);
-        }
-      });
-    }
-
-    if (Array.isArray(data.benefit)) {
-      data.benefit.forEach((b, i) => {
-        formData.append(`benefit[${i}][title]`, b.title || "");
-        formData.append(`benefit[${i}][titleHi]`, b.titleHi || "");
-        formData.append(`benefit[${i}][description]`, b.description || "");
-        formData.append(`benefit[${i}][descriptionHi]`, b.descriptionHi || "");
-      });
-    }
-
-    return formData;
-  };
-
+  console.log("Data being sent to CreateChadhavaAPI:", itemImage);
   try {
-    const formattedData = transformData(data);
+    // Build JSON object matching backend structure
+    const jsonPayload = {
+      title: data.title,
+      titleHi: data.titleHi,
+      subtitle: data.subtitle,
+      subtitleHi: data.subtitleHi,
+      chadhava: data.chadhava,
+      desc: data.description,
+      desc_hi: data.descriptionHi,
+      mandir: data.mandir.value,
+      items: (data.faq || []).map((item, i) => ({
+        title: item.title || "",
+        titleHi: item.titleHi || "",
+        description: item.description || "",
+        descriptionHi: item.descriptionHi || "",
+        price: item.price || 0,
+        image: item.imageUrl || "",
+      })),
+      benefit: (data.benefit || []).map((b) => ({
+        title: b.title || "",
+        titleHi: b.titleHi || "",
+        description: b.description || "",
+        descriptionHi: b.descriptionHi || "",
+      })),
+    };
 
-    const response = await axiosInstance.post("/api/chadhavas", formattedData, {
+    const response = await axiosInstance.post("/api/chadhavas", jsonPayload, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
       },
     });
 
@@ -73,7 +46,6 @@ export const CreateChadhavaAPI = async (data, itemImage) => {
     ) {
       return { error: "Connection timed out. Please try again later." };
     }
-    // Log other unexpected errors
     console.error(error);
     return { error: "Something went wrong." };
   }

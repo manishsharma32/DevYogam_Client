@@ -33,7 +33,7 @@ export default function Mandir({ user }) {
           ...item,
           title: pickLang(item, "title"),
           location: pickLang(item, "location"),
-          bhagwan: pickLang(item, "bhagwan"),
+          subTitle: pickLang(item, "subTitle"),
           templeDescription: pickLang(item, "templeDescription"),
           longDescription: pickLang(item, "longDescription"),
           // Use images_hi in Hindi if available, fallback to images
@@ -97,9 +97,9 @@ export default function Mandir({ user }) {
                   <Box sx={{ p: 1 }}>
                     <PujaCard
                       bannerImg={item?.images?.[0]?.url || temple2}
-                      date={item?.createdAt}
-                      headingEn={item?.title}
-                      highlight={item?.templeDescription}
+                      // date={item?.createdAt}
+                      heading={item?.title}
+                      highlight={item?.subTitle}
                       location={item?.location}
                       isDeleted={item?.isDeleted}
                       ctaText={language === "hi" ? "मंदिर देखें" : "Explore Temple"}

@@ -68,7 +68,7 @@ export default function Chadhava({ user }) {
     const safeName =
       typeof name === "string" && name.length > 0
         ? name.split(" ").join("-")
-        : String(name ?? ""); 
+        : String(name ?? "");
 
     navigate(`/chadhava-details/${safeName}/${id}`);
   };
@@ -156,10 +156,10 @@ export default function Chadhava({ user }) {
             ? skeletons
             : safeChadhavaData.map((item) => {
                 const firstItem = item.items?.[0] || {};
-                const displayTitle = Array.isArray(item.title)
-                  ? item.title[0]
-                  : item.title;
+                const bannerImg =
+                  item.images?.[0]?.url || firstItem.image?.url || chadhava;
 
+                const displayTitle = item?.title;
                 return (
                   <Grid
                     key={item._id}
@@ -171,14 +171,14 @@ export default function Chadhava({ user }) {
                     lg={3}
                   >
                     <PujaCard
-                      bannerImg={firstItem.image || chadhava}
-                      date={item.createdAt || new Date().toISOString()}
-                      headingEn={displayTitle || "Chadhava"}
-                      highlight={item.subtitle || ""}
+                      bannerImg={bannerImg}
+                      // date={item.createdAt || new Date().toISOString()}
+                      heading={item?.title || "Chadhava"}
+                      highlight={item?.subtitle || ""}
                       highlightColor="#7c3aed"
-                      location={`₹${firstItem.price || 0}`}
+                      location={`${item?.mandir || 0}`}
                       ctaText={language === "hi" ? "योगदान करें" : "Contribute"}
-                      // onCtaClick={() => handeNavigate(item?._id, item?.title)}
+                      onCtaClick={() => handeNavigate(item?._id, item?.title)}
                     />
                   </Grid>
                 );

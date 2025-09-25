@@ -36,6 +36,7 @@ import { GetChadavaByID } from "../../services/GetChadavaByID";
 // import { Box, Grid, CardTypography, Button, IconButton, Stack } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import OfferChadhavaButton from "./OfferChadhavaButton";
 
 const Item = styled(Box)(({ theme }) => ({
   backgroundColor: "#fff",
@@ -61,9 +62,10 @@ export default function ChadhavaDetails({ user }) {
   useEffect(() => {
     const getPooja = async () => {
       const res = await GetChadavaByID(id);
-      const lang = language === "hi" ? "Hi" : "";
+      // const language = language === "hi" ? "Hi" : "";
 
-      const pickLang = (obj, base) => obj?.[`${base}${lang}`] ?? obj?.[base];
+      const pickLang = (obj, base) =>
+        obj?.[`${base}${language}`] ?? obj?.[base];
 
       const filtered = {
         ...res,
@@ -71,7 +73,7 @@ export default function ChadhavaDetails({ user }) {
         subtitle: pickLang(res, "subtitle"),
         location: pickLang(res, "location"),
         images:
-          lang === "Hi" &&
+          language === "Hi" &&
           Array.isArray(res.images_hi) &&
           res.images_hi.length > 0
             ? res.images_hi
@@ -113,6 +115,8 @@ export default function ChadhavaDetails({ user }) {
     };
     getPooja();
   }, [id, language]);
+
+  console.log("poojadata", poojaData);
 
   const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
@@ -306,9 +310,9 @@ export default function ChadhavaDetails({ user }) {
                     }}
                   >
                     <LocationOnOutlinedIcon sx={{ color: "#cd5200" }} />{" "}
-                    {poojaData.location}
+                    {poojaData.mandir}
                   </Typography>
-                  <Typography
+                  {/* <Typography
                     mt={1}
                     sx={{
                       fontFamily: "Poppins",
@@ -321,7 +325,7 @@ export default function ChadhavaDetails({ user }) {
                   >
                     <CalendarMonthOutlinedIcon />{" "}
                     {new Date(poojaData.capDate).toLocaleDateString()}
-                  </Typography>
+                  </Typography> */}
                   <hr style={{ marginTop: "2%", opacity: "70%" }} />
                   {/* <Box
                     sx={{
@@ -357,8 +361,8 @@ export default function ChadhavaDetails({ user }) {
                       alignItems: "end",
                     }}
                   >
-                    <Button
-                      sx={{
+                    <OfferChadhavaButton
+                      buttonStyle={{
                         backgroundColor: "#9a67e6",
                         color: "#fff",
                         borderRadius: 2,
@@ -374,14 +378,11 @@ export default function ChadhavaDetails({ user }) {
                         "&:hover": { background: "#cd5200" },
                         width: "80%",
                       }}
-                      onClick={() => {
-                        handleNavigate("single", name, id);
-                      }}
-                    >
-                      {language === "hi"
-                        ? "चढ़ावा अर्पित करें"
-                        : "Offer Chadhava"}
-                    </Button>
+                      language={language}
+                      amount={poojaData?.chadhava} // from your cart calculation
+                      poojaId={poojaData?._id} // pooja id from your params or data
+                    />
+
                     <Button
                       sx={{ marginTop: "10px" }}
                       onClick={() =>
@@ -400,9 +401,38 @@ export default function ChadhavaDetails({ user }) {
             </Grid>
           </Grid>
           <Box sx={{ mt: 5, width: "90%", display: "block", mx: "auto" }}>
-            <MultiLingualItemList  />
+            <MultiLingualItemList poojaData={poojaData} language={language} />
           </Box>
 
+          <Box sx={{ mt: 5, width: "90%", mx: "auto" }}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 600,
+                mb: 2,
+                fontFamily: "Poppins",
+                fontSize: { sx: "1.2rem", md: "1.2rem", lg: "1.2rem" },
+                color: "#cd5200",
+              }}
+            >
+              {language === "hi"
+                ? "चढ़ावा अर्पित करने से जुडी जानकारी "
+                : "Chadhava Details "}
+            </Typography>
+
+            <Typography
+              sx={{
+                mb: 1,
+                fontFamily: "Poppins",
+                lineHeight: 1.5,
+                color: "#79245a",
+                fontSize: "0.9rem",
+                fontWeight: 600,
+              }}
+            >
+              {language === "hi" ? poojaData?.desc_hi : poojaData?.desc}
+            </Typography>
+          </Box>
           <Box sx={{ mt: 5, width: "90%", mx: "auto" }}>
             <Typography
               variant="h6"
@@ -414,7 +444,9 @@ export default function ChadhavaDetails({ user }) {
                 color: "#cd5200",
               }}
             >
-              {language === "hi" ? "यह कैसे काम करता है?" : "How it works?"}
+              {language === "hi"
+                ? "चढ़ावा अर्पित करने की प्रक्रिया"
+                : "How it works?"}
             </Typography>
             <Box
               sx={{
@@ -554,37 +586,13 @@ export default function ChadhavaDetails({ user }) {
   );
 }
 
-// Sample data structure for offerings
-const itemsData = [
-  {
-    id: 1,
-    title: { en: "Black Cloth", hi: "काला कपड़ा" },
-    desc: {
-      en: "By offering it, devotees receive protection and are freed from negative...",
-      hi: "इसे अर्पित करने से भक्तों को सुरक्षा मिलती है और वे नकारात्मकताओं से मुक्त होते हैं...",
-    },
-    price: 151,
-    image: "black-cloth.jpg",
-  },
-  {
-    id: 2,
-    title: { en: "Rose Flower", hi: "गुलाब का फूल" },
-    desc: {
-      en: "Offering roses brings Bhairav Ji’s grace and blessings, making devotees...",
-      hi: "गुलाब चढ़ाने से भैरव जी की कृपा और आशीर्वाद मिलता है...",
-    },
-    price: 51,
-    image: "rose.jpg",
-  },
-  // Add other items here...
-];
+const MultiLingualItemList = ({ poojaData, language }) => {
+  const [cart, setCart] = useState({ default: 1 });
 
-const MultiLingualItemList = () => {
-  const [lang, setLang] = useState("en"); 
-  const [cart, setCart] = useState({}); 
-
-  // Handle adding/removing item to cart
+  // Handle adding item count
   const handleAdd = (id) => setCart((c) => ({ ...c, [id]: (c[id] || 0) + 1 }));
+
+  // Handle removing item count
   const handleRemove = (id) =>
     setCart((c) => {
       const val = (c[id] || 0) - 1;
@@ -594,61 +602,78 @@ const MultiLingualItemList = () => {
       return next;
     });
 
+  // Total amount calculation including default chadhava price + items
+  const totalAmount =
+    (cart.default ? poojaData.chadhava * cart.default : poojaData.chadhava) +
+    Object.entries(cart).reduce((sum, [id, count]) => {
+      if (id === "default") return sum; // skip default already included
+      const item = poojaData.items.find((i) => i._id === id);
+      return item ? sum + item.price * count : sum;
+    }, 0);
+
   return (
     <Box sx={{ padding: 2 }}>
-      {/* Language Toggle */}
-      <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
-        <Button
-          variant={lang === "en" ? "contained" : "outlined"}
-          onClick={() => setLang("en")}
-          sx={{ mr: 1 }}
-        >
-          English
-        </Button>
-        <Button
-          variant={lang === "hi" ? "contained" : "outlined"}
-          onClick={() => setLang("hi")}
-        >
-          हिंदी
-        </Button>
-      </Box>
-      <Typography variant="h6" sx={{ mb: 2, fontFamily:'Poppins' }}>
-        {lang === "en"
+      <Typography variant="h6" sx={{ mb: 2, fontFamily: "Poppins" }}>
+        {language === "en"
           ? "List of all available offerings in this temple"
           : "मंदिर में सभी उपलब्ध चढ़ावे"}
       </Typography>
       <Grid container spacing={2}>
-        {itemsData.map((item) => (
-          <Grid item xs={12} sm={6} md={4} key={item.id}>
-            <Card sx={{ display: "flex", alignItems: "center", padding: 2 }}>
+        {poojaData?.items?.map((item) => (
+          <Grid
+            item
+            size={{ xs: 12, sm: 6, lg: 6, md: 6 }}
+            xs={12}
+            sm={6}
+            md={4}
+            key={item._id}
+          >
+            <Card
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                padding: 2,
+                flexDirection: { xs: "column", sm: "row" },
+              }}
+            >
               <CardMedia
                 component="img"
-                image={item.image} // Replace with actual image URLs or import paths
-                alt={item.title[lang]}
+                image={item.image?.url}
+                alt={language === "hi" ? item.titleHi : item.title}
                 sx={{
-                  width: 70,
-                  height: 70,
+                  width: { xs: "100%", sm: 70 }, // full width on mobile
+                  height: { xs: 150, sm: 70 }, // taller image on mobile
                   objectFit: "contain",
-                  mr: 2,
+                  mb: { xs: 1, sm: 0 }, // spacing below image on mobile
+                  mr: { xs: 0, sm: 2 },
                   borderRadius: 2,
                   background: "#fafafa",
                 }}
               />
               <Box sx={{ flexGrow: 1 }}>
                 <CardContent sx={{ p: 0 }}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                    {item.title[lang]}
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ fontWeight: 600, fontFamily: "Poppins" }}
+                  >
+                    {language === "hi" ? item.titleHi : item.title}
                   </Typography>
-                  <Typography variant="body2" sx={{ color: "#666" }}>
-                    {item.desc[lang]}
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "#666", fontFamily: "Poppins" }}
+                  >
+                    {language === "hi" ? item.descriptionHi : item.description}
                   </Typography>
-                  <Typography variant="h6" sx={{ mt: 1 }}>
+                  <Typography
+                    variant="h6"
+                    sx={{ mt: 1, fontFamily: "Poppins" }}
+                  >
                     ₹{item.price}
                   </Typography>
                 </CardContent>
               </Box>
               {/* Add to cart controls */}
-              {cart[item.id] ? (
+              {cart[item._id] ? (
                 <Stack
                   direction="row"
                   alignItems="center"
@@ -656,15 +681,15 @@ const MultiLingualItemList = () => {
                   sx={{ ml: 2 }}
                 >
                   <IconButton
-                    onClick={() => handleRemove(item.id)}
+                    onClick={() => handleRemove(item._id)}
                     size="small"
                     color="secondary"
                   >
                     <RemoveIcon />
                   </IconButton>
-                  <Typography>{cart[item.id]}</Typography>
+                  <Typography>{cart[item._id]}</Typography>
                   <IconButton
-                    onClick={() => handleAdd(item.id)}
+                    onClick={() => handleAdd(item._id)}
                     size="small"
                     color="secondary"
                   >
@@ -673,11 +698,11 @@ const MultiLingualItemList = () => {
                 </Stack>
               ) : (
                 <Button
-                  onClick={() => handleAdd(item.id)}
+                  onClick={() => handleAdd(item._id)}
                   variant="contained"
                   sx={{ ml: 2, minWidth: 80, background: "#8e5ff3" }}
                 >
-                  {lang === "en" ? "+ Add" : "+ जोड़ें"}
+                  {language === "en" ? "+ Add" : "+ जोड़ें"}
                 </Button>
               )}
             </Card>
@@ -685,31 +710,89 @@ const MultiLingualItemList = () => {
         ))}
       </Grid>
       {/* Cart Summary */}
-      <Box sx={{ mt: 4, ml: 1 }}>
-        <Typography variant="subtitle1">
-          {lang === "en"
-            ? `${Object.keys(cart).length} Offerings`
-            : `${Object.keys(cart).length} चढ़ावे`}
-        </Typography>
-        <Typography variant="h6" sx={{ color: "#8e5ff3", mt: 1 }}>
-          ₹
-          {Object.entries(cart).reduce(
-            (sum, [id, count]) =>
-              sum + itemsData.find((i) => i.id == id)?.price * count,
-            0
-          )}
-        </Typography>
-        {/* List cart items */}
-        <Box sx={{ color: "#666", fontSize: 14 }}>
-          {Object.entries(cart).map(([id, count]) => {
-            const itm = itemsData.find((i) => i.id == id);
-            return (
-              <span key={id}>
-                {itm?.title[lang]} x {count}{" "}
-              </span>
-            );
-          })}
+      <Box
+        sx={{
+          position: "sticky",
+          bottom: 0,
+          left: 0,
+          width: { xs: "100%", sm: "98%" }, // full width on mobile
+          margin: "auto",
+          bgcolor: "#f9f9f9",
+          borderTop: "1px solid #ccc",
+          boxShadow: "0 -2px 8px rgba(0,0,0,0.1)",
+          px: { xs: 2, sm: 3 },
+          py: { xs: 1.5, sm: 2 },
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row" }, // stack on mobile
+          alignItems: { xs: "stretch", sm: "center" },
+          justifyContent: "space-between",
+          fontFamily: "'Poppins', sans-serif",
+          zIndex: 1000,
+          gap: { xs: 1, sm: 0 },
+        }}
+      >
+        <Box sx={{display:{xs:'flex', sm:'block'}, alignItems:'center', justifyContent:'space-between'}} >
+          <Typography
+            variant="subtitle1"
+            sx={{ color: "#444", fontWeight: 600 }}
+          >
+            {language === "en"
+              ? `${Object.keys(cart).length} Offering${
+                  Object.keys(cart).length > 1 ? "s" : ""
+                }`
+              : `${Object.keys(cart).length} चढ़ावे`}
+          </Typography>
+          <Typography
+            variant="h6"
+            sx={{ color: "#8e5ff3", fontWeight: 700, mt: 0.5 }}
+          >
+            ₹{totalAmount}
+          </Typography>
         </Box>
+        <OfferChadhavaButton
+          language={language}
+          amount={totalAmount} // from your cart calculation
+          poojaId={poojaData?._id}
+          buttonStyle={{
+            bgcolor: "#89255b",
+            color: "#fff",
+            fontWeight: 700,
+            textTransform: "none",
+            fontFamily: "'Poppins', sans-serif",
+            borderRadius: 2,
+            px: 4,
+            py: 1.2,
+            boxShadow: "0 4px 12px rgba(142,95,243,0.4)",
+            "&:hover": {
+              bgcolor: "#7323d3",
+              boxShadow: "0 6px 16px rgba(115,35,211,0.6)",
+            },
+          }}
+        />
+
+        {/* <Button
+          variant="contained"
+          sx={{
+            bgcolor: "#89255b",
+            color: "#fff",
+            fontWeight: 700,
+            textTransform: "none",
+            fontFamily: "'Poppins', sans-serif",
+            borderRadius: 2,
+            px: 4,
+            py: 1.2,
+            boxShadow: "0 4px 12px rgba(142,95,243,0.4)",
+            "&:hover": {
+              bgcolor: "#7323d3", // slightly darker on hover
+              boxShadow: "0 6px 16px rgba(115,35,211,0.6)",
+            },
+          }}
+          onClick={() => {
+            // Add your CTA button handler logic here
+          }}
+        >
+          {language === "hi" ? "चढ़ावा अर्पित करें" : "Offer Chadhava"}
+        </Button> */}
       </Box>
     </Box>
   );

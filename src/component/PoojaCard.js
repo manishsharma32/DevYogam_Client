@@ -1,6 +1,7 @@
 import React from "react";
 import {
   Card,
+  Card as MuiCard,
   Box,
   Typography,
   Button,
@@ -33,9 +34,10 @@ export default function PujaCard({
   isDeleted,
 }) {
   const { day, month } = getDateParts(date);
+  const MotionCard = motion(MuiCard);
 
   return (
-    <motion.div
+    <MotionCard
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{
@@ -44,6 +46,7 @@ export default function PujaCard({
       }}
       transition={{ duration: 0.3 }}
       style={{ height: "100%" }}
+      onClick={onCtaClick}
     >
       <Card
         sx={{
@@ -60,7 +63,6 @@ export default function PujaCard({
           maxHeight: "70vh",
           opacity: isDeleted ? 0.4 : 1,
         }}
-        onClick={onCtaClick}
       >
         <CardMedia
           component="img"
@@ -73,42 +75,44 @@ export default function PujaCard({
             objectFit: "cover",
           }}
         />
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "anchor-center",
-            backgroundColor: "#f3eaff",
-            py: 1,
-            borderBottomLeftRadius: 12,
-            borderBottomRightRadius: 12,
-            borderTop: "1px solid #d1bee7",
-            fontWeight: 700,
-            letterSpacing: 1,
-            color: "#7c3aed",
-            fontSize: "1.1rem",
-            gap: 1,
-            userSelect: "none",
-          }}
-        >
-          <Typography
-            variant="body1"
-            sx={{ fontWeight: 700, fontFamily: "Poppins" }}
-          >
-            {day}
-          </Typography>
-          <Typography
-            variant="body2"
+        {date && (
+          <Box
             sx={{
-              fontWeight: 600,
-              textTransform: "uppercase",
-              // mt: "4px",
-              fontFamily: "Poppins",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "anchor-center",
+              backgroundColor: "#f3eaff",
+              py: 1,
+              borderBottomLeftRadius: 12,
+              borderBottomRightRadius: 12,
+              borderTop: "1px solid #d1bee7",
+              fontWeight: 700,
+              letterSpacing: 1,
+              color: "#7c3aed",
+              fontSize: "1.1rem",
+              gap: 1,
+              userSelect: "none",
             }}
           >
-            {month}
-          </Typography>
-        </Box>
+            <Typography
+              variant="body1"
+              sx={{ fontWeight: 700, fontFamily: "Poppins" }}
+            >
+              {day}
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                fontWeight: 600,
+                textTransform: "uppercase",
+                // mt: "4px",
+                fontFamily: "Poppins",
+              }}
+            >
+              {month}
+            </Typography>
+          </Box>
+        )}
         <CardContent sx={{ flexGrow: 1, px: 3, pt: 3 }}>
           {badge && (
             <Box
@@ -208,6 +212,6 @@ export default function PujaCard({
           </Button>
         </CardContent>
       </Card>
-    </motion.div>
+    </MotionCard>
   );
 }

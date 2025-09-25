@@ -60,7 +60,7 @@ const initialValues = {
 };
 export default function AddChadhava({ open, handleClose }) {
   const [poojaData, setPoojaData] = useState(initialValues);
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
   const [templeData, setTempleData] = useState([]);
   const [mandirOptions, setMandirOptions] = useState([]);
   const [templeList, setTempleList] = useState([]);
@@ -162,20 +162,21 @@ export default function AddChadhava({ open, handleClose }) {
     setFieldValue("logoImagesHi", updated);
   };
   const handleSubmit = async (val) => {
-    console.log("Submitted values:", val);
     let itemImg;
-    if (val?.faq?.length > 0) {
-      const images = val.faq.map((i) => i.img);
-      itemImg = await UploadItemImg(images);
-    }
-    const response = await CreateChadhavaAPI(val, itemImg);
+    // if (val?.faq?.length > 0) {
+    //   const images = val.faq.map((i) => i.img);
+    //   itemImg = await UploadItemImg(images);
+    // }
+
+    const itemImageData = {
+      data: {
+        images: val.faq.map((item) => item.imageUrl || ""),
+      },
+    };
+    const response = await CreateChadhavaAPI(val, itemImageData);
     console.log(response);
     if (response?._id) {
-      const res = await CreatePoojaFile(
-        response?._id,
-        val,
-        "chadhava"
-      );
+      const res = await CreatePoojaFile(response?._id, val, "chadhava");
       alert("Puja created successfully");
       if (res?.data?.status) {
         navigate("/chadhava");
@@ -572,7 +573,7 @@ export default function AddChadhava({ open, handleClose }) {
                       >
                         Benefits <span className="required-icon">*</span>
                       </Typography>
-                      <FieldArray name="benefits">
+                      <FieldArray name="benefit">
                         {({ push, remove }) => (
                           <Box>
                             {values?.benefit?.map((item, index) => (
@@ -848,6 +849,72 @@ export default function AddChadhava({ open, handleClose }) {
                                     }}
                                   >
                                     <input
+                                      type="file"
+                                      accept="image/*"
+                                      id={`faq-image-${index}`}
+                                      style={{ display: "none" }}
+                                      onChange={async (e) => {
+                                        const file = e.currentTarget.files[0];
+                                        if (file) {
+                                          // Upload image immediately
+                                          const uploadedUrl =
+                                            await UploadItemImg(file);
+                                          if (uploadedUrl) {
+                                            setFieldValue(
+                                              `faq.${index}.imageUrl`,
+                                              uploadedUrl?.data?.images
+                                            );
+                                          }
+                                        }
+                                      }}
+                                    />
+                                    <label htmlFor={`faq-image-${index}`}>
+                                      <Button
+                                        variant="outlined"
+                                        component="span"
+                                        startIcon={
+                                          <img
+                                            src={UploadIcon}
+                                            alt="Upload"
+                                            style={{ width: 20 }}
+                                          />
+                                        }
+                                      >
+                                        Upload Image
+                                      </Button>
+                                    </label>
+
+                                    {item.imageUrl && (
+                                      <Stack
+                                        direction="row"
+                                        spacing={1}
+                                        alignItems="center"
+                                        mt={1}
+                                      >
+                                        <img
+                                          src={item.imageUrl?.url}
+                                          alt={`Image Upload`}
+                                          style={{
+                                            height: 50,
+                                            borderRadius: 4,
+                                          }}
+                                        />
+                                        <IconButton
+                                          size="small"
+                                          onClick={() =>
+                                            setFieldValue(
+                                              `faq.${index}.imageUrl`,
+                                              ""
+                                            )
+                                          }
+                                          aria-label="remove image"
+                                        >
+                                          <CloseIcon fontSize="small" />
+                                        </IconButton>
+                                      </Stack>
+                                    )}
+
+                                    {/* <input
                                       accept="image/*"
                                       type="file"
                                       style={{ display: "none" }}
@@ -916,7 +983,7 @@ export default function AddChadhava({ open, handleClose }) {
                                           <CloseIcon fontSize="small" />
                                         </IconButton>
                                       </Box>
-                                    )}
+                                    )} */}
                                   </Box>
 
                                   {values.faq.length > 1 && (

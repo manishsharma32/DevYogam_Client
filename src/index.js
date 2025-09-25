@@ -4,6 +4,15 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
+import ReactPixel from "react-facebook-pixel";
+const options = {
+  autoConfig: true, 
+  debug: false, 
+};
+
+
+ReactPixel.init(process.env.REACT_APP_FB_PIXEL_ID, options);
+ReactPixel.pageView(); 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
