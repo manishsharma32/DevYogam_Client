@@ -5,6 +5,7 @@ import XIcon from "@mui/icons-material/X";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import logo from "../assests/logo.png";
 import { Box } from "@mui/material";
+import { Link } from "react-router-dom";
 const footerLinks = [
   {
     heading: "Useful Links",
@@ -26,9 +27,7 @@ const footerLinks = [
   },
   {
     heading: "Contact Us",
-    links: [
-      { name: "Contact", url: "/contact" },
-    ],
+    links: [{ name: "Contact", url: "/contact" }],
   },
 ];
 
@@ -46,8 +45,8 @@ export default function Footer() {
         background: "#f8f9fb",
         padding: "40px 0 20px 0",
         color: "#333",
-        fontFamily: "inherit",
-        marginTop:'5rem'
+        marginTop: "5rem",
+        fontFamily: "Poppins",
       }}
     >
       <Box
@@ -58,11 +57,11 @@ export default function Footer() {
           maxWidth: "1200px",
           margin: "auto",
           flexWrap: "wrap",
-          width: {xs: "80%", md: "100%", sm:"80%" },
+          width: { xs: "80%", md: "100%", sm: "80%" },
         }}
       >
         {/* Logo */}
-        <div style={{marginBottom: "24px" }}>
+        <div style={{ marginBottom: "24px" }}>
           <img src={logo} alt="DevYogam Logo" style={{ maxWidth: "200px" }} />
         </div>
 
@@ -75,6 +74,7 @@ export default function Footer() {
                 fontSize: "18px",
                 marginBottom: "14px",
                 color: "#888",
+                fontFamily: "Poppins",
               }}
             >
               {section.heading}
@@ -82,16 +82,18 @@ export default function Footer() {
             <ul style={{ listStyle: "none", padding: 0 }}>
               {section.links.map((link) => (
                 <li key={link.name} style={{ marginBottom: "8px" }}>
-                  <a
-                    href={link.url}
+                  <Link
+                    to={link.url} // ✅ instead of href
                     style={{
                       color: "#222",
                       textDecoration: "none",
                       fontSize: "16px",
+                      fontFamily: "Poppins",
+                      cursor: "pointer",
                     }}
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -106,14 +108,22 @@ export default function Footer() {
               fontSize: "18px",
               marginBottom: "14px",
               color: "#888",
+              fontFamily: "Poppins",
             }}
           >
             Get in touch
           </h4>
-          <p style={{ fontSize: "15px", marginBottom: "12px", color: "#333" }}>
+          <p
+            style={{
+              fontSize: "15px",
+              marginBottom: "12px",
+              color: "#333",
+              fontFamily: "Poppins",
+            }}
+          >
             Connect with us on social media for the latest updates about our
             services.
-            </p>
+          </p>
           <div style={{ display: "flex", gap: "15px" }}>
             {socialLinks.map((item, idx) => (
               <a
@@ -121,7 +131,11 @@ export default function Footer() {
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: "#433f4a", fontSize: "22px" }}
+                style={{
+                  color: "#433f4a",
+                  fontSize: "22px",
+                  fontFamily: "Poppins",
+                }}
               >
                 {item.icon}
               </a>
@@ -137,6 +151,7 @@ export default function Footer() {
           textAlign: "center",
           color: "#aaa",
           fontSize: "14px",
+          fontFamily: "Poppins",
         }}
       >
         &copy; {new Date().getFullYear()} DevYogam. All Rights Reserved.

@@ -29,6 +29,7 @@ import family from "../../assests/family.png";
 import process from "../../assests/process.jpg";
 import { HidePoojaAPI } from "../../services/HidePoojaAPI";
 import { LanguageContext } from "../../context/LanguageContext";
+import ProcessSteps from "../../component/ProcessStep";
 
 const Item = styled(Box)(({ theme }) => ({
   backgroundColor: "#fff",
@@ -66,7 +67,9 @@ export default function PoojaDetails({ user }) {
         subtitle: pickLang(res, "subtitle"),
         location: pickLang(res, "location"),
         images:
-          lang === "Hi" && Array.isArray(res.images_hi) && res.images_hi.length > 0
+          lang === "Hi" &&
+          Array.isArray(res.images_hi) &&
+          res.images_hi.length > 0
             ? res.images_hi
             : res.images || [],
         price: Array.isArray(res.price)
@@ -361,9 +364,10 @@ export default function PoojaDetails({ user }) {
                 {pricePackages.map((pkg) => {
                   const data = priceDetails[pkg.key];
                   if (!data || data.amaount == null) return null;
-                  const benefits = (language === "hi"
-                    ? data.descriptionHi || data.description
-                    : data.description
+                  const benefits = (
+                    language === "hi"
+                      ? data.descriptionHi || data.description
+                      : data.description
                   )
                     ?.split(". ")
                     .filter(Boolean);
@@ -505,18 +509,6 @@ export default function PoojaDetails({ user }) {
             </Box>
           )}
           <Box sx={{ mt: 5, width: "90%", mx: "auto" }}>
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 600,
-                mb: 2,
-                fontFamily: "Poppins",
-                fontSize: { sx: "1.5rem", md: "2rem", lg: "2rem" },
-                color: "#cd5200",
-              }}
-            >
-              {language === "hi" ? "यह कैसे काम करता है?" : "How it works?"}
-            </Typography>
             <Box
               sx={{
                 display: "flex",
@@ -524,18 +516,7 @@ export default function PoojaDetails({ user }) {
                 alignItems: "center",
               }}
             >
-              <img
-                src={process}
-                style={{
-                  width: "90%",
-                  mx: "auto",
-                  border: "1px solid lightgrey",
-                  borderRadius: "1.5rem",
-                  boxShadow: 5,
-                  p: 2,
-                }}
-                alt="process"
-              />
+              <ProcessSteps type="pooja" language={language} />
             </Box>
           </Box>
 
@@ -623,7 +604,10 @@ export default function PoojaDetails({ user }) {
                         "&.Mui-expanded": { bgcolor: "#f0f0f0" },
                       }}
                     >
-                      <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ px: 2 }}>
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        sx={{ px: 2 }}
+                      >
                         <Typography
                           variant="subtitle1"
                           fontWeight={600}
@@ -633,7 +617,10 @@ export default function PoojaDetails({ user }) {
                         </Typography>
                       </AccordionSummary>
                       <AccordionDetails sx={{ px: 3, py: 2 }}>
-                        <Typography variant="body2" sx={{ whiteSpace: "pre-line", fontFamily: "Poppins" }}>
+                        <Typography
+                          variant="body2"
+                          sx={{ whiteSpace: "pre-line", fontFamily: "Poppins" }}
+                        >
                           {item?.answer}
                         </Typography>
                       </AccordionDetails>

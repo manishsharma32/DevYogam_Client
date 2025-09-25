@@ -60,19 +60,22 @@ export default function PujaCard({
           fontFamily: "Poppins",
           backgroundColor: "#fff",
           overflow: "hidden",
-          maxHeight: "70vh",
+          maxHeight: "auto",
           opacity: isDeleted ? 0.4 : 1,
         }}
       >
         <CardMedia
           component="img"
-          height="180"
+          height="auto"
           image={bannerImg}
           alt="puja-banner"
           sx={{
             borderTopLeftRadius: 12,
             borderTopRightRadius: 12,
-            objectFit: "cover",
+            objectFit: "contain", // ensures the image is fully visible without cropping
+            width: "100%", // take full width
+            maxHeight: "70vh", // restrict max height if needed
+            backgroundColor: "#f0f0f0", // optional grey background for empty spaces
           }}
         />
         {date && (
@@ -135,12 +138,13 @@ export default function PujaCard({
             </Box>
           )}
           <Typography
-            variant="h5"
+            // variant="h5"
             sx={{
               fontWeight: 700,
               mb: 1,
               fontFamily: "Poppins",
               color: "#79245a",
+              fontSize: { xs: "1.2rem", sm: "1.5rem" },
             }}
           >
             {heading}

@@ -28,10 +28,14 @@ export default function ReviewCard() {
   // Map reviews with selected language fields
   const localizedReviews = reviewsData.map((item) => ({
     ...item,
-    mainQuote: language === "hi" ? item.mainQuoteHi || item.mainQuote : item.mainQuote,
+    mainQuote:
+      language === "hi" ? item.mainQuoteHi || item.mainQuote : item.mainQuote,
     review: language === "hi" ? item.reviewHi || item.review : item.review,
     name: language === "hi" ? item.nameHi || item.name : item.name,
-    designation: language === "hi" ? item.designationHi || item.designation : item.designation,
+    designation:
+      language === "hi"
+        ? item.designationHi || item.designation
+        : item.designation,
   }));
 
   return (
@@ -42,6 +46,7 @@ export default function ReviewCard() {
           fontSize: "2rem",
           fontWeight: 600,
           textAlign: "center",
+          color: "#cd5200",
         }}
       >
         {language === "hi" ? "उपयोगकर्ताओं की राय" : "Users Reviews"}
@@ -109,7 +114,7 @@ export default function ReviewCard() {
                     <Typography
                       gutterBottom
                       variant="h5"
-                      sx={{ fontWeight: 600 }}
+                      sx={{ fontWeight: 600, fontFamily: "Poppins", color:"#89255b" }}
                     >
                       {item?.mainQuote}
                     </Typography>
@@ -140,7 +145,7 @@ export default function ReviewCard() {
                       />
                       <Typography
                         variant="body2"
-                        sx={{ fontStyle: "italic", zIndex: 2, width: "100%" }}
+                        sx={{ fontStyle: "italic", zIndex: 2, width: "100%", fontFamily: "Poppins" }}
                       >
                         {item?.review}
                       </Typography>
@@ -160,13 +165,13 @@ export default function ReviewCard() {
 
                     <Typography
                       variant="subtitle1"
-                      sx={{ fontWeight: "bold", marginTop: 2 }}
+                      sx={{ fontWeight: "bold", marginTop: 2, fontFamily: "Poppins", color:"#79245a" }}
                     >
                       - {item.name}
                     </Typography>
                     <Typography
                       variant="caption"
-                      sx={{ color: "text.secondary" }}
+                      sx={{ color: "text.secondary", fontFamily: "Poppins", color:"#79245a" }}
                     >
                       {item?.designation}
                     </Typography>

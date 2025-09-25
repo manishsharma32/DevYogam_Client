@@ -100,6 +100,7 @@ export default function ExploreTemples() {
           fontWeight: 600,
           mb: 4,
           textAlign: "center",
+          color: "#cd5200",
         }}
       >
         {language === "hi" ? "प्राचीन मंदिरों के दर्शन करें" : "Explore Temples"}

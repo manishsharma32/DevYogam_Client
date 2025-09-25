@@ -81,6 +81,7 @@ export default function OurServices() {
           fontSize: "2rem",
           fontWeight: 600,
           textAlign: "center",
+          color: "#cd5200",
           marginTop: !isMobile ? "2%" : "2px",
         }}
       >

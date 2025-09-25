@@ -154,9 +154,7 @@ export default function MandirDetails() {
                 >
                   {mandirData?.subTitle}
                 </Typography>
-                <Typography
-                  variant="body1"
-                  mt={1}
+                <Box
                   sx={{
                     fontFamily: "Poppins",
                     fontSize: "1rem",
@@ -164,25 +162,56 @@ export default function MandirDetails() {
                     marginTop: "2%",
                     display: "flex",
                     gap: "0.5rem",
-                    color: "#cd5200",
+                    alignItems: "center",
+                  }}
+                >
+                  <img src={mandirIcon} style={{ objectFit: "contain" }} />{" "}
+                  <Typography
+                    mt={1}
+                    sx={{
+                      fontFamily: "Poppins",
+                      fontSize: "1rem",
+                      fontWeight: 500,
+                      marginTop: "2%",
+                      display: "flex",
+                      gap: "0.5rem",
+                      textAlign: "left",
+                    }}
+                  >
+                    {mandirData?.subTitle}
+                  </Typography>
+                </Box>
+
+                <Box
+                  sx={{
+                    fontFamily: "Poppins",
+                    fontSize: "1rem",
+                    fontWeight: 500,
+                    marginTop: "2%",
+                    display: "flex",
+                    gap: "0.5rem",
+                    alignItems: "center",
                   }}
                 >
                   <LocationOnOutlinedIcon sx={{ color: "#cd5200" }} />{" "}
-                  {mandirData?.location}
-                </Typography>
-                <Typography
-                  mt={1}
-                  sx={{
-                    fontFamily: "Poppins",
-                    fontSize: "1rem",
-                    fontWeight: 500,
-                    marginTop: "2%",
-                    display: "flex",
-                    gap: "0.5rem",
-                  }}
-                >
-                  <img src={mandirIcon} /> {mandirData?.subTitle}
-                </Typography>
+                  <Typography
+                    variant="body1"
+                    mt={1}
+                    sx={{
+                      fontFamily: "Poppins",
+                      fontSize: "1rem",
+                      fontWeight: 500,
+                      marginTop: "2%",
+                      display: "flex",
+                      gap: "0.5rem",
+                      textAlign: "left",
+                      color: "#cd5200",
+                    }}
+                  >
+                    {mandirData?.location}
+                  </Typography>
+                </Box>
+
                 <ScrollingNotice />
 
                 <Box
@@ -251,37 +280,44 @@ export default function MandirDetails() {
                 ? "देव योगम द्वारा इस मंदिर में उपलब्ध सेवाए"
                 : "Service By Dev Yogam at This Temple"}
             </Typography>
-            <Typography
-              gutterBottom
+
+            <Box
               sx={{
-                fontWeight: 700,
+                padding: "10px",
+                backgroundColor: "#f5f5f5",
+                borderRadius: "8px",
+                overflow: "hidden",
+                position: "relative",
+                height: "40px",
+                display: "flex",
+                alignItems: "center",
                 mb: 3,
-                fontSize: "1rem",
-                fontFamily: "Poppins",
-                color: "#89255b",
               }}
             >
-              <span style={{ color: "#cd5200", fontSize: "1rem" }}>
-                {language === "hi" ? "सूचना:" : "Notice:"}{" "}
-              </span>
               <Typography
+                component="div"
                 sx={{
                   fontFamily: "Poppins",
-                  //   color: "#79245a",
+                  fontSize: "1rem",
+                  fontWeight: 500,
+                  color: "#79245a",
                   whiteSpace: "nowrap",
                   display: "inline-block",
-                  //   animation: "scrollText 12s linear infinite",
-                  //   "@keyframes scrollText": {
-                  //     "100%": { transform: "translateX(0%)" },
-                  //     "-100%": { transform: "translateX(100%)" },
-                  //   },
+                  animation: "scrollText 18s linear infinite",
+                  "@keyframes scrollText": {
+                    "0%": { transform: "translateX(100%)" },
+                    "100%": { transform: "translateX(-100%)" },
+                  },
                 }}
               >
+                <strong style={{ color: "#cd5200" }}>
+                  {language === "hi" ? "सूचना:" : "Notice:"}{" "}
+                </strong>
                 {language === "hi"
                   ? "आप इस मंदिर में अपने एवं अपने परिवार के लिए सीधे देव योगम से जुड़कर निम्न उपलब्ध सेवाओं का व्यक्तिगत रूप से लाभ उठा सकते हैं"
                   : "You and your family can personally avail the following services at this temple by directly connecting with Dev Yogam."}
               </Typography>
-            </Typography>
+            </Box>
 
             <Grid container spacing={3} alignContent={"center"}>
               {/* Personal/Special Pooja Card */}

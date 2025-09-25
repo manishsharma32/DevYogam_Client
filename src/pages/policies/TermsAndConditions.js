@@ -2,12 +2,12 @@ import React from 'react';
 
 export default function TermsAndConditions() {
   return (
-    <div style={{ padding: '32px', maxWidth: '900px', margin: 'auto', fontFamily: 'Arial, sans-serif', lineHeight: '1.7' }}>
+    <div style={{ padding: '32px', maxWidth: '900px', margin: 'auto', fontFamily: 'Poppins', lineHeight: '1.7' }}>
       <h1>Terms and Conditions (End User License Agreement)</h1>
 
       <h2>1. Introduction</h2>
-      <p><strong>1.1</strong> This electronic document outlines the terms and conditions for the use of the DevYogam platform (the “App” and website), published in compliance with the Information Technology Act, 2000 and associated rules. No physical signature is needed for this agreement.</p>
-      <p><strong>1.2</strong> DevYogam is operated by [DevYogam Company/Legal Entity], registered under the applicable laws of India. By accessing, browsing, or using this platform, you enter into a legally binding agreement with DevYogam and agree to abide by these terms. If any part of this agreement is unacceptable, please do not use this platform.</p>
+      <p><strong>1.1</strong> This electronic document outlines the terms and conditions for the use of the DevYogam platform, published in compliance with the Information Technology Act, 2000 and associated rules. No physical signature is needed for this agreement.</p>
+      <p><strong>1.2</strong> DevYogam is registered under the applicable laws of India. By accessing, browsing, or using this platform, you enter into a legally binding agreement with DevYogam and agree to abide by these terms. If any part of this agreement is unacceptable, please do not use this platform.</p>
       <p><strong>1.3</strong> We reserve the right to modify these terms at any time, with updates announced on the App or via your registered contact details. Your continued use of the service after changes implies acceptance.</p>
 
       <h2>2. Section A: General Terms of Service</h2>
@@ -60,14 +60,15 @@ export default function TermsAndConditions() {
       <p><strong>2.13</strong> <strong>Severability and Waiver</strong><br />
       If any provision is found unenforceable, it will be limited or eliminated to ensure the rest remain in effect. The failure to enforce any right is not a waiver of others.</p>
 
-      <p><strong>2.14</strong> <strong>Grievance Redressal Mechanism</strong><br />
+      {/* <p><strong>2.14</strong> <strong>Grievance Redressal Mechanism</strong><br />
       For complaints or concerns regarding these terms or use of the platform, contact our Grievance Officer:<br />
       Name: [Grievance Officer Name]<br />
       Email: [Update with DevYogam grievance email]<br />
-      Phone: [Update with DevYogam contact number]</p>
+      Phone: [Update with DevYogam contact number]
+      </p> */}
 
-      <p><strong>2.15</strong> <strong>Contact Us</strong><br />
-      For questions about these terms, please contact: [Update with DevYogam company email]</p>
+      <p><strong>2.14</strong> <strong>Contact Us</strong><br />
+      For questions about these terms, please contact: support@devyogam.com</p>
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import one from "../../assests/1.png";
+import banner from "../../assests/tmplbanner.webp";
 import { Button } from "@mui/material";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
@@ -38,7 +39,7 @@ export default function SplitHeader() {
     });
 
     gsap.to(".hero__image-cont > img", {
-      scale: 1.5,
+      scale: 1.2,
       xPercent: 20,
       scrollTrigger: {
         trigger: ".hero",
@@ -171,7 +172,7 @@ export default function SplitHeader() {
             <div className="hero__inner constrain">
               {[...Array(6)].map((_, i) => (
                 <div key={i} className="hero__image-cont">
-                  <img src={one} alt={`slice ${i}`} draggable={false} />
+                  <img src={banner} alt={`slice ${i}`} style={{ objectFit: "cover", margin:"auto" }} draggable={false} />
                   <div className="anim-swipe" />
                 </div>
               ))}

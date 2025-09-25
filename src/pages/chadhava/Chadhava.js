@@ -177,7 +177,7 @@ export default function Chadhava({ user }) {
                       highlight={item?.subtitle || ""}
                       highlightColor="#7c3aed"
                       location={`${item?.mandir || 0}`}
-                      ctaText={language === "hi" ? "योगदान करें" : "Contribute"}
+                      ctaText={language === "hi" ? "चढ़ावा अर्पित करें" : "Contribute"}
                       onCtaClick={() => handeNavigate(item?._id, item?.title)}
                     />
                   </Grid>

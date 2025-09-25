@@ -7,8 +7,9 @@ export default function Disclamer() {
         padding: "32px",
         maxWidth: "900px",
         margin: "auto",
-        fontFamily: "Arial, sans-serif",
+        fontFamily: "Poppins",
         lineHeight: "1.7",
+
       }}
     >
       <h1>Disclaimer</h1>

@@ -37,6 +37,7 @@ import { GetChadavaByID } from "../../services/GetChadavaByID";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import OfferChadhavaButton from "./OfferChadhavaButton";
+import ProcessSteps from "../../component/ProcessStep";
 
 const Item = styled(Box)(({ theme }) => ({
   backgroundColor: "#fff",
@@ -433,21 +434,8 @@ export default function ChadhavaDetails({ user }) {
               {language === "hi" ? poojaData?.desc_hi : poojaData?.desc}
             </Typography>
           </Box>
+          
           <Box sx={{ mt: 5, width: "90%", mx: "auto" }}>
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 600,
-                mb: 2,
-                fontFamily: "Poppins",
-                fontSize: { sx: "1.5rem", md: "2rem", lg: "2rem" },
-                color: "#cd5200",
-              }}
-            >
-              {language === "hi"
-                ? "चढ़ावा अर्पित करने की प्रक्रिया"
-                : "How it works?"}
-            </Typography>
             <Box
               sx={{
                 display: "flex",
@@ -455,18 +443,7 @@ export default function ChadhavaDetails({ user }) {
                 alignItems: "center",
               }}
             >
-              <img
-                src={process}
-                style={{
-                  width: "90%",
-                  mx: "auto",
-                  border: "1px solid lightgrey",
-                  borderRadius: "1.5rem",
-                  boxShadow: 5,
-                  p: 2,
-                }}
-                alt="process"
-              />
+              <ProcessSteps type="chadhava" language={language} />
             </Box>
           </Box>
 
@@ -613,7 +590,7 @@ const MultiLingualItemList = ({ poojaData, language }) => {
 
   return (
     <Box sx={{ padding: 2 }}>
-      <Typography variant="h6" sx={{ mb: 2, fontFamily: "Poppins" }}>
+      <Typography variant="h5" sx={{ mb: 2, fontWeight:600, fontFamily: "Poppins", color:"#89255b" }}>
         {language === "en"
           ? "List of all available offerings in this temple"
           : "मंदिर में सभी उपलब्ध चढ़ावे"}
@@ -700,7 +677,7 @@ const MultiLingualItemList = ({ poojaData, language }) => {
                 <Button
                   onClick={() => handleAdd(item._id)}
                   variant="contained"
-                  sx={{ ml: 2, minWidth: 80, background: "#8e5ff3" }}
+                  sx={{ ml: 2, minWidth: 80, background: "#8e5ff3", fontFamily:"Poppins", borderRadius:'0.5rem' }}
                 >
                   {language === "en" ? "+ Add" : "+ जोड़ें"}
                 </Button>
