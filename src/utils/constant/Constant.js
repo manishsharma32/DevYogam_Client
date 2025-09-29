@@ -1,6 +1,6 @@
-// export const baseURL = process.env.REACT_APP_API_BASE_URL_SERVER_V2
+export const baseURL = process.env.REACT_APP_API_BASE_URL_SERVER_V2
 // export const baseURL = process.env.REACT_APP_API_BASE_URL_SERVER
-export const baseURL = process.env.REACT_APP_API_BASE_URL_LOCAL;
+// export const baseURL = process.env.REACT_APP_API_BASE_URL_LOCAL;
 // export const baseURL = 'http://localhost:5000'
 
 export const reviewsData = [
