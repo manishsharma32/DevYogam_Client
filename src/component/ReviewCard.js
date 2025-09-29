@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import { reviewsData } from "../utils/constant/Constant";
+import { Rating } from "@mui/material";
 
 export default function ReviewCard() {
   const [selectedItem, setSelectedItem] = useState(0);
@@ -73,17 +74,20 @@ export default function ReviewCard() {
                     paddingTop: "16px",
                   }}
                 >
-                  <Avatar
-                    src={item?.avatar}
-                    sx={{
-                      height: 80,
-                      width: 80,
-                    }}
+                  <Rating
+                    name="half-rating-read"
+                    defaultValue={2.5}
+                    precision={0.5}
+                    readOnly
                   />
                 </CardMedia>
 
                 <CardContent sx={{ textAlign: "center" }}>
-                  <Typography gutterBottom variant="h5" sx={{ fontWeight: 600 }}>
+                  <Typography
+                    gutterBottom
+                    variant="h5"
+                    sx={{ fontWeight: 600 }}
+                  >
                     {item?.mainQuote}
                   </Typography>
                   <div
@@ -138,7 +142,10 @@ export default function ReviewCard() {
                   >
                     - {item.name}
                   </Typography>
-                  <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                  <Typography
+                    variant="caption"
+                    sx={{ color: "text.secondary" }}
+                  >
                     {item?.designation}
                   </Typography>
                 </CardContent>

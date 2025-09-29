@@ -9,58 +9,167 @@ import {
 } from "@mui/material";
 import { motion } from "framer-motion";
 
-const stepsData = [
-  {
-    title: {
-      en: "Select a Puja",
-      hi: "एक पूजा चुनें",
+// All process steps (add/adjust as needed)
+const processStepsByType = {
+  pooja: [
+    {
+      title: {
+        en: "Select a Puja",
+        hi: "एक पूजा चुनें",
+      },
+      description: {
+        en: "First you have to choose a puja you want to perform.",
+        hi: "सबसे पहले आपको एक पूजा चुननी होगी, जिसे आप करना चाहते हैं।",
+      },
     },
-    description: {
-      en: "First you have to choose a puja you want to performed",
-      hi: "सबसे पहले आपको एक पूजा चुननी होगी, जिसे आप करना चाहते हैं",
+    {
+      title: {
+        en: "Select a Puja Pack",
+        hi: "एक पूजा पैक चुनें",
+      },
+      description: {
+        en: "After selecting Puja, choose a Puja Pack as per your need — Individual, Partner or Family.",
+        hi: "पूजा चुनने के बाद आपको पूजा पैक चुनना होगा — व्यक्तिगत, साथी या परिवार के लिए।",
+      },
     },
-  },
-  {
-    title: {
-      en: "Select a Puja Pack",
-      hi: "एक पूजा पैक चुनें",
+    {
+      title: {
+        en: "Fill the Details",
+        hi: "विवरण भरें",
+      },
+      description: {
+        en: "Fill in details such as your name, gotra, and other essentials.",
+        hi: "अपना नाम, गोत्र आदि विवरण भरें।",
+      },
     },
-    description: {
-      en: "After Selecting Puja you have to select Puja Pack as per your need- as Individual, Partner or Family",
-      hi: "पूजा चुनने के बाद आपको पूजा पैकेज चुनना होगा - व्यक्तिगत, साथी या परिवार के लिए",
+    {
+      title: {
+        en: "Booking Confirmation",
+        hi: "बुकिंग पुष्टि",
+      },
+      description: {
+        en: "Our Team will reach out and verify the details you provided.",
+        hi: "हमारी टीम आपसे संपर्क करेगी और आपके द्वारा दिए गए विवरणों की पुष्टि करेगी।",
+      },
     },
-  },
-  {
-    title: {
-      en: "Fill the Details",
-      hi: "विवरण भरें",
+    {
+      title: {
+        en: "Get Puja Video",
+        hi: "पूजा वीडियो प्राप्त करें",
+      },
+      description: {
+        en: "After 5-7 days of puja, receive your personalized puja video on WhatsApp.",
+        hi: "पूजा के 5-7 दिन बाद आपको व्हाट्सएप पर पूजा का व्यक्तिगत वीडियो मिलेगा।",
+      },
     },
-    description: {
-      en: "Fill the details like your name, clan etc.",
-      hi: "अपना नाम, गोत्र आदि विवरण भरें",
+  ],
+  chadhava: [
+    {
+      title: {
+        en: "Select Chadhava",
+        hi: "चढ़ावा चुनें",
+      },
+      description: {
+        en: "Choose the offering (chadhava) you want to present.",
+        hi: "चुनें कि कौन सा चढ़ावा आप अर्पित करना चाहते हैं।",
+      },
     },
-  },
-  {
-    title: {
-      en: "Booking Confirmation",
-      hi: "बुकिंग पुष्टि",
+    {
+      title: {
+        en: "Fill Details",
+        hi: "विवरण भरें",
+      },
+      description: {
+        en: "Provide your personal and offering details.",
+        hi: "अपना व्यक्तिगत और चढ़ावा विवरण भरें।",
+      },
     },
-    description: {
-      en: "Our Team will reach to you and verify the details given by you",
-      hi: "हमारी टीम आपसे संपर्क करेगी और आपके द्वारा दिए गए विवरणों की पुष्टि करेगी",
+    {
+      title: {
+        en: "Payment & Submission",
+        hi: "भुगतान और सबमिशन",
+      },
+      description: {
+        en: "Complete the payment and submit your offering request.",
+        hi: "भुगतान पूरा करें और अपना चढ़ावा अनुरोध सबमिट करें।",
+      },
     },
-  },
-  {
-    title: {
-      en: "Get Puja Video",
-      hi: "पूजा वीडियो प्राप्त करें",
+    {
+      title: {
+        en: "Confirmation",
+        hi: "पुष्टि",
+      },
+      description: {
+        en: "You’ll receive a confirmation for your chadhava and get updates.",
+        hi: "आपको आपके चढ़ावे की पुष्टि और अपडेट मिलेंगे।",
+      },
     },
-    description: {
-      en: "After 5-7 days of puja you'll get personalised video of Puja on Whatsapp",
-      hi: "पूजा के 5-7 दिन बाद आपको व्हाट्सएप पर पूजा का व्यक्तिगत वीडियो मिलेगा",
+    {
+      title: {
+        en: "Receive Prasad/Blessings",
+        hi: "प्रसाद/आशीर्वाद प्राप्त करें",
+      },
+      description: {
+        en: "Receive blessings and prasad, if applicable, by your chosen mode.",
+        hi: "अपने चुने गए माध्यम से आशीर्वाद और प्रसाद प्राप्त करें (जहां लागू हो)।",
+      },
     },
-  },
-];
+  ],
+  mandir: [
+    {
+      title: {
+        en: "Select Mandir",
+        hi: "मंदिर चुनें",
+      },
+      description: {
+        en: "Pick the temple you wish to contribute towards.",
+        hi: "जिस मंदिर में आप योगदान करना चाहते हैं, उसे चुनें।",
+      },
+    },
+    {
+      title: {
+        en: "Choose Contribution Mode",
+        hi: "योगदान का तरीका चुनें",
+      },
+      description: {
+        en: "Select your preferred contribution (funds, items, or service).",
+        hi: "अपना पसंदीदा योगदान प्रकार चुनें (धनराशि, सामान या सेवा)।",
+      },
+    },
+    {
+      title: {
+        en: "Fill Details",
+        hi: "विवरण भरें",
+      },
+      description: {
+        en: "Share your contact and contribution details.",
+        hi: "अपने संपर्क विवरण और योगदान की जानकारी भरें।",
+      },
+    },
+    {
+      title: {
+        en: "Contribution Confirmation",
+        hi: "योगदान की पुष्टि",
+      },
+      description: {
+        en: "You'll receive a confirmation/receipt from the mandir.",
+        hi: "मंदिर से आपको पुष्टि या रसीद प्राप्त होगी।",
+      },
+    },
+    {
+      title: {
+        en: "Prasad or Acknowledgement",
+        hi: "प्रसाद या प्रमाण पत्र",
+      },
+      description: {
+        en: "Receive prasad or acknowledgement (as applicable) from the Mandir.",
+        hi: "मंदिर से प्रसाद या प्रमाण पत्र प्राप्त करें (जहां लागू हो)।",
+      },
+    },
+  ]
+};
+
+const getStepsData = (type) => processStepsByType[type] || processStepsByType["pooja"];
 
 const getTypeLabel = (type, language) => {
   const labels = {
@@ -74,7 +183,7 @@ const getTypeLabel = (type, language) => {
         : "How Chadhava Process Works?",
     mandir:
       language === "hi"
-        ? "मंदिर में योगदान करने की प्रक्रिया"
+        ? "मंदिर में योगदान प्रक्रिया"
         : "How Mandir Process Works?",
     default: language === "hi" ? "यह कैसे काम करता है?" : "How it works?",
   };
@@ -100,9 +209,11 @@ const itemVariants = {
   },
 };
 
+// Main component
 const ProcessSteps = ({ type = "pooja", language = "en" }) => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("md"));
+  const stepsData = getStepsData(type);
 
   return (
     <Box sx={{ mt: 5, width: "100%", maxWidth: 1100, mx: "auto" }}>
@@ -143,7 +254,7 @@ const ProcessSteps = ({ type = "pooja", language = "en" }) => {
                     boxShadow: 3,
                     borderRadius: ".5rem",
                     mb: 2,
-                    minHeight: { xs: 60, md: 100 },
+                    minHeight: { xs: 60, md: 80 },
                   }}
                 >
                   <Avatar
@@ -154,7 +265,8 @@ const ProcessSteps = ({ type = "pooja", language = "en" }) => {
                       height: { xs: 24, md: 44 },
                       mb: 1,
                       fontWeight: 700,
-                      fontSize: { xs: "0.75rem", md: "1rem", fontFamily:'Poppins' },
+                      fontSize: { xs: "0.75rem", md: "1rem" },
+                      fontFamily: "Poppins",
                     }}
                   >
                     {idx + 1}

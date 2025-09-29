@@ -410,10 +410,11 @@ export default function ChadhavaDetails({ user }) {
               variant="h6"
               sx={{
                 fontWeight: 600,
-                mb: 2,
+                mb: 3,
                 fontFamily: "Poppins",
-                fontSize: { sx: "1.2rem", md: "1.2rem", lg: "1.2rem" },
+                fontSize: { xs: "1.5rem", md: "2rem", lg: "2rem" },
                 color: "#cd5200",
+                textAlign: "start",
               }}
             >
               {language === "hi"
@@ -427,14 +428,14 @@ export default function ChadhavaDetails({ user }) {
                 fontFamily: "Poppins",
                 lineHeight: 1.5,
                 color: "#79245a",
-                fontSize: "0.9rem",
+                fontSize: "1rem",
                 fontWeight: 600,
               }}
             >
               {language === "hi" ? poojaData?.desc_hi : poojaData?.desc}
             </Typography>
           </Box>
-          
+
           <Box sx={{ mt: 5, width: "90%", mx: "auto" }}>
             <Box
               sx={{
@@ -590,7 +591,10 @@ const MultiLingualItemList = ({ poojaData, language }) => {
 
   return (
     <Box sx={{ padding: 2 }}>
-      <Typography variant="h5" sx={{ mb: 2, fontWeight:600, fontFamily: "Poppins", color:"#89255b" }}>
+      <Typography
+        variant="h5"
+        sx={{ mb: 2, fontWeight: 600, fontFamily: "Poppins", color: "#89255b" }}
+      >
         {language === "en"
           ? "List of all available offerings in this temple"
           : "मंदिर में सभी उपलब्ध चढ़ावे"}
@@ -677,7 +681,13 @@ const MultiLingualItemList = ({ poojaData, language }) => {
                 <Button
                   onClick={() => handleAdd(item._id)}
                   variant="contained"
-                  sx={{ ml: 2, minWidth: 80, background: "#8e5ff3", fontFamily:"Poppins", borderRadius:'0.5rem' }}
+                  sx={{
+                    ml: 2,
+                    minWidth: 80,
+                    background: "#8e5ff3",
+                    fontFamily: "Poppins",
+                    borderRadius: "0.5rem",
+                  }}
                 >
                   {language === "en" ? "+ Add" : "+ जोड़ें"}
                 </Button>
@@ -708,7 +718,13 @@ const MultiLingualItemList = ({ poojaData, language }) => {
           gap: { xs: 1, sm: 0 },
         }}
       >
-        <Box sx={{display:{xs:'flex', sm:'block'}, alignItems:'center', justifyContent:'space-between'}} >
+        <Box
+          sx={{
+            display: { xs: "flex", sm: "block" },
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
           <Typography
             variant="subtitle1"
             sx={{ color: "#444", fontWeight: 600 }}

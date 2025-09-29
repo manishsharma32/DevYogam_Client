@@ -218,6 +218,7 @@ export default function PoojaDetails({ user }) {
                                 color: "#aa4466",
                               },
                             }}
+                              onClick={() =>window.open(`${window?.location?.origin}/pooja/edit/${id}`)}
                           >
                             Edit
                           </MenuItem>

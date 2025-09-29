@@ -17,9 +17,9 @@ export default function Home() {
       description: "Book sacred rituals online anytime.",
     },
     {
-      image: img1,
-      title: "Welcome to DevYogam",
-      description: "A divine journey begins here.",
+      image: language === "hi" ? bannerhi : img2,
+      title: "Spiritual Pooja Services",
+      description: "Book sacred rituals online anytime.",
     },
     {
       image: language === "hi" ? bannerhi : img2,

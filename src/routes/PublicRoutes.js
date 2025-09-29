@@ -36,7 +36,7 @@ export default function PublicRoutes({ user }) {
         <Route element={<ProtectedRoute />}>
           <>
             <Route path="/pooja/create" element={<AddPooja />} />
-            <Route path="/pooja-edit/:id" element={<EditPooja />} />
+            <Route path="/pooja/edit/:id" element={<EditPooja />} />
             <Route path="/temple/create" element={<AddTemple />} />
             <Route path="/chadhava/create" element={<AddChadhava />} />
             <Route path="/payment-history" element={<PaymentHistory />} />
