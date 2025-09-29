@@ -158,7 +158,14 @@ export default function ReviewCard() {
         >
           <Box display="flex" flexDirection="column" gap={2}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6} md={6} lg={6}>
+              <Grid
+                item
+                size={{ xs: 12, sm: 12, md: 12, lg: 12 }}
+                xs={12}
+                sm={6}
+                md={6}
+                lg={6}
+              >
                 <Typography
                   variant="h6"
                   sx={{ mb: 2, fontWeight: 600, fontFamily: "Poppins" }}
@@ -166,7 +173,14 @@ export default function ReviewCard() {
                   Add Review
                 </Typography>
               </Grid>
-              <Grid item xs={12} sm={6} md={6} lg={6}>
+              <Grid
+                item
+                size={{ xs: 12, sm: 6, md: 6, lg: 6 }}
+                xs={12}
+                sm={6}
+                md={6}
+                lg={6}
+              >
                 <TextField
                   name="name"
                   label="Name"
@@ -175,7 +189,14 @@ export default function ReviewCard() {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={6} lg={6}>
+              <Grid
+                item
+                size={{ xs: 12, sm: 6, md: 6, lg: 6 }}
+                xs={12}
+                sm={6}
+                md={6}
+                lg={6}
+              >
                 <TextField
                   name="designation"
                   label="Designation"
@@ -184,7 +205,14 @@ export default function ReviewCard() {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={6} lg={6}>
+              <Grid
+                item
+                size={{ xs: 12, sm: 6, md: 6, lg: 6 }}
+                xs={12}
+                sm={6}
+                md={6}
+                lg={6}
+              >
                 <TextField
                   name="quote"
                   label="Quote"
@@ -193,7 +221,14 @@ export default function ReviewCard() {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={6} lg={6}>
+              <Grid
+                item
+                size={{ xs: 12, sm: 6, md: 6, lg: 6 }}
+                xs={12}
+                sm={6}
+                md={6}
+                lg={6}
+              >
                 <TextField
                   name="review"
                   label="Review"
@@ -203,7 +238,14 @@ export default function ReviewCard() {
                   multiline
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={6} lg={6}>
+              <Grid
+                item
+                size={{ xs: 12, sm: 6, md: 6, lg: 6 }}
+                xs={12}
+                sm={6}
+                md={6}
+                lg={6}
+              >
                 <TextField
                   name="nameHi"
                   label="Name (Hindi)"
@@ -212,7 +254,14 @@ export default function ReviewCard() {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={6} lg={6}>
+              <Grid
+                item
+                size={{ xs: 12, sm: 6, md: 6, lg: 6 }}
+                xs={12}
+                sm={6}
+                md={6}
+                lg={6}
+              >
                 <TextField
                   name="designationHi"
                   label="Designation (Hindi)"
@@ -221,7 +270,14 @@ export default function ReviewCard() {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={6} lg={6}>
+              <Grid
+                item
+                size={{ xs: 12, sm: 6, md: 6, lg: 6 }}
+                xs={12}
+                sm={6}
+                md={6}
+                lg={6}
+              >
                 <TextField
                   name="quoteHi"
                   label="Quote (Hindi)"
@@ -230,7 +286,14 @@ export default function ReviewCard() {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={6} lg={6}>
+              <Grid
+                item
+                size={{ xs: 12, sm: 6, md: 6, lg: 6 }}
+                xs={12}
+                sm={6}
+                md={6}
+                lg={6}
+              >
                 <TextField
                   name="reviewHi"
                   label="Review (Hindi)"
@@ -240,7 +303,14 @@ export default function ReviewCard() {
                   multiline
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={6} lg={6}>
+              <Grid
+                item
+                size={{ xs: 12, sm: 6, md: 6, lg: 6 }}
+                xs={12}
+                sm={6}
+                md={6}
+                lg={6}
+              >
                 <TextField
                   select
                   name="rating"
