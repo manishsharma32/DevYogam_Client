@@ -1,8 +1,8 @@
 import axiosInstance from "../utils/axiosConfig";
 
-export const HidePoojaAPI = async (id) => {
+export const HidePoojaAPI = async (type,id) => {
   try {
-    const response = await axiosInstance.delete(`/api/poojas/delete/${id}`);
+    const response = await axiosInstance.delete(`/api${type}/${id}`);
     if (response?.status === 200) {
       return response?.data;
     }

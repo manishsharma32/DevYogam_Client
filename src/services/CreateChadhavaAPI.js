@@ -12,7 +12,8 @@ export const CreateChadhavaAPI = async (data, itemImage) => {
       desc: data.description,
       desc_hi: data.descriptionHi,
       mandir: data.mandir.value,
-      items: (data.faq || []).map((item, i) => ({
+      mandirHi: data.mandirHi.value,
+      items: (data.cItem || []).map((item, i) => ({
         title: item.title || "",
         titleHi: item.titleHi || "",
         description: item.description || "",
@@ -26,6 +27,14 @@ export const CreateChadhavaAPI = async (data, itemImage) => {
         description: b.description || "",
         descriptionHi: b.descriptionHi || "",
       })),
+        faq: Array.isArray(data.faq)
+    ? data.faq.map((f) => ({
+        question: f.question || "",
+        questionHi: f.questionHi || "",
+        answer: f.answer || "",
+        answerHi: f.answerHi || "",
+      }))
+    : [],
     };
 
     const response = await axiosInstance.post("/api/chadhavas", jsonPayload, {

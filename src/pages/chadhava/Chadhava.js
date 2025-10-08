@@ -156,8 +156,12 @@ export default function Chadhava({ user }) {
             ? skeletons
             : safeChadhavaData.map((item) => {
                 const firstItem = item.items?.[0] || {};
+
                 const bannerImg =
-                  item.images?.[0]?.url || firstItem.image?.url || chadhava;
+                  (language === "hi" && item.images_hi?.[0]?.url) ||
+                  item.images?.[0]?.url ||
+                  firstItem.image?.url ||
+                  chadhava;
 
                 const displayTitle = item?.title;
                 return (
@@ -177,7 +181,9 @@ export default function Chadhava({ user }) {
                       highlight={item?.subtitle || ""}
                       highlightColor="#7c3aed"
                       location={`${item?.mandir || 0}`}
-                      ctaText={language === "hi" ? "चढ़ावा अर्पित करें" : "Contribute"}
+                      ctaText={
+                        language === "hi" ? "चढ़ावा अर्पित करें" : "Contribute"
+                      }
                       onCtaClick={() => handeNavigate(item?._id, item?.title)}
                     />
                   </Grid>

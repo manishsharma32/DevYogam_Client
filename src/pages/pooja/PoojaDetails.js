@@ -144,7 +144,7 @@ export default function PoojaDetails({ user }) {
   };
   const handleHidePooja = async (id) => {
     handleMenuClose();
-    await HidePoojaAPI(id);
+    await HidePoojaAPI("/poojas/delete",id);
   };
 
   if (!poojaData) return null;
@@ -218,7 +218,11 @@ export default function PoojaDetails({ user }) {
                                 color: "#aa4466",
                               },
                             }}
-                              onClick={() =>window.open(`${window?.location?.origin}/pooja/edit/${id}`)}
+                            onClick={() =>
+                              window.open(
+                                `${window?.location?.origin}/pooja/edit/${id}`
+                              )
+                            }
                           >
                             Edit
                           </MenuItem>
@@ -631,6 +635,51 @@ export default function PoojaDetails({ user }) {
               </Box>
             )}
           </Box>
+        </Box>
+        <Box
+          sx={{
+            position: "sticky",
+            bottom: 0,
+            left: 0,
+            width: "90%",
+            margin: "auto",
+            bgcolor: "#f9f9f9",
+            borderTop: "1px solid #ccc",
+            boxShadow: "0 -2px 8px rgba(0,0,0,0.1)",
+            px: { xs: 2, sm: 3 },
+            py: { xs: 1.5, sm: 2 },
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            alignItems: { xs: "stretch", sm: "center" },
+            justifyContent: "space-between",
+            fontFamily: "'Poppins', sans-serif",
+            zIndex: 10,
+            gap: { xs: 1, sm: 0 },
+          }}
+        >
+          <Button
+            sx={{
+              backgroundColor: "#9a67e6",
+              color: "#fff",
+              borderRadius: 2,
+              textTransform: "none",
+              fontFamily: "Poppins",
+              fontWeight: 600,
+              py: 0.5,
+              height: "3rem",
+              fontSize: 16,
+              boxShadow: "0 2px 8px 2px rgba(237,106,18,0.09)",
+              mt: 1,
+              letterSpacing: 0.1,
+              "&:hover": { background: "#cd5200" },
+              width: "100%",
+            }}
+            onClick={() => {
+              handleNavigate("single", name, id);
+            }}
+          >
+            {language === "hi" ? "पुजा बुक करें" : "Book Pooja"}
+          </Button>
         </Box>
       </Box>
     </GlobalCssStyles>

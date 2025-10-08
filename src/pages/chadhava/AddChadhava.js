@@ -39,7 +39,7 @@ const initialValues = {
   newLogoImagesHi: [],
   removedLogoImageIds: [],
   removedLogoImageIdsHi: [],
-  faq: [
+  cItem: [
     {
       title: "",
       titleHi: "",
@@ -57,6 +57,7 @@ const initialValues = {
       descriptionHi: "",
     },
   ],
+  faq: [{ question: "", questionHi: "", answer: "", answerHi: "" }],
 };
 export default function AddChadhava({ open, handleClose }) {
   const [poojaData, setPoojaData] = useState(initialValues);
@@ -133,10 +134,7 @@ export default function AddChadhava({ open, handleClose }) {
   };
   const handleLogoImagesUploadHi = (event, values, setFieldValue) => {
     const files = Array.from(event.target.files);
-    const combined = [...(values.logoImagesHi || []), ...files].slice(
-      0,
-      MAX_LOGOS
-    );
+    const combined = [...(values.b || []), ...files].slice(0, MAX_LOGOS);
     setFieldValue("logoImagesHi", combined);
     setFieldValue(
       "newLogoImagesHi",
@@ -163,21 +161,21 @@ export default function AddChadhava({ open, handleClose }) {
   };
   const handleSubmit = async (val) => {
     let itemImg;
-    // if (val?.faq?.length > 0) {
-    //   const images = val.faq.map((i) => i.img);
+    // if (val?.cItem?.length > 0) {
+    //   const images = val.cItem.map((i) => i.img);
     //   itemImg = await UploadItemImg(images);
     // }
 
     const itemImageData = {
       data: {
-        images: val.faq.map((item) => item.imageUrl || ""),
+        images: val.cItem.map((item) => item.imageUrl || ""),
       },
     };
     const response = await CreateChadhavaAPI(val, itemImageData);
     console.log(response);
     if (response?._id) {
       const res = await CreatePoojaFile(response?._id, val, "chadhava");
-      alert("Puja created successfully");
+      alert("Chadhava created successfully");
       if (res?.data?.status) {
         navigate("/chadhava");
       }
@@ -337,6 +335,35 @@ export default function AddChadhava({ open, handleClose }) {
                           className="error-msg"
                         >
                           {errors.mandir}
+                        </Typography>
+                      )}
+                    </Grid>
+
+                    <Grid item xs={12} sm={12} sx={{ mb: 2 }}>
+                      <Typography className="policy-form-label policy-text-field-label">
+                         मंदिर चुने <span className="required-icon">*</span>
+                      </Typography>
+                      <AsyncCreatableSelect
+                        id="originator"
+                        name="originator"
+                        cacheOptions
+                        defaultOptions={mandirOptions}
+                        options={mandirOptions}
+                        value={values.mandirHi}
+                        onChange={(option) => setFieldValue("mandirHi", option)}
+                        isClearable
+                        placeholder="Select Mandir"
+                        getOptionLabel={(e) => e.label}
+                        getOptionValue={(e) => e.value}
+                        onBlur={() => setFieldTouched("mandirHi", true)}
+                      />
+                      {touched.mandirHi && errors.mandirHi && (
+                        <Typography
+                          color="error"
+                          variant="caption"
+                          className="error-msg"
+                        >
+                          {errors.mandirHi}
                         </Typography>
                       )}
                     </Grid>
@@ -514,7 +541,6 @@ export default function AddChadhava({ open, handleClose }) {
                       )}{" "}
                     </Grid>
 
-                    {/* Benefits Field Array - max 3 */}
                     <Grid item xs={12} sm={12} sx={{ mb: 2 }}>
                       <Typography
                         className="policy-form-label policy-text-field-label"
@@ -564,6 +590,321 @@ export default function AddChadhava({ open, handleClose }) {
                           errors.descriptionHi
                         }
                       />
+                    </Grid>
+
+                    <Grid item xs={12} sm={12} sx={{ mb: 1 }}>
+                      <Typography
+                        className="policy-form-label policy-text-field-label"
+                        sx={{ mb: 1 }}
+                      >
+                        Items <span className="required-icon">*</span>
+                      </Typography>
+                      <FieldArray name="cItem">
+                        {({ push, remove }) => (
+                          <Box>
+                            {values.cItem.map((item, index) => (
+                              <Box
+                                key={index}
+                                sx={{
+                                  mb: 3,
+                                  borderRadius: "8px",
+                                }}
+                              >
+                                <Stack spacing={2}>
+                                  <CustomTextField
+                                    name={`cItem.${index}.title`}
+                                    placeholder="Title (English)"
+                                    value={item.title}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    fullWidth
+                                    size="small"
+                                    error={
+                                      touched.cItem &&
+                                      touched.cItem[index]?.title &&
+                                      Boolean(errors.cItem?.[index]?.title)
+                                    }
+                                    helperText={
+                                      touched.cItem &&
+                                      touched.cItem[index]?.title &&
+                                      errors.cItem?.[index]?.title
+                                    }
+                                  />
+
+                                  {/* Title (Hindi) */}
+                                  <CustomTextField
+                                    name={`cItem.${index}.titleHi`}
+                                    placeholder="शीर्षक (हिंदी)"
+                                    value={item.titleHi}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    fullWidth
+                                    size="small"
+                                    error={
+                                      touched.cItem &&
+                                      touched.cItem[index]?.titleHi &&
+                                      Boolean(errors.cItem?.[index]?.titleHi)
+                                    }
+                                    helperText={
+                                      touched.cItem &&
+                                      touched.cItem[index]?.titleHi &&
+                                      errors.cItem?.[index]?.titleHi
+                                    }
+                                  />
+
+                                  <CustomTextField
+                                    name={`cItem.${index}.description`}
+                                    placeholder="Description (English)"
+                                    value={item.description}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    fullWidth
+                                    size="small"
+                                    error={
+                                      touched.cItem &&
+                                      touched.cItem[index]?.description &&
+                                      Boolean(
+                                        errors.cItem?.[index]?.description
+                                      )
+                                    }
+                                    helperText={
+                                      touched.cItem &&
+                                      touched.cItem[index]?.description &&
+                                      errors.cItem?.[index]?.description
+                                    }
+                                  />
+
+                                  <CustomTextField
+                                    name={`cItem.${index}.descriptionHi`}
+                                    placeholder="विवरण (हिंदी)"
+                                    value={item.descriptionHi}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    fullWidth
+                                    size="small"
+                                    error={
+                                      touched.cItem &&
+                                      touched.cItem[index]?.descriptionHi &&
+                                      Boolean(
+                                        errors.cItem?.[index]?.descriptionHi
+                                      )
+                                    }
+                                    helperText={
+                                      touched.cItem &&
+                                      touched.cItem[index]?.descriptionHi &&
+                                      errors.cItem?.[index]?.descriptionHi
+                                    }
+                                  />
+
+                                  <CustomTextField
+                                    name={`cItem.${index}.price`}
+                                    placeholder="Price"
+                                    value={item.price}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    fullWidth
+                                    size="small"
+                                    error={
+                                      touched.cItem &&
+                                      touched.cItem[index]?.price &&
+                                      Boolean(errors.cItem?.[index]?.price)
+                                    }
+                                    helperText={
+                                      touched.cItem &&
+                                      touched.cItem[index]?.price &&
+                                      errors.cItem?.[index]?.price
+                                    }
+                                  />
+
+                                  <Box
+                                    sx={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: 2,
+                                    }}
+                                  >
+                                    <input
+                                      type="file"
+                                      accept="image/*"
+                                      id={`cItem-image-${index}`}
+                                      style={{ display: "none" }}
+                                      onChange={async (e) => {
+                                        const file = e.currentTarget.files[0];
+                                        if (file) {
+                                          // Upload image immediately
+                                          const uploadedUrl =
+                                            await UploadItemImg(file);
+                                          if (uploadedUrl) {
+                                            setFieldValue(
+                                              `cItem.${index}.imageUrl`,
+                                              uploadedUrl?.data?.images
+                                            );
+                                          }
+                                        }
+                                      }}
+                                    />
+                                    <label htmlFor={`cItem-image-${index}`}>
+                                      <Button
+                                        variant="outlined"
+                                        component="span"
+                                        startIcon={
+                                          <img
+                                            src={UploadIcon}
+                                            alt="Upload"
+                                            style={{ width: 20 }}
+                                          />
+                                        }
+                                      >
+                                        Upload Image
+                                      </Button>
+                                    </label>
+
+                                    {item.imageUrl && (
+                                      <Stack
+                                        direction="row"
+                                        spacing={1}
+                                        alignItems="center"
+                                        mt={1}
+                                      >
+                                        <img
+                                          src={item.imageUrl?.url}
+                                          alt={`Image Upload`}
+                                          style={{
+                                            height: 50,
+                                            borderRadius: 4,
+                                          }}
+                                        />
+                                        <IconButton
+                                          size="small"
+                                          onClick={() =>
+                                            setFieldValue(
+                                              `cItem.${index}.imageUrl`,
+                                              ""
+                                            )
+                                          }
+                                          aria-label="remove image"
+                                        >
+                                          <CloseIcon fontSize="small" />
+                                        </IconButton>
+                                      </Stack>
+                                    )}
+
+                                    {/* <input
+                                      accept="image/*"
+                                      type="file"
+                                      style={{ display: "none" }}
+                                      id={`cItem-${index}-image`}
+                                      onChange={(e) => {
+                                        if (
+                                          e.target.files &&
+                                          e.target.files[0]
+                                        ) {
+                                          const file = e.target.files[0];
+                                          setFieldValue(
+                                            `cItem.${index}.img`,
+                                            file
+                                          );
+                                          setFieldValue(
+                                            `cItem.${index}.imgName`,
+                                            file.name
+                                          );
+                                        }
+                                      }}
+                                    />
+                                    <label htmlFor={`cItem-${index}-image`}>
+                                      <Button
+                                        variant="outlined"
+                                        component="span"
+                                        size="small"
+                                        sx={{ borderRadius: "2rem" }}
+                                      >
+                                        <img
+                                          src={UploadIcon}
+                                          alt="Upload"
+                                          style={{ width: 20, marginRight: 8 }}
+                                        />
+                                        Upload Image
+                                      </Button>
+                                    </label>
+
+                                    {item.img && (
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          background: "#f3f2f1",
+                                          padding: "4px 10px",
+                                          borderRadius: 12,
+                                        }}
+                                      >
+                                        <Typography
+                                          sx={{ fontFamily: "Poppins" }}
+                                        >
+                                          {item.img.name || item.imgName}
+                                        </Typography>
+                                        <IconButton
+                                          size="small"
+                                          onClick={() => {
+                                            setFieldValue(
+                                              `cItem.${index}.img`,
+                                              ""
+                                            );
+                                            setFieldValue(
+                                              `cItem.${index}.imgName`,
+                                              ""
+                                            );
+                                          }}
+                                        >
+                                          <CloseIcon fontSize="small" />
+                                        </IconButton>
+                                      </Box>
+                                    )} */}
+                                  </Box>
+
+                                  {values.cItem.length > 1 && (
+                                    <Box
+                                      sx={{
+                                        display: "flex",
+                                        justifyContent: "flex-end",
+                                      }}
+                                    >
+                                      <IconButton
+                                        onClick={() => remove(index)}
+                                        size="small"
+                                        aria-label="delete"
+                                      >
+                                        <DeleteOutlinedIcon color="error" />
+                                      </IconButton>
+                                    </Box>
+                                  )}
+                                </Stack>
+
+                                {index === values.cItem.length - 1 &&
+                                  values.cItem.length < 5 && (
+                                    <Box sx={{ mt: 2 }}>
+                                      <Button
+                                        onClick={() =>
+                                          push({
+                                            title: "",
+                                            titleHi: "",
+                                            description: "",
+                                            descriptionHi: "",
+                                            price: "",
+                                            img: "",
+                                            imgName: "",
+                                          })
+                                        }
+                                        variant="outlined"
+                                      >
+                                        Add Items
+                                      </Button>
+                                    </Box>
+                                  )}
+                              </Box>
+                            ))}
+                          </Box>
+                        )}
+                      </FieldArray>
                     </Grid>
                     {/* Benefit array */}
                     <Grid item xs={12} sm={12} sx={{ mb: 2 }}>
@@ -719,313 +1060,158 @@ export default function AddChadhava({ open, handleClose }) {
                         )}
                       </FieldArray>
                     </Grid>
+                    {/* FAQ array */}
                     <Grid item xs={12} sm={12} sx={{ mb: 1 }}>
                       <Typography
                         className="policy-form-label policy-text-field-label"
                         sx={{ mb: 1 }}
                       >
-                        Items <span className="required-icon">*</span>
+                        FAQ <span className="required-icon">*</span>
                       </Typography>
                       <FieldArray name="faq">
                         {({ push, remove }) => (
                           <Box>
-                            {values.faq.map((item, index) => (
-                              <Box
+                            {values?.faq?.map((item, index) => (
+                              <Grid
+                                container
+                                spacing={2}
                                 key={index}
-                                sx={{
-                                  mb: 3,
-                                  borderRadius: "8px",
-                                }}
+                                alignItems="center"
+                                sx={{ mb: 1, position: "relative" }}
                               >
-                                <Stack spacing={2}>
-                                  <CustomTextField
-                                    name={`faq.${index}.title`}
-                                    placeholder="Title (English)"
-                                    value={item.title}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    fullWidth
-                                    size="small"
-                                    error={
-                                      touched.faq &&
-                                      touched.faq[index]?.title &&
-                                      Boolean(errors.faq?.[index]?.title)
-                                    }
-                                    helperText={
-                                      touched.faq &&
-                                      touched.faq[index]?.title &&
-                                      errors.faq?.[index]?.title
-                                    }
-                                  />
-
-                                  {/* Title (Hindi) */}
-                                  <CustomTextField
-                                    name={`faq.${index}.titleHi`}
-                                    placeholder="शीर्षक (हिंदी)"
-                                    value={item.titleHi}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    fullWidth
-                                    size="small"
-                                    error={
-                                      touched.faq &&
-                                      touched.faq[index]?.titleHi &&
-                                      Boolean(errors.faq?.[index]?.titleHi)
-                                    }
-                                    helperText={
-                                      touched.faq &&
-                                      touched.faq[index]?.titleHi &&
-                                      errors.faq?.[index]?.titleHi
-                                    }
-                                  />
-
-                                  <CustomTextField
-                                    name={`faq.${index}.description`}
-                                    placeholder="Description (English)"
-                                    value={item.description}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    fullWidth
-                                    size="small"
-                                    error={
-                                      touched.faq &&
-                                      touched.faq[index]?.description &&
-                                      Boolean(errors.faq?.[index]?.description)
-                                    }
-                                    helperText={
-                                      touched.faq &&
-                                      touched.faq[index]?.description &&
-                                      errors.faq?.[index]?.description
-                                    }
-                                  />
-
-                                  <CustomTextField
-                                    name={`faq.${index}.descriptionHi`}
-                                    placeholder="विवरण (हिंदी)"
-                                    value={item.descriptionHi}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    fullWidth
-                                    size="small"
-                                    error={
-                                      touched.faq &&
-                                      touched.faq[index]?.descriptionHi &&
-                                      Boolean(
-                                        errors.faq?.[index]?.descriptionHi
-                                      )
-                                    }
-                                    helperText={
-                                      touched.faq &&
-                                      touched.faq[index]?.descriptionHi &&
-                                      errors.faq?.[index]?.descriptionHi
-                                    }
-                                  />
-
-                                  <CustomTextField
-                                    name={`faq.${index}.price`}
-                                    placeholder="Price"
-                                    value={item.price}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    fullWidth
-                                    size="small"
-                                    error={
-                                      touched.faq &&
-                                      touched.faq[index]?.price &&
-                                      Boolean(errors.faq?.[index]?.price)
-                                    }
-                                    helperText={
-                                      touched.faq &&
-                                      touched.faq[index]?.price &&
-                                      errors.faq?.[index]?.price
-                                    }
-                                  />
-
-                                  <Box
-                                    sx={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                      gap: 2,
-                                    }}
-                                  >
-                                    <input
-                                      type="file"
-                                      accept="image/*"
-                                      id={`faq-image-${index}`}
-                                      style={{ display: "none" }}
-                                      onChange={async (e) => {
-                                        const file = e.currentTarget.files[0];
-                                        if (file) {
-                                          // Upload image immediately
-                                          const uploadedUrl =
-                                            await UploadItemImg(file);
-                                          if (uploadedUrl) {
-                                            setFieldValue(
-                                              `faq.${index}.imageUrl`,
-                                              uploadedUrl?.data?.images
-                                            );
-                                          }
-                                        }
-                                      }}
+                                <Grid item xs={11} size={11}>
+                                  <Stack spacing={2}>
+                                    <CustomTextField
+                                      name={`faq.${index}.question`}
+                                      placeholder="Question (English)"
+                                      value={item.question}
+                                      onChange={handleChange}
+                                      onBlur={handleBlur}
+                                      fullWidth
+                                      size="small"
+                                      error={
+                                        touched.faq &&
+                                        touched.faq[index] &&
+                                        touched.faq[index].question &&
+                                        Boolean(errors.faq?.[index]?.question)
+                                      }
+                                      helperText={
+                                        touched.faq &&
+                                        touched.faq[index] &&
+                                        touched.faq[index].question &&
+                                        errors.faq?.[index]?.question
+                                      }
                                     />
-                                    <label htmlFor={`faq-image-${index}`}>
-                                      <Button
-                                        variant="outlined"
-                                        component="span"
-                                        startIcon={
-                                          <img
-                                            src={UploadIcon}
-                                            alt="Upload"
-                                            style={{ width: 20 }}
-                                          />
-                                        }
-                                      >
-                                        Upload Image
-                                      </Button>
-                                    </label>
-
-                                    {item.imageUrl && (
-                                      <Stack
-                                        direction="row"
-                                        spacing={1}
-                                        alignItems="center"
-                                        mt={1}
-                                      >
-                                        <img
-                                          src={item.imageUrl?.url}
-                                          alt={`Image Upload`}
-                                          style={{
-                                            height: 50,
-                                            borderRadius: 4,
-                                          }}
-                                        />
-                                        <IconButton
-                                          size="small"
-                                          onClick={() =>
-                                            setFieldValue(
-                                              `faq.${index}.imageUrl`,
-                                              ""
-                                            )
-                                          }
-                                          aria-label="remove image"
-                                        >
-                                          <CloseIcon fontSize="small" />
-                                        </IconButton>
-                                      </Stack>
-                                    )}
-
-                                    {/* <input
-                                      accept="image/*"
-                                      type="file"
-                                      style={{ display: "none" }}
-                                      id={`faq-${index}-image`}
-                                      onChange={(e) => {
-                                        if (
-                                          e.target.files &&
-                                          e.target.files[0]
-                                        ) {
-                                          const file = e.target.files[0];
-                                          setFieldValue(
-                                            `faq.${index}.img`,
-                                            file
-                                          );
-                                          setFieldValue(
-                                            `faq.${index}.imgName`,
-                                            file.name
-                                          );
-                                        }
-                                      }}
+                                    <CustomTextField
+                                      name={`faq.${index}.questionHi`}
+                                      placeholder="प्रश्न (हिंदी)"
+                                      value={item.questionHi}
+                                      onChange={handleChange}
+                                      onBlur={handleBlur}
+                                      fullWidth
+                                      size="small"
+                                      error={
+                                        touched.faq &&
+                                        touched.faq[index] &&
+                                        touched.faq[index].questionHi &&
+                                        Boolean(errors.faq?.[index]?.questionHi)
+                                      }
+                                      helperText={
+                                        touched.faq &&
+                                        touched.faq[index] &&
+                                        touched.faq[index].questionHi &&
+                                        errors.faq?.[index]?.questionHi
+                                      }
                                     />
-                                    <label htmlFor={`faq-${index}-image`}>
-                                      <Button
-                                        variant="outlined"
-                                        component="span"
-                                        size="small"
-                                        sx={{ borderRadius: "2rem" }}
-                                      >
-                                        <img
-                                          src={UploadIcon}
-                                          alt="Upload"
-                                          style={{ width: 20, marginRight: 8 }}
-                                        />
-                                        Upload Image
-                                      </Button>
-                                    </label>
-
-                                    {item.img && (
-                                      <Box
-                                        sx={{
-                                          display: "flex",
-                                          alignItems: "center",
-                                          background: "#f3f2f1",
-                                          padding: "4px 10px",
-                                          borderRadius: 12,
-                                        }}
-                                      >
-                                        <Typography
-                                          sx={{ fontFamily: "Poppins" }}
-                                        >
-                                          {item.img.name || item.imgName}
-                                        </Typography>
-                                        <IconButton
-                                          size="small"
-                                          onClick={() => {
-                                            setFieldValue(
-                                              `faq.${index}.img`,
-                                              ""
-                                            );
-                                            setFieldValue(
-                                              `faq.${index}.imgName`,
-                                              ""
-                                            );
-                                          }}
-                                        >
-                                          <CloseIcon fontSize="small" />
-                                        </IconButton>
-                                      </Box>
-                                    )} */}
-                                  </Box>
-
+                                    <CustomTextField
+                                      as="textarea"
+                                      name={`faq.${index}.answer`}
+                                      placeholder="Answer (English)"
+                                      value={item.answer}
+                                      onChange={handleChange}
+                                      onBlur={handleBlur}
+                                      fullWidth
+                                      size="small"
+                                      error={
+                                        touched.faq &&
+                                        touched.faq[index] &&
+                                        touched.faq[index].answer &&
+                                        Boolean(errors.faq?.[index]?.answer)
+                                      }
+                                      helperText={
+                                        touched.faq &&
+                                        touched.faq[index] &&
+                                        touched.faq[index].answer &&
+                                        errors.faq?.[index]?.answer
+                                      }
+                                      rows={3}
+                                    />
+                                    <CustomTextField
+                                      as="textarea"
+                                      name={`faq.${index}.answerHi`}
+                                      placeholder="उत्तर (हिंदी)"
+                                      value={item.answerHi}
+                                      onChange={handleChange}
+                                      onBlur={handleBlur}
+                                      fullWidth
+                                      size="small"
+                                      error={
+                                        touched.faq &&
+                                        touched.faq[index] &&
+                                        touched.faq[index].answerHi &&
+                                        Boolean(errors.faq?.[index]?.answerHi)
+                                      }
+                                      helperText={
+                                        touched.faq &&
+                                        touched.faq[index] &&
+                                        touched.faq[index].answerHi &&
+                                        errors.faq?.[index]?.answerHi
+                                      }
+                                      rows={3}
+                                    />
+                                  </Stack>
+                                </Grid>
+                                <Grid
+                                  item
+                                  xs={1}
+                                  size={1}
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "flex-end",
+                                    justifyContent: "flex-end",
+                                    pt: 1,
+                                  }}
+                                >
                                   {values.faq.length > 1 && (
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        justifyContent: "flex-end",
-                                      }}
+                                    <IconButton
+                                      onClick={() => remove(index)}
+                                      size="small"
+                                      aria-label="delete"
+                                      sx={{ m: 0, p: 0 }}
                                     >
-                                      <IconButton
-                                        onClick={() => remove(index)}
-                                        size="small"
-                                        aria-label="delete"
-                                      >
-                                        <DeleteOutlinedIcon color="error" />
-                                      </IconButton>
-                                    </Box>
+                                      <DeleteOutlinedIcon color="error" />
+                                    </IconButton>
                                   )}
-                                </Stack>
-
+                                </Grid>
                                 {index === values.faq.length - 1 &&
                                   values.faq.length < 5 && (
-                                    <Box sx={{ mt: 2 }}>
+                                    <Grid item xs={12} sx={{ pt: 1 }}>
                                       <Button
                                         onClick={() =>
                                           push({
-                                            title: "",
-                                            titleHi: "",
-                                            description: "",
-                                            descriptionHi: "",
-                                            price: "",
-                                            img: "",
-                                            imgName: "",
+                                            question: "",
+                                            questionHi: "",
+                                            answer: "",
+                                            answerHi: "",
                                           })
                                         }
-                                        variant="outlined"
+                                        variant="text"
                                       >
-                                        Add Items
+                                        Add FAQ
                                       </Button>
-                                    </Box>
+                                    </Grid>
                                   )}
-                              </Box>
+                              </Grid>
                             ))}
                           </Box>
                         )}
