@@ -508,7 +508,7 @@ export default function ChadhavaDetails({ user }) {
                         fontWeight: 600,
                       }}
                     >
-                      {item?.title}
+                      {language === "hi" ? item?.titleHi : item?.title}
                     </Typography>
 
                     <Typography
@@ -519,7 +519,9 @@ export default function ChadhavaDetails({ user }) {
                         color: "#444",
                       }}
                     >
-                      {item?.description}
+                      {language === "hi"
+                        ? item?.descriptionHi
+                        : item?.description}
                     </Typography>
                   </Box>
                 ))}
@@ -566,7 +568,9 @@ export default function ChadhavaDetails({ user }) {
                           fontWeight={600}
                           sx={{ fontFamily: "Poppins" }}
                         >
-                          {item?.question}
+                          {language === "hi"
+                            ? item?.questionHi
+                            : item?.question}
                         </Typography>
                       </AccordionSummary>
                       <AccordionDetails sx={{ px: 3, py: 2 }}>
@@ -574,7 +578,7 @@ export default function ChadhavaDetails({ user }) {
                           variant="body2"
                           sx={{ whiteSpace: "pre-line", fontFamily: "Poppins" }}
                         >
-                          {item?.answer}
+                          {language === "hi" ? item?.answerHi : item?.answer}
                         </Typography>
                       </AccordionDetails>
                     </Accordion>
