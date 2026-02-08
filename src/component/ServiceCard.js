@@ -41,7 +41,7 @@ export default function ServiceCard({
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-start",
-        minHeight: 230,
+        height: 220,
         borderRadius: 3,
         fontFamily: "Poppins",
         gap: 1.2,
@@ -72,16 +72,36 @@ export default function ServiceCard({
           </Typography>
           {btnLabel && (
             <Button
+              fullWidth
               sx={{
-                mt: 2,
-                minWidth: 110,
-                color: "#89255b",
-                fontWeight: 600,
-                textTransform: "none",
-                fontSize: "18px",
-                textAlign: "start",
+                backgroundColor: "#79245a",
+                // backgroundColor: "#7c3aed",
                 fontFamily: "Poppins",
+                color: "#fff",
+                borderRadius: 2,
+                textTransform: "none",
+                fontWeight: 600,
+                // py: 1,
+                mt:2,
+                mb:2,
+                fontSize: 16,
+                boxShadow: "0 4px 12px rgba(124, 58, 237, 0.4)",
+                // "&:hover": { backgroundColor: "#5b20c9" }
+                "&:hover": { background: "#cd5200" },
+
+                transition: "background-color 0.3s ease",
               }}
+              endIcon={<span style={{ fontSize: 22 }}>→</span>}
+              // sx={{
+              //   mt: 2,
+              //   minWidth: 110,
+              //   color: "#89255b",
+              //   fontWeight: 600,
+              //   textTransform: "none",
+              //   fontSize: "18px",
+              //   textAlign: "start",
+              //   fontFamily: "Poppins",
+              // }}
               onClick={onClick}
             >
               {btnLabel}

@@ -20,6 +20,7 @@ import ChadhavaDetails from "../pages/chadhava/ChadhavaDetails";
 import PaymentHistory from "../pages/payment-history/PaymentHistory";
 import RouteChangeTracker from "./RouteChangeTracker";
 import MandirDetails from "../pages/mandir/MandirDetails";
+import EditChadhava from "../pages/chadhava/EditChadhava";
 
 export default function PublicRoutes({ user }) {
   return (
@@ -39,6 +40,8 @@ export default function PublicRoutes({ user }) {
             <Route path="/pooja/edit/:id" element={<EditPooja />} />
             <Route path="/temple/create" element={<AddTemple />} />
             <Route path="/chadhava/create" element={<AddChadhava />} />
+            <Route path="/chadhava/edit/:id" element={<EditChadhava />} />
+            {/* <Route path="/chadhava/edit/:id" element={<EditChadhava />} /> */}
             <Route path="/payment-history" element={<PaymentHistory />} />
             <Route path="/hi/payment-history" element={<PaymentHistory />} />
           </>

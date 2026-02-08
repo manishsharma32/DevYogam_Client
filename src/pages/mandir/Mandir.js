@@ -29,7 +29,7 @@ export default function Mandir({ user }) {
     const pickLang = (obj, base) => obj?.[`${base}${lang}`] ?? obj?.[base];
 
     const filteredData = Array.isArray(res)
-      ? res.map((item) => ({
+      ? res?.map((item) => ({
           ...item,
           title: pickLang(item, "title"),
           location: pickLang(item, "location"),

@@ -31,7 +31,7 @@ export default function Chadhava({ user }) {
       const pickLang = (obj, base) => obj?.[`${base}${lang}`] ?? obj?.[base];
 
       const filteredData = Array.isArray(res)
-        ? res.map((item) => ({
+        ? res?.map((item) => ({
             ...item,
             title: Array.isArray(item.title)
               ? [

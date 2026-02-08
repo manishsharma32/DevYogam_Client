@@ -1,5 +1,5 @@
 import { Box, Button, Typography, IconButton, Stack } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CustomTextField, GlobalCssStyles } from "../../style/GlobalCSS";
 import { FieldArray, Form, Formik } from "formik";
 import Grid from "@mui/material/Grid";
@@ -18,7 +18,9 @@ import { GetAllTempleAPI } from "../../services/GetAllTempleAPI";
 import AsyncCreatableSelect from "react-select/async-creatable";
 import { UploadItemImg } from "../../services/UploadItemImg";
 import { CreatePoojaFile } from "../../services/CreatePoojaFile";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { GetChadavaByID } from "../../services/GetChadavaByID";
+import { LanguageContext } from "../../context/LanguageContext";
 
 const MAX_LOGOS = 5;
 
@@ -59,13 +61,153 @@ const initialValues = {
   ],
   faq: [{ question: "", questionHi: "", answer: "", answerHi: "" }],
 };
-export default function AddChadhava({ open, handleClose }) {
+export default function EditChadhava({ open, handleClose }) {
   const [poojaData, setPoojaData] = useState(initialValues);
+  const { language } = useContext(LanguageContext);
+  const { id } = useParams();
   const navigate = useNavigate();
   const [templeData, setTempleData] = useState([]);
   const [mandirOptions, setMandirOptions] = useState([]);
   const [templeList, setTempleList] = useState([]);
   const [templeListHi, setTempleListHi] = useState([]);
+
+  useEffect(() => {
+    const getPooja = async () => {
+      const response = await GetChadavaByID(id);
+      // const language = language === "hi" ? "Hi" : "";
+
+      const pickLang = (obj, base) =>
+        obj?.[`${base}${language}`] ?? obj?.[base];
+
+      setPoojaData({
+        title: response?.title || "",
+        titleHi: response?.titleHi || "",
+        subtitle: response?.subtitle || "",
+        subtitleHi: response?.subtitleHi || "",
+        desc: response?.desc || "",
+        descHi: response?.desc_hi || "",
+        chadhava: response?.chadhava || null,
+
+        // English images
+        logoImages:
+          response?.images?.map((img) => ({
+            url: img.url,
+            delete_url: img.delete_url,
+            _id: img._id,
+          })) || Array(MAX_LOGOS).fill(null),
+
+        // Hindi images
+        logoImagesHi:
+          response?.images_hi?.map((img) => ({
+            url: img.url,
+            delete_url: img.delete_url,
+            _id: img._id,
+          })) || Array(MAX_LOGOS).fill(null),
+
+        newLogoImages: [],
+        newLogoImagesHi: [],
+        removedLogoImageIds: [],
+        removedLogoImageIdsHi: [],
+
+        // Items
+        cItem: response?.items?.map((item) => ({
+          title: item.title || "",
+          titleHi: item.titleHi || "",
+          description: item.description || "",
+          descriptionHi: item.descriptionHi || "",
+          price: item.price || "",
+          img: item.image?.url || "",
+        })) || [
+          {
+            title: "",
+            titleHi: "",
+            description: "",
+            descriptionHi: "",
+            price: "",
+            img: "",
+          },
+        ],
+
+        // Benefits
+        benefit: response?.benefit?.map((b) => ({
+          title: b.title || "",
+          titleHi: b.titleHi || "",
+          description: b.description || "",
+          descriptionHi: b.descriptionHi || "",
+        })) || [
+          {
+            title: "",
+            titleHi: "",
+            description: "",
+            descriptionHi: "",
+          },
+        ],
+
+        // FAQ
+        faq: response?.faq?.map((f) => ({
+          question: f.question || "",
+          questionHi: f.questionHi || "",
+          answer: f.answer || "",
+          answerHi: f.answerHi || "",
+        })) || [
+          {
+            question: "",
+            questionHi: "",
+            answer: "",
+            answerHi: "",
+          },
+        ],
+      });
+
+      //   const filtered = {
+      //     ...res,
+      //     title: pickLang(res, "title"),
+      //     subtitle: pickLang(res, "subtitle"),
+      //     location: pickLang(res, "location"),
+      //     images:
+      //       language === "Hi" &&
+      //       Array.isArray(res.images_hi) &&
+      //       res.images_hi.length > 0
+      //         ? res.images_hi
+      //         : res.images || [],
+      //     price: Array.isArray(res.price)
+      //       ? res.price.map((p) => ({
+      //           ...p,
+      //           single: {
+      //             ...p.single,
+      //             description: pickLang(p.single, "description"),
+      //           },
+      //           couple: {
+      //             ...p.couple,
+      //             description: pickLang(p.couple, "description"),
+      //           },
+      //           family: {
+      //             ...p.family,
+      //             description: pickLang(p.family, "description"),
+      //           },
+      //         }))
+      //       : [],
+      //     benefit: Array.isArray(res.benefit)
+      //       ? res.benefit.map((b) => ({
+      //           ...b,
+      //           title: pickLang(b, "title"),
+      //           description: pickLang(b, "description"),
+      //         }))
+      //       : [],
+      //     faq: Array.isArray(res.faq)
+      //       ? res.faq.map((f) => ({
+      //           ...f,
+      //           question: pickLang(f, "question"),
+      //           answer: pickLang(f, "answer"),
+      //         }))
+      //       : [],
+      //   };
+
+      //   setPoojaData(filtered);
+    };
+    getPooja();
+  }, [id, language]);
+
   const getTemple = async () => {
     const res = await GetAllTempleAPI();
     const english = (res || []).map((item) => ({
@@ -258,7 +400,7 @@ export default function AddChadhava({ open, handleClose }) {
             >
               <Box style={{ width: "90%", margin: "auto" }}>
                 <Typography className="policies-text" sx={{ mb: 2 }}>
-                  Add New Chadhava
+                  Edit Chadhava
                 </Typography>
 
                 <Grid container spacing={2} sx={{ width: "100%" }}>
@@ -431,28 +573,28 @@ export default function AddChadhava({ open, handleClose }) {
                             style={{ display: "none" }}
                             accept="image/*"
                             // onChange={(e) =>
-          //  handleLogoImageUploadAtIndex(
-          //                       e,
-          //                       values,
-          //                       setFieldValue,
-          //                       idx,
-          //                       "logoImages",
-          //                       "newLogoImages"
-          //                     )
+                            //  handleLogoImageUploadAtIndex(
+                            //                       e,
+                            //                       values,
+                            //                       setFieldValue,
+                            //                       idx,
+                            //                       "logoImages",
+                            //                       "newLogoImages"
+                            //                     )
                             // }
-                            onChange={async (e) => {
-                              const file = e.currentTarget.files[0];
-                              if (file) {
-                                // Upload image immediately
-                                const uploadedUrl = await UploadItemImg(file);
-                                if (uploadedUrl) {
-                                  setFieldValue(
-                                    `logoImages.${idx}.imageUrl`,
-                                    uploadedUrl?.data?.images
-                                  );
-                                }
-                              }
-                            }}
+                            // onChange={async (e) => {
+                            //   const file = e.currentTarget.files[0];
+                            //   if (file) {
+                            //     // Upload image immediately
+                            //     const uploadedUrl = await UploadItemImg(file);
+                            //     if (uploadedUrl) {
+                            //       setFieldValue(
+                            //         `logoImages.${idx}.imageUrl`,
+                            //         uploadedUrl?.data?.images
+                            //       );
+                            //     }
+                            //   }
+                            // }}
                           />
                           {values.logoImages[idx] ? (
                             <Box
@@ -462,12 +604,41 @@ export default function AddChadhava({ open, handleClose }) {
                                 background: "#f3f2f1",
                                 padding: "4px 10px",
                                 borderRadius: 12,
+                                gap: 1,
                               }}
                             >
+                              {/* Show image preview */}
+                              {values.logoImages[idx]?.url ? (
+                                <img
+                                  src={values.logoImages[idx].url}
+                                  alt={`logo-${idx}`}
+                                  style={{
+                                    width: 50,
+                                    height: 50,
+                                    objectFit: "cover",
+                                    borderRadius: 8,
+                                  }}
+                                />
+                              ) : (
+                                <img
+                                  src={URL.createObjectURL(
+                                    values.logoImages[idx]
+                                  )}
+                                  alt={`logo-${idx}`}
+                                  style={{
+                                    width: 50,
+                                    height: 50,
+                                    objectFit: "cover",
+                                    borderRadius: 8,
+                                  }}
+                                />
+                              )}
+
                               <Typography sx={{ fontFamily: "Poppins" }}>
                                 {values.logoImages[idx]?.name ||
                                   "Uploaded Image"}
                               </Typography>
+
                               <IconButton
                                 size="small"
                                 onClick={() =>
@@ -553,7 +724,7 @@ export default function AddChadhava({ open, handleClose }) {
                               )
                             }
                           />
-                          {values.logoImagesHi[idx] ? (
+                          {values.logoImagesHi[idx] && (
                             <Box
                               sx={{
                                 display: "flex",
@@ -561,12 +732,42 @@ export default function AddChadhava({ open, handleClose }) {
                                 background: "#f3f2f1",
                                 padding: "4px 10px",
                                 borderRadius: 12,
+                                gap: 1,
                               }}
                             >
+                              {values.logoImagesHi[idx]?.url ? (
+                                // 📌 Existing image (string URL)
+                                <img
+                                  src={values.logoImagesHi[idx].url}
+                                  alt={`logo-hi-${idx}`}
+                                  style={{
+                                    width: 50,
+                                    height: 50,
+                                    objectFit: "cover",
+                                    borderRadius: 8,
+                                  }}
+                                />
+                              ) : (
+                                // 📌 Newly uploaded image (File object)
+                                <img
+                                  src={URL.createObjectURL(
+                                    values.logoImagesHi[idx]
+                                  )}
+                                  alt={`logo-hi-${idx}`}
+                                  style={{
+                                    width: 50,
+                                    height: 50,
+                                    objectFit: "cover",
+                                    borderRadius: 8,
+                                  }}
+                                />
+                              )}
+
                               <Typography sx={{ fontFamily: "Poppins" }}>
                                 {values.logoImagesHi[idx]?.name ||
-                                  "अपलोड की गई छवि"}
+                                  "Uploaded Image"}
                               </Typography>
+
                               <IconButton
                                 size="small"
                                 onClick={() =>
@@ -583,31 +784,6 @@ export default function AddChadhava({ open, handleClose }) {
                                 <CloseIcon fontSize="small" />
                               </IconButton>
                             </Box>
-                          ) : (
-                            <Button
-                              type="button"
-                              variant="outlined"
-                              size="small"
-                              style={{
-                                minHeight: "2.5rem",
-                                borderRadius: 20,
-                                background: "#fff",
-                              }}
-                              onClick={() =>
-                                document
-                                  .getElementById(
-                                    `logo-images-upload-hi-${idx}`
-                                  )
-                                  .click()
-                              }
-                            >
-                              <img
-                                src={UploadIcon}
-                                alt="Upload"
-                                style={{ width: 20, marginRight: 8 }}
-                              />
-                              चित्र अपलोड करें {idx + 1}
-                            </Button>
                           )}
                         </Box>
                       ))}

@@ -35,6 +35,8 @@ export default function PujaCard({
 }) {
   const { day, month } = getDateParts(date);
   const MotionCard = motion(MuiCard);
+  const shortHighlight =
+    highlight?.length > 85 ? highlight?.substring(0, 82) + "..." : highlight;
 
   return (
     <MotionCard
@@ -160,7 +162,7 @@ export default function PujaCard({
                 color: "#7c3aed",
               }}
             >
-              {highlight}
+              {shortHighlight}
             </Typography>
           )}
           <Box

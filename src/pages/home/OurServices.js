@@ -16,9 +16,9 @@ const servicesData = [
     title: "Pujas",
     titleHi: "पूजा",
     description:
-      "Book personalized online pujas performed by experienced priests, with prasad delivered to your doorstep.",
+      "Book personalized online pujas with Devyogam, performed by experienced priests, and receive the puja video on your mobile.",
     descriptionHi:
-      "अनुभवी पुजारियों द्वारा आयोजित व्यक्तिगत ऑनलाइन पूजा बुक करें, प्रसाद आपके द्रवाजे पर वितरित होगा।",
+"देवयोगम के साथ व्यक्तिगत ऑनलाइन पूजा बुक करें, जो अनुभवी पुजारियों द्वारा कराई जाएगी, और पूजा का पूरा वीडियो सीधे अपने मोबाइल पर प्राप्त करें।",
     btnLabel: "Book Now",
     btnLabelHi: "बुक करें",
     link: "/pooja",

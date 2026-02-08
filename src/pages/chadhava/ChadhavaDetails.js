@@ -5,13 +5,12 @@ import {
   Box,
   Button,
   Card,
-  CardActions,
   CardContent,
   CardMedia,
   IconButton,
   Menu,
   MenuItem,
-  Stack,
+  Stack,  
   Typography,
 } from "@mui/material";
 import { GlobalCssStyles } from "../../style/GlobalCSS";
@@ -282,6 +281,11 @@ export default function ChadhavaDetails({ user }) {
                                 color: "#aa4466",
                               },
                             }}
+                            onClick={() =>
+                              window.open(
+                                `${window?.location?.origin}/chadhava/edit/${id}`
+                              )
+                            }
                           >
                             Edit
                           </MenuItem>
